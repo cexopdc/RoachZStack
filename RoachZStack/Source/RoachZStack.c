@@ -88,8 +88,8 @@
 #endif
 
 #if !defined( SERIAL_APP_BAUD )
-#define SERIAL_APP_BAUD  HAL_UART_BR_38400
-//#define SERIAL_APP_BAUD  HAL_UART_BR_115200
+//#define SERIAL_APP_BAUD  HAL_UART_BR_38400
+#define SERIAL_APP_BAUD  HAL_UART_BR_115200
 #endif
 
 // When the Rx buf space is less than this threshold, invoke the Rx callback.
@@ -358,6 +358,10 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
 void RoachZStack_HandleKeys( uint8 shift, uint8 keys )
 {
   zAddrType_t txAddr;
+  
+  
+  byte buf[5] = {1,2,3,4,5};
+  HalUARTWrite (SERIAL_APP_PORT, buf, sizeof(buf));
   
   if ( shift )
   {
