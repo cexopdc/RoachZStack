@@ -74,6 +74,8 @@
 #endif
 #include "hal_led.h"
 #include "hal_uart.h"
+#include "RoachZStack_ADC.h"
+#include "ZConfig.h"
 
 /*********************************************************************
  * MACROS
@@ -213,6 +215,7 @@ void RoachZStack_Init( uint8 task_id )
   afRegister( (endPointDesc_t *)&RoachZStack_epDesc );
 
   RegisterForKeys( task_id );
+  RegisterForADC( task_id );
 
   uartConfig.configured           = TRUE;              // 2x30 don't care - see uart driver.
   uartConfig.baudRate             = SERIAL_APP_BAUD;
@@ -232,8 +235,6 @@ void RoachZStack_Init( uint8 task_id )
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, End_Device_Bind_rsp );
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, Match_Desc_rsp );
   
-  byte buf[5] = {1,2,3,4,5};
-  HalUARTWrite (SERIAL_APP_PORT, buf, sizeof(buf));
 }
 
 /*********************************************************************
@@ -269,7 +270,35 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
       case AF_INCOMING_MSG_CMD:
         RoachZStack_ProcessMSGCmd( MSGpkt );
         break;
+  
+      case RZS_ADC_VALUE:
+        if (!RoachZStack_TxLen && 
+            (RoachZStack_TxLen = sizeof(((adcMsg_t*) MSGpkt)->value)))
+        {
+          // Pre-pend sequence number to the Tx message.
+          RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
+          RoachZStack_TxBuf[1] = ((adcMsg_t*) MSGpkt)->value;
+        }
 
+        if (RoachZStack_TxLen)
+        {
+          afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
+                                                 (endPointDesc_t *)&RoachZStack_epDesc,
+                                                  ROACHZSTACK_CLUSTERID1,
+                                                  RoachZStack_TxLen+1, RoachZStack_TxBuf,
+                                                  &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS);
+          HalLcdWriteValue ( s,16, HAL_LCD_LINE_1);
+          HalLcdWriteValue ( RoachZStack_TxSeq,16, HAL_LCD_LINE_2);
+          /*if (afStatus_SUCCESS != AF_DataRequest(&RoachZStack_TxAddr,
+                                                 (endPointDesc_t *)&RoachZStack_epDesc,
+                                                  ROACHZSTACK_CLUSTERID1,
+                                                  RoachZStack_TxLen+1, RoachZStack_TxBuf,
+                                                  &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS))
+          {
+            //osal_set_event(RoachZStack_TaskID, ROACHZSTACK_SEND_EVT);
+          }*/
+        }
+        break;
       default:
         break;
       }
@@ -291,6 +320,7 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
     RoachZStack_Resp();
     return ( events ^ ROACHZSTACK_RESP_EVT );
   }
+  
 
   return ( 0 );  // Discard unknown events.
 }
@@ -360,7 +390,7 @@ void RoachZStack_HandleKeys( uint8 shift, uint8 keys )
   zAddrType_t txAddr;
   
   
-  byte buf[5] = {1,2,3,4,5};
+  byte buf[8] = {1,2,3,4,5,'a','b','c'};
   HalUARTWrite (SERIAL_APP_PORT, buf, sizeof(buf));
   
   if ( shift )

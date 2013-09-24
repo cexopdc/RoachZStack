@@ -63,6 +63,8 @@
 #endif
 
 #include "RoachZStack.h"
+#include "RoachZStack_ADC.h"
+
 
 /*********************************************************************
  * GLOBAL VARIABLES
@@ -84,7 +86,8 @@ const pTaskEventHandlerFn tasksArr[] = {
 #if defined ( ZIGBEE_FREQ_AGILITY ) || defined ( ZIGBEE_PANID_CONFLICT )
   ZDNwkMgr_event_loop,
 #endif
-  RoachZStack_ProcessEvent
+  RoachZStack_ProcessEvent,
+  RoachZStack_ADC
 };
 
 const uint8 tasksCnt = sizeof( tasksArr ) / sizeof( tasksArr[0] );
@@ -124,7 +127,8 @@ void osalInitTasks( void )
 #if defined ( ZIGBEE_FREQ_AGILITY ) || defined ( ZIGBEE_PANID_CONFLICT )
   ZDNwkMgr_Init( taskID++ );
 #endif
-  RoachZStack_Init( taskID );
+  RoachZStack_Init( taskID++ );
+  RoachZStack_ADC_Init( taskID );
 }
 
 /*********************************************************************

@@ -3222,6 +3222,15 @@
     <file>
       <name>$PROJ_DIR$\..\Source\RoachZStack.h</name>
     </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\RoachZStack_ADC.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\RoachZStack_ADC.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\ZConfig.h</name>
+    </file>
   </group>
   <group>
     <name>HAL</name>
