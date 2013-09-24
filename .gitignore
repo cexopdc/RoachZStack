@@ -216,3 +216,5 @@ pip-log.txt
 
 *.lst
 *.s51
+*.d51
+*.map
