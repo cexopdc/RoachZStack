@@ -215,7 +215,6 @@ void RoachZStack_Init( uint8 task_id )
   afRegister( (endPointDesc_t *)&RoachZStack_epDesc );
 
   RegisterForKeys( task_id );
-  RegisterForADC( task_id );
 
   uartConfig.configured           = TRUE;              // 2x30 don't care - see uart driver.
   uartConfig.baudRate             = SERIAL_APP_BAUD;
@@ -235,6 +234,9 @@ void RoachZStack_Init( uint8 task_id )
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, End_Device_Bind_rsp );
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, Match_Desc_rsp );
   
+  
+    osal_set_event(RoachZStack_TaskID, RZS_DO_HANDSHAKE );
+  
 }
 
 /*********************************************************************
@@ -251,12 +253,15 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
 {
   (void)task_id;  // Intentionally unreferenced parameter
   
+  HalLcdWriteValue ( events,16, HAL_LCD_LINE_1);
   if ( events & SYS_EVENT_MSG )
   {
     afIncomingMSGPacket_t *MSGpkt;
 
     while ( (MSGpkt = (afIncomingMSGPacket_t *)osal_msg_receive( RoachZStack_TaskID )) )
     {
+      
+      HalLcdWriteValue ( MSGpkt->hdr.event,16, HAL_LCD_LINE_2);
       switch ( MSGpkt->hdr.event )
       {
       case ZDO_CB_MSG:
@@ -273,11 +278,11 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
   
       case RZS_ADC_VALUE:
         if (!RoachZStack_TxLen && 
-            (RoachZStack_TxLen = sizeof(((adcMsg_t*) MSGpkt)->value)))
+            (RoachZStack_TxLen = sizeof(((adcMsg_t*) MSGpkt)->buffer)))
         {
           // Pre-pend sequence number to the Tx message.
           RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
-          RoachZStack_TxBuf[1] = ((adcMsg_t*) MSGpkt)->value;
+          osal_memcpy( RoachZStack_TxBuf+1, ((adcMsg_t*) MSGpkt)->buffer, sizeof(((adcMsg_t*) MSGpkt)->buffer) );
         }
 
         if (RoachZStack_TxLen)
@@ -287,7 +292,7 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
                                                   ROACHZSTACK_CLUSTERID1,
                                                   RoachZStack_TxLen+1, RoachZStack_TxBuf,
                                                   &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS);
-          HalLcdWriteValue ( s,16, HAL_LCD_LINE_1);
+          // HalLcdWriteValue ( s,16, HAL_LCD_LINE_1);
           HalLcdWriteValue ( RoachZStack_TxSeq,16, HAL_LCD_LINE_2);
           /*if (afStatus_SUCCESS != AF_DataRequest(&RoachZStack_TxAddr,
                                                  (endPointDesc_t *)&RoachZStack_epDesc,
@@ -321,6 +326,23 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
     return ( events ^ ROACHZSTACK_RESP_EVT );
   }
   
+  if ( events & RZS_DO_HANDSHAKE )
+  {
+    zAddrType_t txAddr;
+    // Initiate a Match Description Request (Service Discovery)
+    txAddr.addrMode = AddrBroadcast;
+    txAddr.addr.shortAddr = NWK_BROADCAST_SHORTADDR;
+    afStatus_t status = ZDP_MatchDescReq( &txAddr, NWK_BROADCAST_SHORTADDR,
+                    ROACHZSTACK_PROFID,
+                    ROACHZSTACK_MAX_CLUSTERS, (cId_t *)RoachZStack_ClusterList,
+                    ROACHZSTACK_MAX_CLUSTERS, (cId_t *)RoachZStack_ClusterList,
+                    FALSE );
+    if (status != afStatus_SUCCESS)
+    {
+      osal_start_timerEx( RoachZStack_TaskID, RZS_DO_HANDSHAKE, 500); 
+    }
+    return ( events ^ RZS_DO_HANDSHAKE );
+  }
 
   return ( 0 );  // Discard unknown events.
 }
@@ -367,6 +389,8 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
             
             // Light LED
             HalLedSet( HAL_LED_4, HAL_LED_MODE_ON );
+            
+            RegisterForADC( RoachZStack_TaskID );
           }
           osal_mem_free( pRsp );
         }
@@ -416,17 +440,6 @@ void RoachZStack_HandleKeys( uint8 shift, uint8 keys )
 
     if ( keys & HAL_KEY_SW_2 )
     {
-      HalLedSet ( HAL_LED_4, HAL_LED_MODE_OFF );
-      
-      // Initiate an End Device Bind Request for the mandatory endpoint
-      txAddr.addrMode = Addr16Bit;
-      txAddr.addr.shortAddr = 0x0000; // Coordinator
-      ZDP_EndDeviceBindReq( &txAddr, NLME_GetShortAddr(), 
-                            RoachZStack_epDesc.endPoint,
-                            ROACHZSTACK_PROFID,
-                            ROACHZSTACK_MAX_CLUSTERS, (cId_t *)RoachZStack_ClusterList,
-                            ROACHZSTACK_MAX_CLUSTERS, (cId_t *)RoachZStack_ClusterList,
-                            FALSE );
     }
 
     if ( keys & HAL_KEY_SW_3 )
@@ -436,15 +449,24 @@ void RoachZStack_HandleKeys( uint8 shift, uint8 keys )
     if ( keys & HAL_KEY_SW_4 )
     {
       HalLedSet ( HAL_LED_4, HAL_LED_MODE_OFF );
-      
+
       // Initiate a Match Description Request (Service Discovery)
       txAddr.addrMode = AddrBroadcast;
       txAddr.addr.shortAddr = NWK_BROADCAST_SHORTADDR;
+#ifdef ZDO_COORDINATOR
       ZDP_MatchDescReq( &txAddr, NWK_BROADCAST_SHORTADDR,
                         ROACHZSTACK_PROFID,
                         ROACHZSTACK_MAX_CLUSTERS, (cId_t *)RoachZStack_ClusterList,
                         ROACHZSTACK_MAX_CLUSTERS, (cId_t *)RoachZStack_ClusterList,
                         FALSE );
+#else
+      
+      ZDP_MatchDescReq( &txAddr, NWK_BROADCAST_SHORTADDR,
+                        ROACHZSTACK_PROFID,
+                        ROACHZSTACK_MAX_CLUSTERS, (cId_t *)RoachZStack_ClusterList,
+                        ROACHZSTACK_MAX_CLUSTERS, (cId_t *)RoachZStack_ClusterList,
+                        FALSE );
+#endif
     }
   }
 }
