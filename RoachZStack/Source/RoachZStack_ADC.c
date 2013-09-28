@@ -81,8 +81,12 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
       return events ^ RZS_ADC_READ;
     }
     
-    uint8 adcVal = (uint8) HalAdcRead ( HAL_ADC_CHANNEL_4, HAL_ADC_RESOLUTION_8 );
-    pBufferMsg->buffer[bufferIndex++] = adcVal;
+    uint8 adcVal1 = (uint8) HalAdcRead ( HAL_ADC_CHANNEL_4, HAL_ADC_RESOLUTION_8 );
+    uint8 adcVal2 = (uint8) HalAdcRead ( HAL_ADC_CHANNEL_5, HAL_ADC_RESOLUTION_8 );
+    uint8 adcVal3 = (uint8) HalAdcRead ( HAL_ADC_CHANNEL_6, HAL_ADC_RESOLUTION_8 );
+    pBufferMsg->buffer[bufferIndex++] = adcVal1;
+    pBufferMsg->buffer[bufferIndex++] = adcVal2;
+    pBufferMsg->buffer[bufferIndex++] = adcVal3;
     if (bufferIndex == BUFFER_SIZE)
     {
       bufferIndex = 0;
