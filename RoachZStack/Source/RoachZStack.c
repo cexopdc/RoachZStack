@@ -234,8 +234,9 @@ void RoachZStack_Init( uint8 task_id )
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, End_Device_Bind_rsp );
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, Match_Desc_rsp );
   
-  
-    osal_set_event(RoachZStack_TaskID, RZS_DO_HANDSHAKE );
+#ifndef ZDO_COORDINATOR
+  osal_set_event(RoachZStack_TaskID, RZS_DO_HANDSHAKE );
+#endif
   
 }
 
@@ -502,7 +503,9 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
     osal_memcpy(&RoachZStack_RxAddr, &(pkt->srcAddr), sizeof( afAddrType_t ));
 
     seqnb = pkt->cmd.Data[0];
-
+#ifdef LCD_SUPPORTED          
+    HalLcdWriteValue ( pkt->nwkSeqNum, 16, HAL_LCD_LINE_3);
+#endif
     // Keep message if not a repeat packet
     if ( (seqnb > RoachZStack_RxSeq) ||                    // Normal
         ((seqnb < 0x80 ) && ( RoachZStack_RxSeq > 0x80)) ) // Wrap-around
