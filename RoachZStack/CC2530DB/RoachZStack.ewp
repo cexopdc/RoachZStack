@@ -1345,7 +1345,6 @@
           <name>CCDefines</name>
           <state>HAL_UART=TRUE</state>
           <state>SERIAL_APP_PORT=0</state>
-          <state>LCD_SUPPORTED</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -1426,7 +1425,7 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>00000</state>
+          <state>10010</state>
         </option>
         <option>
           <name>CCObjUseModuleName</name>
@@ -1556,7 +1555,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>0</state>
+          <state>2</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -1565,7 +1564,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>0</state>
+          <state>2</state>
         </option>
         <option>
           <name>CompilerMisraRules04</name>

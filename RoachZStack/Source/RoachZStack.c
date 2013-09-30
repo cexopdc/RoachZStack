@@ -253,15 +253,18 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
 {
   (void)task_id;  // Intentionally unreferenced parameter
   
+#ifdef LCD_SUPPORTED
   HalLcdWriteValue ( events,16, HAL_LCD_LINE_1);
+#endif
   if ( events & SYS_EVENT_MSG )
   {
     afIncomingMSGPacket_t *MSGpkt;
 
     while ( (MSGpkt = (afIncomingMSGPacket_t *)osal_msg_receive( RoachZStack_TaskID )) )
     {
-      
+#ifdef LCD_SUPPORTED
       HalLcdWriteValue ( MSGpkt->hdr.event,16, HAL_LCD_LINE_2);
+#endif
       switch ( MSGpkt->hdr.event )
       {
       case ZDO_CB_MSG:
@@ -292,8 +295,10 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
                                                   ROACHZSTACK_CLUSTERID1,
                                                   RoachZStack_TxLen+1, RoachZStack_TxBuf,
                                                   &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS);
+#ifdef LCD_SUPPORTED          
           // HalLcdWriteValue ( s,16, HAL_LCD_LINE_1);
           HalLcdWriteValue ( RoachZStack_TxSeq,16, HAL_LCD_LINE_2);
+#endif
           /*if (afStatus_SUCCESS != AF_DataRequest(&RoachZStack_TxAddr,
                                                  (endPointDesc_t *)&RoachZStack_epDesc,
                                                   ROACHZSTACK_CLUSTERID1,
