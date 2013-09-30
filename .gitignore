@@ -218,3 +218,6 @@ pip-log.txt
 *.s51
 *.d51
 *.map
+*.dbgdt
+*.wsdt
+*.dni
