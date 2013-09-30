@@ -96,7 +96,7 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
       pBufferMsg = NULL;
     }
     
-    HalLcdWriteValue ( adcVal,16, HAL_LCD_LINE_3);
+    HalLcdWriteValue ( adcVal1,16, HAL_LCD_LINE_3);
     //osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
     osal_start_timerEx( RoachZStack_ADC_TaskID, RZS_ADC_READ, 1); 
     return events ^ RZS_ADC_READ;
