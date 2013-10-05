@@ -124,6 +124,8 @@
 
 #define SERIAL_APP_RSP_CNT  4
 
+unsigned char premic_signal[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+
 // This list should be filled with Application specific Cluster IDs.
 const cId_t RoachZStack_ClusterList[ROACHZSTACK_MAX_CLUSTERS] =
 {
@@ -510,6 +512,7 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
     if ( (seqnb > RoachZStack_RxSeq) ||                    // Normal
         ((seqnb < 0x80 ) && ( RoachZStack_RxSeq > 0x80)) ) // Wrap-around
     {
+      HalUARTWrite( SERIAL_APP_PORT, premic_signal, sizeof(premic_signal) );
       // Transmit the data on the serial port.
       if ( HalUARTWrite( SERIAL_APP_PORT, pkt->cmd.Data+1, (pkt->cmd.DataLength-1) ) )
       {
