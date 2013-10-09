@@ -15,7 +15,7 @@ while (1)
 end
 
 size = 33;
-channels = 3;
+channels = 3
 data = zeros(channels,size);
 ah = zeros(1, channels);
 for channel = 1:channels
@@ -28,7 +28,7 @@ plotBuffer = zeros(channels,plotSamples);
 index = 1;
 while (1)
     newData = fread(port, size, 'int16')';
-    newData=reshape(newData, 3, length(newData)/3)
+    newData=reshape(newData, 3, length(newData)/3);
     for channel = 1:channels
         plotBuffer(channel,index:index+length(newData)-2) = newData(channel,1:length(newData)-1);
         %axes(ah(channel));
