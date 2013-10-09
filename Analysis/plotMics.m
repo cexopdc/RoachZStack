@@ -1,8 +1,31 @@
 clear all;
 close all;
 
-port = serial('COM7','BaudRate',115200, 'FlowControl', 'hardware');
+port = serial('COM1','BaudRate',115200, 'FlowControl', 'hardware');
 fopen(port);
+
+% signal = [255, 255, 255, 255, 255, 255];
+% buffer = zeros(1, length(signal));
+% while (1)
+%     data = fread(port, 1, 'uint8')';
+%     buffer = [data(1), buffer(1:end-1)]
+%     if signal==buffer
+%         break;
+%     end
+% end
+
+size = 33;
+channels = 3;
+data = zeros(channels,size);
+ah = zeros(1, channels);
+for channel = 1:channels
+    ah(channel) = subplot(3,1,channel);
+end
+%figure; hold on;
+
+plotSamples = 60;
+plotBuffer = zeros(channels,plotSamples);
+index = 1;
 
 signal = [255, 255, 255, 255, 255, 255];
 buffer = zeros(1, length(signal));
@@ -14,21 +37,14 @@ while (1)
     end
 end
 
-size = 33;
-channels = 3;
-data = zeros(channels,size);
-ah = zeros(1, channels);
-for channel = 1:channels
-    ah(channel) = subplot(3,1,channel);
-end
-%figure; hold on;
 
-plotSamples = 30;
-plotBuffer = zeros(channels,plotSamples);
-index = 1;
 while (1)
     newData = fread(port, size, 'int16')';
     newData=reshape(newData, 3, length(newData)/3)
+    
+%     if newData(1,11) ~= -1
+%         break;
+%     end
     for channel = 1:channels
         plotBuffer(channel,index:index+length(newData)-2) = newData(channel,1:length(newData)-1);
         %axes(ah(channel));
