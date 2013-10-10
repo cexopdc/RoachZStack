@@ -119,7 +119,7 @@
 
 // This is the max byte count per OTA message.
 #if !defined( SERIAL_APP_TX_MAX )
-#define SERIAL_APP_TX_MAX  80
+#define SERIAL_APP_TX_MAX  200
 #endif
 
 #define SERIAL_APP_RSP_CNT  4
@@ -283,14 +283,16 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
         break;
   
       case RZS_ADC_VALUE:
+      {
+        adcMsg_t* adcMsg = ((adcMsg_t*) MSGpkt);
         if (!RoachZStack_TxLen && 
-            (RoachZStack_TxLen = sizeof(((adcMsg_t*) MSGpkt)->buffer)))
+            (RoachZStack_TxLen = adcMsg->size * sizeof(*(adcMsg->buffer))))
         {
           // Pre-pend sequence number to the Tx message.
           RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
-          osal_memcpy( RoachZStack_TxBuf+1, ((adcMsg_t*) MSGpkt)->buffer, sizeof(((adcMsg_t*) MSGpkt)->buffer) );
+          osal_memcpy( RoachZStack_TxBuf+1, adcMsg->buffer, adcMsg->size * sizeof(*(adcMsg->buffer)) );
         }
-
+        HalLcdWriteValue(RoachZStack_TxLen, 10, HAL_LCD_LINE_3);
         if (RoachZStack_TxLen)
         {
           afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
@@ -312,6 +314,7 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
           }*/
         }
         break;
+      }
       default:
         break;
       }
