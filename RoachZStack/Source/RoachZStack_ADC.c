@@ -44,6 +44,7 @@ adcMsg_t* pBufferMsg = NULL;
 
 
 // Registered keys task ID, initialized to NOT USED.
+extern volatile uint8 allocCount;
 static uint8 registeredADCTaskID = NO_TASK_ID;
 uint8 RoachZStack_ADC_TaskID;    // Task ID for internal task/event processing.
 
@@ -115,7 +116,8 @@ void RoachZStack_ADC_Init( uint8 task_id )
     
     IEN0 |= 0x02; //ADCIE
     IEN1 |= 0x08;
-    T3CTL = 0x18;
+    T3CTL = 0xF8;
+    CLKCONCMD |= 0x38;
     
     osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
   #endif
@@ -176,7 +178,11 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
     if (pBufferMsg == NULL)
     {
       pBufferMsg = (adcMsg_t*) osal_msg_allocate( sizeof(adcMsg_t) );
-      pBufferMsg->size = 0;
+      allocCount++;
+      if (pBufferMsg != NULL)
+      {  
+        pBufferMsg->size = 0;
+      }
     }
     
     HAL_EXIT_CRITICAL_SECTION( intState );   // Re-enable interrupts.

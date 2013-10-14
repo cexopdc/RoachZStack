@@ -119,7 +119,7 @@
 
 // This is the max byte count per OTA message.
 #if !defined( SERIAL_APP_TX_MAX )
-#define SERIAL_APP_TX_MAX  200
+#define SERIAL_APP_TX_MAX  128
 #endif
 
 #define SERIAL_APP_RSP_CNT  4
@@ -197,6 +197,10 @@ static void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt );
 static void RoachZStack_Send(void);
 static void RoachZStack_Resp(void);
 static void RoachZStack_CallBack(uint8 port, uint8 event);
+
+volatile uint8 allocCount = 0;
+volatile uint8 deallocCount = 0;
+
 
 /*********************************************************************
  * @fn      RoachZStack_Init
@@ -285,33 +289,24 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
       case RZS_ADC_VALUE:
       {
         adcMsg_t* adcMsg = ((adcMsg_t*) MSGpkt);
-        if (!RoachZStack_TxLen && 
-            (RoachZStack_TxLen = adcMsg->size * sizeof(*(adcMsg->buffer))))
+        
+        RoachZStack_TxLen = adcMsg->size * sizeof(*(adcMsg->buffer));
+        if (RoachZStack_TxLen)
         {
           // Pre-pend sequence number to the Tx message.
           RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
           osal_memcpy( RoachZStack_TxBuf+1, adcMsg->buffer, adcMsg->size * sizeof(*(adcMsg->buffer)) );
-        }
-        HalLcdWriteValue(RoachZStack_TxLen, 10, HAL_LCD_LINE_3);
-        if (RoachZStack_TxLen)
-        {
+          RoachZStack_TxBuf[1] = 0x77;
+          HalLcdWriteValue(RoachZStack_TxSeq, 10, HAL_LCD_LINE_3);
+          HalLedSet(HAL_LED_4, HAL_LED_MODE_TOGGLE);
           afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
                                                  (endPointDesc_t *)&RoachZStack_epDesc,
                                                   ROACHZSTACK_CLUSTERID1,
                                                   RoachZStack_TxLen+1, RoachZStack_TxBuf,
                                                   &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS);
-#ifdef LCD_SUPPORTED          
-          // HalLcdWriteValue ( s,16, HAL_LCD_LINE_1);
-          HalLcdWriteValue ( RoachZStack_TxSeq,16, HAL_LCD_LINE_2);
-#endif
-          /*if (afStatus_SUCCESS != AF_DataRequest(&RoachZStack_TxAddr,
-                                                 (endPointDesc_t *)&RoachZStack_epDesc,
-                                                  ROACHZSTACK_CLUSTERID1,
-                                                  RoachZStack_TxLen+1, RoachZStack_TxBuf,
-                                                  &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS))
-          {
-            //osal_set_event(RoachZStack_TaskID, ROACHZSTACK_SEND_EVT);
-          }*/
+          
+          deallocCount++;
+          HalLcdWriteValue(allocCount - deallocCount, 10, HAL_LCD_LINE_3);
         }
         break;
       }
