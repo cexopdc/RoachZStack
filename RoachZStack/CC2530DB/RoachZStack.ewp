@@ -1017,7 +1017,7 @@
         </option>
         <option>
           <name>Linker Extra Options Edit</name>
-          <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\Router-Pro.lib</state>
+          <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\Router.lib</state>
           <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\Security.lib</state>
           <state>-C $PROJ_DIR$\..\..\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
         </option>
@@ -1347,6 +1347,7 @@
           <state>SERIAL_APP_PORT=0</state>
           <state>LCD_SUPPORTED</state>
           <state>HAL_LED=TRUE</state>
+          <state>ZIGBEE_FRAGMENTATION</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -2417,6 +2418,7 @@
           <state>HAL_UART=TRUE</state>
           <state>SERIAL_APP_PORT=0</state>
           <state>LCD_SUPPORTED</state>
+          <state>ZIGBEE_FRAGMENTATION</state>
           <state>xPOWER_SAVING</state>
         </option>
         <option>
@@ -2498,7 +2500,7 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>11101</state>
+          <state>11111</state>
         </option>
         <option>
           <name>CCObjUseModuleName</name>
@@ -3158,7 +3160,7 @@
         </option>
         <option>
           <name>Linker Extra Options Edit</name>
-          <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\EndDevice-Pro.lib</state>
+          <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\EndDevice.lib</state>
           <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\Security.lib</state>
           <state>-C $PROJ_DIR$\..\..\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
         </option>

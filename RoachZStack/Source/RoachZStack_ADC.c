@@ -2,6 +2,7 @@
 #include "RoachZStack_ADC.h"
 #include "hal_adc.h"
 #include "hal_lcd.h"
+#include "hal_led.h"
 #include "ZConfig.h"
 #include "OSAL.h"
 
@@ -53,7 +54,7 @@ uint16 data = 0;
 uint8 nextADC = 50;
 
 uint8 micADC[3] = {HAL_ADC_CHANNEL_1, HAL_ADC_CHANNEL_4, HAL_ADC_CHANNEL_5};
-
+uint16 overflow = 0;
 HAL_ISR_FUNCTION(ADC_ISR,ADC_VECTOR)
 {
   //HAL_ENTER_ISR();
@@ -66,15 +67,19 @@ HAL_ISR_FUNCTION(ADC_ISR,ADC_VECTOR)
   if (reading < 0)
     reading = 0;
   
-  reading >>= 2;
+  reading >>= 8; // 8 bit res
   if (pBufferMsg != NULL && pBufferMsg->size < BUFFER_SIZE)
   {
-    pBufferMsg->buffer[pBufferMsg->size++] = reading;
+    pBufferMsg->buffer[pBufferMsg->size++] = (uint8)reading;
+  }
+  else
+  {
+    overflow++;
   }
   
   if (nextADC+1 < sizeof(micADC))
   {
-    ADCCON3 = HAL_ADC_REF_VOLT | HAL_ADC_DEC_512 | micADC[nextADC+1];
+    ADCCON3 = HAL_ADC_REF_VOLT | HAL_ADC_DEC_064 | micADC[nextADC+1];
   }
   nextADC++;
   //HAL_EXIT_ISR();
@@ -89,7 +94,7 @@ HAL_ISR_FUNCTION(T3_ISR,T3_VECTOR)
     if (nextADC >= sizeof(micADC))
     {
       nextADC = 0;
-      ADCCON3 = HAL_ADC_REF_VOLT | HAL_ADC_DEC_512 | micADC[0];
+      ADCCON3 = HAL_ADC_REF_VOLT | HAL_ADC_DEC_064 | micADC[0];
     }
   }
   
@@ -116,8 +121,7 @@ void RoachZStack_ADC_Init( uint8 task_id )
     
     IEN0 |= 0x02; //ADCIE
     IEN1 |= 0x08;
-    T3CTL = 0xF8;
-    CLKCONCMD |= 0x38;
+    T3CTL = 0xDC;
     
     osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
   #endif
@@ -167,7 +171,7 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
     halIntState_t intState;
     HAL_ENTER_CRITICAL_SECTION( intState );  // Hold off interrupts.
         
-    if (pBufferMsg != NULL && pBufferMsg->size > sizeof(pBufferMsg->buffer)/sizeof(*(pBufferMsg->buffer))/2 &&  pBufferMsg->size % sizeof(micADC) == 0)
+    if (pBufferMsg != NULL && pBufferMsg->size > sizeof(pBufferMsg->buffer)/sizeof(*(pBufferMsg->buffer))/2 &&  nextADC >= sizeof(micADC))
     {
       // Send the address to the task
       pBufferMsg->hdr.event = RZS_ADC_VALUE;
@@ -182,12 +186,17 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
       if (pBufferMsg != NULL)
       {  
         pBufferMsg->size = 0;
+        overflow = 0;
+      }
+      else
+      {
+        HalLedSet(HAL_LED_2, HAL_LED_MODE_TOGGLE);
       }
     }
     
     HAL_EXIT_CRITICAL_SECTION( intState );   // Re-enable interrupts.
     
-    osal_start_timerEx( RoachZStack_ADC_TaskID, RZS_ADC_READ, 1); 
+    osal_start_timerEx( RoachZStack_ADC_TaskID, RZS_ADC_READ, 10); 
     return events ^ RZS_ADC_READ;
   }
     return 0;

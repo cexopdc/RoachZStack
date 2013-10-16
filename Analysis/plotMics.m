@@ -13,8 +13,8 @@ fopen(port);
 %         break;
 %     end
 % end
-
-size = 33;
+figure; hold on;
+size = 93;
 channels = 3;
 data = zeros(channels,size);
 ah = zeros(1, channels);
@@ -23,65 +23,45 @@ for channel = 1:channels
 end
 %figure; hold on;
 
-plotSamples = 60;
+plotSamples = 1000;
 plotBuffer = zeros(channels,plotSamples);
 index = 1;
-
+drawCounter = 0;
 signal = [255, 255, 255, 255, 255, 255];
-buffer = zeros(1, length(signal));
 while (1)
-    data = fread(port, 1, 'uint8')';
-    buffer = [data(1), buffer(1:end-1)]
-    if signal==buffer
-        break;
+    
+    buffer = zeros(1, length(signal));
+    while (1)
+        data = fread(port, 1, 'uint8')';
+        buffer = [data(1), buffer(1:end-1)];
+        if signal==buffer
+            break;
+        end
     end
-end
+    len = fread(port, 1, 'uint16');
 
-
-while (1)
-    newData = fread(port, size, 'int16')';
-    newData=reshape(newData, 3, length(newData)/3)
+    newData = fread(port, len, 'int8')';
+    newData=reshape(newData, 3, length(newData)/3);
     
 %     if newData(1,11) ~= -1
 %         break;
 %     end
-    for channel = 1:channels
-        plotBuffer(channel,index:index+length(newData)-2) = newData(channel,1:length(newData)-1);
-        %axes(ah(channel));
-        %cla;
-        %plot(newData(channel,:));
-        %ylim([0, 8191])
-    end
-    index = index + length(newData)-1;
-    if index == plotSamples + 1
-        index = 1;
+
+    plotBuffer = [plotBuffer(:,len/3+1:end), newData];
+    
+
+    if drawCounter == plotSamples/20
         for channel = 1:channels
             axes(ah(channel));
             cla;
             plot(plotBuffer(channel,:));
-            ylim([0, 8191])
+            ylim([0, 256])
         end
         drawnow;
         refresh;
+        drawCounter = 0;
     end
-    %drawnow;
-    %refresh;
+    drawCounter = drawCounter + 1;
 end
 
-
-% while (1)
-%     for channel = 1:channels
-%         newData = fread(port, 1, 'int16')';
-%         if newData == 65535
-%             break;
-%         end
-%         data(channel,:) = [newData data(channel,1:end-1)];
-%         axes(ah(channel));
-%         cla;
-%         plot(data(channel,:));
-%         ylim([0, 8191])
-%     end
-%     drawnow;
-%     refresh;
-% end
 fclose(port);

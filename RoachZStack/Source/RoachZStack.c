@@ -119,7 +119,7 @@
 
 // This is the max byte count per OTA message.
 #if !defined( SERIAL_APP_TX_MAX )
-#define SERIAL_APP_TX_MAX  128
+#define SERIAL_APP_TX_MAX  99
 #endif
 
 #define SERIAL_APP_RSP_CNT  4
@@ -260,18 +260,13 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
 {
   (void)task_id;  // Intentionally unreferenced parameter
   
-#ifdef LCD_SUPPORTED
-  HalLcdWriteValue ( events,16, HAL_LCD_LINE_1);
-#endif
+
   if ( events & SYS_EVENT_MSG )
   {
     afIncomingMSGPacket_t *MSGpkt;
 
     while ( (MSGpkt = (afIncomingMSGPacket_t *)osal_msg_receive( RoachZStack_TaskID )) )
     {
-#ifdef LCD_SUPPORTED
-      HalLcdWriteValue ( MSGpkt->hdr.event,16, HAL_LCD_LINE_2);
-#endif
       switch ( MSGpkt->hdr.event )
       {
       case ZDO_CB_MSG:
@@ -296,17 +291,15 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
           // Pre-pend sequence number to the Tx message.
           RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
           osal_memcpy( RoachZStack_TxBuf+1, adcMsg->buffer, adcMsg->size * sizeof(*(adcMsg->buffer)) );
-          RoachZStack_TxBuf[1] = 0x77;
-          HalLcdWriteValue(RoachZStack_TxSeq, 10, HAL_LCD_LINE_3);
           HalLedSet(HAL_LED_4, HAL_LED_MODE_TOGGLE);
           afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
                                                  (endPointDesc_t *)&RoachZStack_epDesc,
                                                   ROACHZSTACK_CLUSTERID1,
                                                   RoachZStack_TxLen+1, RoachZStack_TxBuf,
-                                                  &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS);
-          
+                                                  &RoachZStack_MsgID, AF_DISCV_ROUTE, AF_DEFAULT_RADIUS);
+          HalLcdWriteValue ( s, 10, HAL_LCD_LINE_1);
+          HalLcdWriteValue ( RoachZStack_TxLen, 10, HAL_LCD_LINE_2);
           deallocCount++;
-          HalLcdWriteValue(allocCount - deallocCount, 10, HAL_LCD_LINE_3);
         }
         break;
       }
@@ -511,8 +504,11 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
         ((seqnb < 0x80 ) && ( RoachZStack_RxSeq > 0x80)) ) // Wrap-around
     {
       HalUARTWrite( SERIAL_APP_PORT, premic_signal, sizeof(premic_signal) );
+      uint16 size = pkt->cmd.DataLength-1;
+      uint8 array[2]={ size & 0xff, size >> 8 };
+      HalUARTWrite( SERIAL_APP_PORT, array, sizeof(array) );
       // Transmit the data on the serial port.
-      if ( HalUARTWrite( SERIAL_APP_PORT, pkt->cmd.Data+1, (pkt->cmd.DataLength-1) ) )
+      if ( HalUARTWrite( SERIAL_APP_PORT, pkt->cmd.Data+1, size ) )
       {
         // Save for next incoming message
         RoachZStack_RxSeq = seqnb;
