@@ -28,6 +28,7 @@ plotBuffer = zeros(channels,plotSamples);
 index = 1;
 drawCounter = 0;
 signal = [255, 255, 255, 255, 255, 255];
+sampleSize = 1;
 while (1)
     
     buffer = zeros(1, length(signal));
@@ -40,14 +41,14 @@ while (1)
     end
     len = fread(port, 1, 'uint16');
 
-    newData = fread(port, len, 'int8')';
-    newData=reshape(newData, 3, length(newData)/3);
+    newData = fread(port, len/sampleSize, ['int',num2str(8*sampleSize)])';
+    newData = reshape(newData, 3, length(newData)/3)
     
-%     if newData(1,11) ~= -1
-%         break;
-%     end
+    if sum(newData(1,:) > 100)
+        t = 3;
+    end
 
-    plotBuffer = [plotBuffer(:,len/3+1:end), newData];
+    plotBuffer = [plotBuffer(:,len/3/sampleSize+1:end), newData];
     
 
     if drawCounter == plotSamples/20
@@ -55,7 +56,7 @@ while (1)
             axes(ah(channel));
             cla;
             plot(plotBuffer(channel,:));
-            ylim([0, 256])
+            ylim([0, 2^(8*sampleSize)])
         end
         drawnow;
         refresh;

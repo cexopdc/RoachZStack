@@ -69,9 +69,7 @@
 
 #include "hal_drivers.h"
 #include "hal_key.h"
-#if defined ( LCD_SUPPORTED )
-  #include "hal_lcd.h"
-#endif
+#include "hal_lcd.h"
 #include "hal_led.h"
 #include "hal_uart.h"
 #include "RoachZStack_ADC.h"
@@ -221,7 +219,7 @@ void RoachZStack_Init( uint8 task_id )
   afRegister( (endPointDesc_t *)&RoachZStack_epDesc );
 
   RegisterForKeys( task_id );
-
+#ifdef ZDO_COORDINATOR
   uartConfig.configured           = TRUE;              // 2x30 don't care - see uart driver.
   uartConfig.baudRate             = SERIAL_APP_BAUD;
   uartConfig.flowControl          = TRUE;
@@ -232,7 +230,8 @@ void RoachZStack_Init( uint8 task_id )
   uartConfig.intEnable            = TRUE;              // 2x30 don't care - see uart driver.
   uartConfig.callBackFunc         = RoachZStack_CallBack;
   HalUARTOpen (SERIAL_APP_PORT, &uartConfig);
-
+#endif
+  
 #if defined ( LCD_SUPPORTED )
   HalLcdWriteString( "RoachZStack", HAL_LCD_LINE_2 );
 #endif
@@ -285,12 +284,12 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
       {
         adcMsg_t* adcMsg = ((adcMsg_t*) MSGpkt);
         
-        RoachZStack_TxLen = adcMsg->size * sizeof(*(adcMsg->buffer));
+        RoachZStack_TxLen = sizeof(adcMsg->buffer);
         if (RoachZStack_TxLen)
         {
           // Pre-pend sequence number to the Tx message.
           RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
-          osal_memcpy( RoachZStack_TxBuf+1, adcMsg->buffer, adcMsg->size * sizeof(*(adcMsg->buffer)) );
+          osal_memcpy( RoachZStack_TxBuf+1, adcMsg->buffer, sizeof(adcMsg->buffer) );
           HalLedSet(HAL_LED_4, HAL_LED_MODE_TOGGLE);
           afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
                                                  (endPointDesc_t *)&RoachZStack_epDesc,
