@@ -73,13 +73,13 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
   {
     HAL_DMA_SET_DEST(HAL_DMA_GET_DESC1234(1), pBufferReading->buffer);
     HAL_DMA_ARM_CH(1);
+    T1CTL = 0x00 | 0x0C | 0x02;
   }
 
   osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
 
   CLEAR_SLEEP_MODE();
   HAL_EXIT_ISR();
-  T1CTL = 0x00 | 0x0C | 0x02;
 }
 #endif
 /*********************************************************************
@@ -194,9 +194,13 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
     if (pBufferReading == NULL)
     {
       pBufferReading = pBufferNext;
-      pBufferNext = NULL;
-      HAL_DMA_SET_DEST(HAL_DMA_GET_DESC1234(1), pBufferReading->buffer);
-      HAL_DMA_ARM_CH(1);
+      pBufferNext = (adcMsg_t*) osal_msg_allocate( sizeof(adcMsg_t) );
+      if (pBufferReading != NULL)
+      {  
+        HAL_DMA_SET_DEST(HAL_DMA_GET_DESC1234(1), pBufferReading->buffer);
+        HAL_DMA_ARM_CH(1);
+        T1CTL = 0x00 | 0x0C | 0x02;
+      }
     }
     
     HAL_EXIT_CRITICAL_SECTION( intState );   // Re-enable interrupts.

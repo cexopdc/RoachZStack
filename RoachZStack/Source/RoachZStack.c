@@ -588,7 +588,7 @@ static void RoachZStack_Send(void)
   }
 #else
   if (!RoachZStack_TxLen && 
-      (RoachZStack_TxLen = HalUARTRead(SERIAL_APP_PORT, RoachZStack_TxBuf+1, SERIAL_APP_TX_MAX)))
+      (RoachZStack_TxLen = HalUARTRead(SERIAL_APP_PORT, RoachZStack_TxBuf+1, SERIAL_APP_TX_MAX-1)))
   {
     // Pre-pend sequence number to the Tx message.
     RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
@@ -596,13 +596,20 @@ static void RoachZStack_Send(void)
 
   if (RoachZStack_TxLen)
   {
-    if (afStatus_SUCCESS != AF_DataRequest(&RoachZStack_TxAddr,
+    afStatus_t status = AF_DataRequest(&RoachZStack_TxAddr,
                                            (endPointDesc_t *)&RoachZStack_epDesc,
                                             ROACHZSTACK_CLUSTERID1,
                                             RoachZStack_TxLen+1, RoachZStack_TxBuf,
-                                            &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS))
+                                            &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS);
+    if (afStatus_SUCCESS != status)
     {
+      HalLcdWriteValue ( status, 10, HAL_LCD_LINE_1);
+      HalLcdWriteValue ( RoachZStack_TxLen, 10, HAL_LCD_LINE_1);
       osal_set_event(RoachZStack_TaskID, ROACHZSTACK_SEND_EVT);
+    }
+    else
+    {
+      RoachZStack_TxLen = 0;
     }
   }
 #endif
