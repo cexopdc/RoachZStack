@@ -125,12 +125,18 @@
 unsigned char premic_signal[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
 // This list should be filled with Application specific Cluster IDs.
-const cId_t RoachZStack_ClusterList[ROACHZSTACK_MAX_CLUSTERS] =
+const cId_t RoachZStack_ClusterListIn[ROACHZSTACK_MAX_CLUSTERS] =
 {
   ROACHZSTACK_CLUSTERID1,
   ROACHZSTACK_CLUSTERID2
 };
 
+// This list should be filled with Application specific Cluster IDs.
+const cId_t RoachZStack_ClusterListOut[ROACHZSTACK_MAX_CLUSTERS] =
+{
+  ROACHZSTACK_CLUSTERID1,
+  ROACHZSTACK_CLUSTERID2
+};
 const SimpleDescriptionFormat_t RoachZStack_SimpleDesc =
 {
   ROACHZSTACK_ENDPOINT,              //  int   Endpoint;
@@ -239,6 +245,11 @@ void RoachZStack_Init( uint8 task_id )
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, End_Device_Bind_rsp );
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, Match_Desc_rsp );
   
+
+  ZDO_RegisterForZDOMsg( RoachZStack_TaskID, Match_Desc_req );
+#ifdef ZDO_COORDINATOR
+#endif
+  
 #ifndef ZDO_COORDINATOR
   osal_set_event(RoachZStack_TaskID, RZS_DO_HANDSHAKE );
 #endif
@@ -291,12 +302,12 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
           RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
           osal_memcpy( RoachZStack_TxBuf+1, adcMsg->buffer, sizeof(adcMsg->buffer) );
           HalLedSet(HAL_LED_4, HAL_LED_MODE_TOGGLE);
-          afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
+          /*afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
                                                  (endPointDesc_t *)&RoachZStack_epDesc,
                                                   ROACHZSTACK_CLUSTERID1,
                                                   RoachZStack_TxLen+1, RoachZStack_TxBuf,
                                                   &RoachZStack_MsgID, AF_DISCV_ROUTE, AF_DEFAULT_RADIUS);
-          HalLcdWriteValue ( s, 10, HAL_LCD_LINE_1);
+          HalLcdWriteValue ( s, 10, HAL_LCD_LINE_1);*/
           HalLcdWriteValue ( RoachZStack_TxLen, 10, HAL_LCD_LINE_2);
           deallocCount++;
         }
@@ -393,6 +404,10 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
           osal_mem_free( pRsp );
         }
       }
+      break;
+      
+    case Match_Desc_req:
+      osal_set_event(RoachZStack_TaskID, RZS_DO_HANDSHAKE );
       break;
   }
 }

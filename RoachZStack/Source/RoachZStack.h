@@ -63,9 +63,8 @@ extern "C"
 #define ROACHZSTACK_DEVICE_VERSION     0
 #define ROACHZSTACK_FLAGS              0
 
-#define ROACHZSTACK_MAX_CLUSTERS       2
-#define ROACHZSTACK_CLUSTERID1         1
-#define ROACHZSTACK_CLUSTERID2         2
+#define ROACHZSTACK_CLUSTER_MIC         1
+#define ROACHZSTACK_CLUSTER_COMMAND         2
 
 #define ROACHZSTACK_SEND_EVT           0x0001
 #define ROACHZSTACK_RESP_EVT           0x0002
