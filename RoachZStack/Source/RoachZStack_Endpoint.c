@@ -107,16 +107,18 @@
 
 unsigned char premic_signal[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
+
+
 // This list should be filled with Application specific Cluster IDs.
 const cId_t RoachZStack_ClusterListIn[1] =
 {
-  ROACHZSTACK_CLUSTER_MIC,
+  ROACHZSTACK_CLUSTER_CMD,
 };
 
 // This list should be filled with Application specific Cluster IDs.
 const cId_t RoachZStack_ClusterListOut[1] =
 {
-  ROACHZSTACK_CLUSTER_CMD,
+  ROACHZSTACK_CLUSTER_MIC,
 };
 
 const SimpleDescriptionFormat_t RoachZStack_SimpleDesc =
@@ -180,9 +182,6 @@ static uint8 RoachZStack_RspBuf[SERIAL_APP_RSP_CNT];
 static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg );
 static void RoachZStack_HandleKeys( uint8 shift, uint8 keys );
 static void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt );
-static void RoachZStack_Send(void);
-static void RoachZStack_Resp(void);
-static void RoachZStack_CallBack(uint8 port, uint8 event);
 
 volatile uint8 allocCount = 0;
 volatile uint8 deallocCount = 0;
@@ -207,18 +206,6 @@ void RoachZStack_Init( uint8 task_id )
   afRegister( (endPointDesc_t *)&RoachZStack_epDesc );
 
   RegisterForKeys( task_id );
-
-  uartConfig.configured           = TRUE;              // 2x30 don't care - see uart driver.
-  uartConfig.baudRate             = SERIAL_APP_BAUD;
-  uartConfig.flowControl          = TRUE;
-  uartConfig.flowControlThreshold = SERIAL_APP_THRESH; // 2x30 don't care - see uart driver.
-  uartConfig.rx.maxBufSize        = SERIAL_APP_RX_SZ;  // 2x30 don't care - see uart driver.
-  uartConfig.tx.maxBufSize        = SERIAL_APP_TX_SZ;  // 2x30 don't care - see uart driver.
-  uartConfig.idleTimeout          = SERIAL_APP_IDLE;   // 2x30 don't care - see uart driver.
-  uartConfig.intEnable            = TRUE;              // 2x30 don't care - see uart driver.
-  uartConfig.callBackFunc         = RoachZStack_CallBack;
-  HalUARTOpen (SERIAL_APP_PORT, &uartConfig);
-
   
 #if defined ( LCD_SUPPORTED )
   HalLcdWriteString( "RoachZStack", HAL_LCD_LINE_2 );
@@ -226,7 +213,8 @@ void RoachZStack_Init( uint8 task_id )
   
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, End_Device_Bind_rsp );
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, Match_Desc_rsp );
-  ZDO_RegisterForZDOMsg( RoachZStack_TaskID, Match_Desc_req );
+  
+  osal_set_event(RoachZStack_TaskID, RZS_DO_HANDSHAKE );
   
 }
 
@@ -264,7 +252,29 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
       case AF_INCOMING_MSG_CMD:
         RoachZStack_ProcessMSGCmd( MSGpkt );
         break;
-
+  
+      case RZS_ADC_VALUE:
+      {
+        adcMsg_t* adcMsg = ((adcMsg_t*) MSGpkt);
+        
+        RoachZStack_TxLen = sizeof(adcMsg->buffer);
+        if (RoachZStack_TxLen)
+        {
+          // Pre-pend sequence number to the Tx message.
+          RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
+          osal_memcpy( RoachZStack_TxBuf+1, adcMsg->buffer, sizeof(adcMsg->buffer) );
+          HalLedSet(HAL_LED_4, HAL_LED_MODE_TOGGLE);
+          /*afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
+                                                 (endPointDesc_t *)&RoachZStack_epDesc,
+                                                  ROACHZSTACK_CLUSTER_MIC,
+                                                  RoachZStack_TxLen+1, RoachZStack_TxBuf,
+                                                  &RoachZStack_MsgID, AF_DISCV_ROUTE, AF_DEFAULT_RADIUS);
+          HalLcdWriteValue ( s, 10, HAL_LCD_LINE_1);*/
+          HalLcdWriteValue ( RoachZStack_TxLen, 10, HAL_LCD_LINE_2);
+          deallocCount++;
+        }
+        break;
+      }
       default:
         break;
       }
@@ -275,18 +285,6 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
     return ( events ^ SYS_EVENT_MSG );
   }
 
-  if ( events & ROACHZSTACK_SEND_EVT )
-  {
-    RoachZStack_Send();
-    return ( events ^ ROACHZSTACK_SEND_EVT );
-  }
-
-  if ( events & ROACHZSTACK_RESP_EVT )
-  {
-    RoachZStack_Resp();
-    return ( events ^ ROACHZSTACK_RESP_EVT );
-  }
-  
   if ( events & RZS_DO_HANDSHAKE )
   {
     zAddrType_t txAddr;
@@ -356,10 +354,6 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
           osal_mem_free( pRsp );
         }
       }
-      break;
-      
-    case Match_Desc_req:
-      osal_set_event(RoachZStack_TaskID, RZS_DO_HANDSHAKE );
       break;
   }
 }
@@ -432,50 +426,21 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
 
   switch ( pkt->clusterId )
   {
-  // A message with microphone data to be transmitted on the serial port.
-  case ROACHZSTACK_CLUSTER_MIC:
-    // Store the address for sending and retrying.
-    osal_memcpy(&RoachZStack_RxAddr, &(pkt->srcAddr), sizeof( afAddrType_t ));
 
-    seqnb = pkt->cmd.Data[0];
-#ifdef LCD_SUPPORTED          
-    HalLcdWriteValue ( pkt->nwkSeqNum, 16, HAL_LCD_LINE_3);
-#endif
-    // Keep message if not a repeat packet
-    if ( (seqnb > RoachZStack_RxSeq) ||                    // Normal
-        ((seqnb < 0x80 ) && ( RoachZStack_RxSeq > 0x80)) ) // Wrap-around
+  // stimulation command
+  case ROACHZSTACK_CLUSTER_CMD:
+    if ((pkt->cmd.Data[1] == RoachZStack_TxSeq) &&
+       ((pkt->cmd.Data[0] == OTA_SUCCESS) || (pkt->cmd.Data[0] == OTA_DUP_MSG)))
     {
-      HalUARTWrite( SERIAL_APP_PORT, premic_signal, sizeof(premic_signal) );
-      uint16 size = pkt->cmd.DataLength-1;
-      uint8 array[2]={ size & 0xff, size >> 8 };
-      HalUARTWrite( SERIAL_APP_PORT, array, sizeof(array) );
-      // Transmit the data on the serial port.
-      if ( HalUARTWrite( SERIAL_APP_PORT, pkt->cmd.Data+1, size ) )
-      {
-        // Save for next incoming message
-        RoachZStack_RxSeq = seqnb;
-        stat = OTA_SUCCESS;
-      }
-      else
-      {
-        stat = OTA_SER_BUSY;
-      }
+      RoachZStack_TxLen = 0;
+      osal_stop_timerEx(RoachZStack_TaskID, ROACHZSTACK_SEND_EVT);
     }
     else
     {
-      stat = OTA_DUP_MSG;
+      // Re-start timeout according to delay sent from other device.
+      delay = BUILD_UINT16( pkt->cmd.Data[2], pkt->cmd.Data[3] );
+      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_SEND_EVT, delay );
     }
-
-    // Select approproiate OTA flow-control delay.
-    delay = (stat == OTA_SER_BUSY) ? ROACHZSTACK_NAK_DELAY : ROACHZSTACK_ACK_DELAY;
-
-    // Build & send OTA response message.
-    RoachZStack_RspBuf[0] = stat;
-    RoachZStack_RspBuf[1] = seqnb;
-    RoachZStack_RspBuf[2] = LO_UINT16( delay );
-    RoachZStack_RspBuf[3] = HI_UINT16( delay );
-    osal_set_event( RoachZStack_TaskID, ROACHZSTACK_RESP_EVT );
-    osal_stop_timerEx(RoachZStack_TaskID, ROACHZSTACK_RESP_EVT);
     break;
 
     default:
@@ -483,110 +448,7 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
   }
 }
 
-/*********************************************************************
- * @fn      RoachZStack_Send
- *
- * @brief   Send data OTA.
- *
- * @param   none
- *
- * @return  none
- */
-static void RoachZStack_Send(void)
-{
-#if SERIAL_APP_LOOPBACK
-  if (RoachZStack_TxLen < SERIAL_APP_TX_MAX)
-  {
-    RoachZStack_TxLen += HalUARTRead(SERIAL_APP_PORT, RoachZStack_TxBuf+RoachZStack_TxLen+1,
-                                                    SERIAL_APP_TX_MAX-RoachZStack_TxLen);
-  }
 
-  if (RoachZStack_TxLen)
-  {
-    (void)RoachZStack_TxAddr;
-    if (HalUARTWrite(SERIAL_APP_PORT, RoachZStack_TxBuf+1, RoachZStack_TxLen))
-    {
-      RoachZStack_TxLen = 0;
-    }
-    else
-    {
-      osal_set_event(RoachZStack_TaskID, ROACHZSTACK_SEND_EVT);
-    }
-  }
-#else
-  if (!RoachZStack_TxLen && 
-      (RoachZStack_TxLen = HalUARTRead(SERIAL_APP_PORT, RoachZStack_TxBuf+1, SERIAL_APP_TX_MAX-1)))
-  {
-    // Pre-pend sequence number to the Tx message.
-    RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
-  }
-
-  if (RoachZStack_TxLen)
-  {
-    afStatus_t status = AF_DataRequest(&RoachZStack_TxAddr,
-                                           (endPointDesc_t *)&RoachZStack_epDesc,
-                                            ROACHZSTACK_CLUSTER_CMD,
-                                            RoachZStack_TxLen+1, RoachZStack_TxBuf,
-                                            &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS);
-    if (afStatus_SUCCESS != status)
-    {
-      HalLcdWriteValue ( status, 10, HAL_LCD_LINE_1);
-      HalLcdWriteValue ( RoachZStack_TxLen, 10, HAL_LCD_LINE_1);
-      osal_set_event(RoachZStack_TaskID, ROACHZSTACK_SEND_EVT);
-    }
-    else
-    {
-      RoachZStack_TxLen = 0;
-    }
-  }
-#endif
-}
-
-/*********************************************************************
- * @fn      RoachZStack_Resp
- *
- * @brief   Send data OTA.
- *
- * @param   none
- *
- * @return  none
- */
-static void RoachZStack_Resp(void)
-{
-  if (afStatus_SUCCESS != AF_DataRequest(&RoachZStack_RxAddr,
-                                         (endPointDesc_t *)&RoachZStack_epDesc,
-                                          ROACHZSTACK_CLUSTER_MIC,
-                                          SERIAL_APP_RSP_CNT, RoachZStack_RspBuf,
-                                         &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS))
-  {
-    osal_set_event(RoachZStack_TaskID, ROACHZSTACK_RESP_EVT);
-  }
-}
-
-/*********************************************************************
- * @fn      RoachZStack_CallBack
- *
- * @brief   Send data OTA.
- *
- * @param   port - UART port.
- * @param   event - the UART port event flag.
- *
- * @return  none
- */
-static void RoachZStack_CallBack(uint8 port, uint8 event)
-{
-  (void)port;
-
-  if ((event & (HAL_UART_RX_FULL | HAL_UART_RX_ABOUT_FULL | HAL_UART_RX_TIMEOUT)) &&
-#if SERIAL_APP_LOOPBACK
-      (RoachZStack_TxLen < SERIAL_APP_TX_MAX))
-#else
-      !RoachZStack_TxLen)
-#endif
-  {
-    RoachZStack_Send();
-  }
-}
 
 /*********************************************************************
 *********************************************************************/

@@ -56,7 +56,11 @@ extern "C"
 
 // These constants are only for example and should be changed to the
 // device's needs
+#ifdef ZDO_COORDINATOR
+#define ROACHZSTACK_ENDPOINT           10
+#else
 #define ROACHZSTACK_ENDPOINT           11
+#endif
 
 #define ROACHZSTACK_PROFID             0x0F05
 #define ROACHZSTACK_DEVICEID           0x0001
@@ -64,7 +68,7 @@ extern "C"
 #define ROACHZSTACK_FLAGS              0
 
 #define ROACHZSTACK_CLUSTER_MIC         1
-#define ROACHZSTACK_CLUSTER_COMMAND         2
+#define ROACHZSTACK_CLUSTER_CMD         2
 
 #define ROACHZSTACK_SEND_EVT           0x0001
 #define ROACHZSTACK_RESP_EVT           0x0002
