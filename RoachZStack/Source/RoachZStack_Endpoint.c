@@ -37,6 +37,7 @@
   contact Texas Instruments Incorporated at www.TI.com. 
 **************************************************************************************************/
 
+#ifndef ZDO_COORDINATOR
 
 /*********************************************************************
  * INCLUDES
@@ -171,10 +172,6 @@ static uint8 RoachZStack_TxSeq;
 static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX+1];
 static uint8 RoachZStack_TxLen;
 
-static afAddrType_t RoachZStack_RxAddr;
-static uint8 RoachZStack_RxSeq;
-static uint8 RoachZStack_RspBuf[SERIAL_APP_RSP_CNT];
-
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
@@ -201,17 +198,15 @@ void RoachZStack_Init( uint8 task_id )
   halUARTCfg_t uartConfig;
 
   RoachZStack_TaskID = task_id;
-  RoachZStack_RxSeq = 0xC3;
 
   afRegister( (endPointDesc_t *)&RoachZStack_epDesc );
-
+  
   RegisterForKeys( task_id );
   
 #if defined ( LCD_SUPPORTED )
   HalLcdWriteString( "RoachZStack", HAL_LCD_LINE_2 );
 #endif
   
-  ZDO_RegisterForZDOMsg( RoachZStack_TaskID, End_Device_Bind_rsp );
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, Match_Desc_rsp );
   
   osal_set_event(RoachZStack_TaskID, RZS_DO_HANDSHAKE );
@@ -264,12 +259,12 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
           RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
           osal_memcpy( RoachZStack_TxBuf+1, adcMsg->buffer, sizeof(adcMsg->buffer) );
           HalLedSet(HAL_LED_4, HAL_LED_MODE_TOGGLE);
-          /*afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
+          afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
                                                  (endPointDesc_t *)&RoachZStack_epDesc,
                                                   ROACHZSTACK_CLUSTER_MIC,
                                                   RoachZStack_TxLen+1, RoachZStack_TxBuf,
                                                   &RoachZStack_MsgID, AF_DISCV_ROUTE, AF_DEFAULT_RADIUS);
-          HalLcdWriteValue ( s, 10, HAL_LCD_LINE_1);*/
+          HalLcdWriteValue ( s, 10, HAL_LCD_LINE_1);
           HalLcdWriteValue ( RoachZStack_TxLen, 10, HAL_LCD_LINE_2);
           deallocCount++;
         }
@@ -319,21 +314,7 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
 {
   switch ( inMsg->clusterID )
   {
-    case End_Device_Bind_rsp:
-      if ( ZDO_ParseBindRsp( inMsg ) == ZSuccess )
-      {
-        // Light LED
-        HalLedSet( HAL_LED_4, HAL_LED_MODE_ON );
-      }
-#if defined(BLINK_LEDS)
-      else
-      {
-        // Flash LED to show failure
-        HalLedSet ( HAL_LED_4, HAL_LED_MODE_FLASH );
-      }
-#endif
-      break;
-      
+    
     case Match_Desc_rsp:
       {
         ZDO_ActiveEndpointRsp_t *pRsp = ZDO_ParseEPListRsp( inMsg );
@@ -420,8 +401,6 @@ void RoachZStack_HandleKeys( uint8 shift, uint8 keys )
  */
 void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
 {
-  uint8 stat;
-  uint8 seqnb;
   uint8 delay;
 
   switch ( pkt->clusterId )
@@ -452,3 +431,5 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
 
 /*********************************************************************
 *********************************************************************/
+
+#endif

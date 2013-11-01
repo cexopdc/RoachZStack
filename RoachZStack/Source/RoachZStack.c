@@ -37,6 +37,7 @@
   contact Texas Instruments Incorporated at www.TI.com. 
 **************************************************************************************************/
 
+#ifdef ZDO_COORDINATOR
 
 /*********************************************************************
  * INCLUDES
@@ -224,9 +225,8 @@ void RoachZStack_Init( uint8 task_id )
   HalLcdWriteString( "RoachZStack", HAL_LCD_LINE_2 );
 #endif
   
-  ZDO_RegisterForZDOMsg( RoachZStack_TaskID, End_Device_Bind_rsp );
-  ZDO_RegisterForZDOMsg( RoachZStack_TaskID, Match_Desc_rsp );
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, Match_Desc_req );
+ 
   
 }
 
@@ -286,24 +286,6 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
     RoachZStack_Resp();
     return ( events ^ ROACHZSTACK_RESP_EVT );
   }
-  
-  if ( events & RZS_DO_HANDSHAKE )
-  {
-    zAddrType_t txAddr;
-    // Initiate a Match Description Request (Service Discovery)
-    txAddr.addrMode = AddrBroadcast;
-    txAddr.addr.shortAddr = NWK_BROADCAST_SHORTADDR;
-    afStatus_t status = ZDP_MatchDescReq( &txAddr, NWK_BROADCAST_SHORTADDR,
-                    ROACHZSTACK_PROFID,
-                    sizeof(RoachZStack_ClusterListIn), (cId_t *)RoachZStack_ClusterListIn,
-                    sizeof(RoachZStack_ClusterListOut), (cId_t *)RoachZStack_ClusterListOut,
-                    FALSE );
-    if (status != afStatus_SUCCESS)
-    {
-      osal_start_timerEx( RoachZStack_TaskID, RZS_DO_HANDSHAKE, 500); 
-    }
-    return ( events ^ RZS_DO_HANDSHAKE );
-  }
 
   return ( 0 );  // Discard unknown events.
 }
@@ -352,6 +334,8 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
             HalLedSet( HAL_LED_4, HAL_LED_MODE_ON );
             
             RegisterForADC( RoachZStack_TaskID );
+            
+            osal_stop_timerEx( RoachZStack_TaskID, RZS_DO_HANDSHAKE);
           }
           osal_mem_free( pRsp );
         }
@@ -359,7 +343,10 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
       break;
       
     case Match_Desc_req:
-      osal_set_event(RoachZStack_TaskID, RZS_DO_HANDSHAKE );
+      RoachZStack_TxAddr.addrMode = (afAddrMode_t)Addr16Bit;
+      RoachZStack_TxAddr.addr.shortAddr = inMsg->srcAddr.addr.shortAddr;
+      RoachZStack_TxAddr.endPoint = ROACHZSTACK_ENDPOINT;
+      
       break;
   }
 }
@@ -531,7 +518,7 @@ static void RoachZStack_Send(void)
     if (afStatus_SUCCESS != status)
     {
       HalLcdWriteValue ( status, 10, HAL_LCD_LINE_1);
-      HalLcdWriteValue ( RoachZStack_TxLen, 10, HAL_LCD_LINE_1);
+      HalLcdWriteValue ( RoachZStack_TxLen, 10, HAL_LCD_LINE_2);
       osal_set_event(RoachZStack_TaskID, ROACHZSTACK_SEND_EVT);
     }
     else
@@ -590,3 +577,4 @@ static void RoachZStack_CallBack(uint8 port, uint8 event)
 
 /*********************************************************************
 *********************************************************************/
+#endif

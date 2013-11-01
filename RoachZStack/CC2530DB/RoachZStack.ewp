@@ -488,7 +488,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -497,7 +497,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CompilerMisraRules04</name>
@@ -2421,6 +2421,11 @@
           <state>HAL_DMA=TRUE</state>
           <state>LCD_SUPPORTED</state>
           <state>HAL_LCD=TRUE</state>
+          <state>MT_TASK</state>
+          <state>MT_ZDO_FUNC</state>
+          <state>MT_ZDO_CB_FUNC</state>
+          <state>MT_SYS_FUNC</state>
+          <state>MT_UTIL_FUNC</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -3162,6 +3167,7 @@
         <option>
           <name>Linker Extra Options Edit</name>
           <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\EndDevice.lib</state>
+          <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\EndDeviceMT.lib</state>
           <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\Security.lib</state>
           <state>-C $PROJ_DIR$\..\..\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
         </option>
@@ -3231,6 +3237,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\Source\RoachZStack_ADC.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\RoachZStack_Endpoint.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Source\ZConfig.h</name>
