@@ -58,6 +58,7 @@
 #include "hal_uart.h"
 #include "RoachZStack_ADC.h"
 #include "ZConfig.h"
+#include "commands.h"
 
 /*********************************************************************
  * MACROS
@@ -184,6 +185,7 @@ static void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt );
 static void RoachZStack_Send(void);
 static void RoachZStack_Resp(void);
 static void RoachZStack_CallBack(uint8 port, uint8 event);
+static void showMessage(void);
 
 volatile uint8 allocCount = 0;
 volatile uint8 deallocCount = 0;
@@ -470,6 +472,15 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
   }
 }
 
+static void showMessage(void)
+{
+  stimCommand* cmd = parseCommand(RoachZStack_TxBuf+1, RoachZStack_TxLen);
+  HalLcdWriteValue ( cmd->direction, 10, HAL_LCD_LINE_1);
+  HalLcdWriteValue ( cmd->repeats, 10, HAL_LCD_LINE_2);
+  HalLcdWriteValue ( cmd->duration, 10, HAL_LCD_LINE_3);
+  osal_mem_free(cmd);
+}
+
 /*********************************************************************
  * @fn      RoachZStack_Send
  *
@@ -507,9 +518,10 @@ static void RoachZStack_Send(void)
     // Pre-pend sequence number to the Tx message.
     RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
   }
-
+  
   if (RoachZStack_TxLen)
   {
+    showMessage();
     afStatus_t status = AF_DataRequest(&RoachZStack_TxAddr,
                                            (endPointDesc_t *)&RoachZStack_epDesc,
                                             ROACHZSTACK_CLUSTER_CMD,

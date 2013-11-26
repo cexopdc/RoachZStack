@@ -2506,7 +2506,7 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>00000</state>
+          <state>11111</state>
         </option>
         <option>
           <name>CCObjUseModuleName</name>
@@ -2636,7 +2636,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -2645,7 +2645,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CompilerMisraRules04</name>
@@ -3068,20 +3068,20 @@
         </option>
         <option>
           <name>GenerateExtraOutput</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>XExtraOutOverride</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>ExtraOutputFile</name>
-          <state>RoachZStack.sim</state>
+          <state>RoachZStack.a51</state>
         </option>
         <option>
           <name>ExtraOutputFormat</name>
           <version>11</version>
-          <state>60</state>
+          <state>23</state>
         </option>
         <option>
           <name>ExtraFormatVariant</name>
@@ -3167,7 +3167,6 @@
         <option>
           <name>Linker Extra Options Edit</name>
           <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\EndDevice.lib</state>
-          <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\EndDeviceMT.lib</state>
           <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\Security.lib</state>
           <state>-C $PROJ_DIR$\..\..\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
         </option>
@@ -3223,6 +3222,12 @@
   </configuration>
   <group>
     <name>App</name>
+    <file>
+      <name>$PROJ_DIR$\..\Source\commands.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\commands.h</name>
+    </file>
     <file>
       <name>$PROJ_DIR$\..\Source\OSAL_RoachZStack.c</name>
     </file>

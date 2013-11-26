@@ -58,6 +58,7 @@
 #include "hal_uart.h"
 #include "RoachZStack_ADC.h"
 #include "ZConfig.h"
+#include "commands.h"
 
 /*********************************************************************
  * MACROS
@@ -179,6 +180,7 @@ static uint8 RoachZStack_TxLen;
 static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg );
 static void RoachZStack_HandleKeys( uint8 shift, uint8 keys );
 static void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt );
+static void showMessage(afMSGCommandFormat_t data);
 
 volatile uint8 allocCount = 0;
 volatile uint8 deallocCount = 0;
@@ -264,8 +266,6 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
                                                   ROACHZSTACK_CLUSTER_MIC,
                                                   RoachZStack_TxLen+1, RoachZStack_TxBuf,
                                                   &RoachZStack_MsgID, AF_DISCV_ROUTE, AF_DEFAULT_RADIUS);
-          HalLcdWriteValue ( s, 10, HAL_LCD_LINE_1);
-          HalLcdWriteValue ( RoachZStack_TxLen, 10, HAL_LCD_LINE_2);
           deallocCount++;
         }
         break;
@@ -386,7 +386,14 @@ void RoachZStack_HandleKeys( uint8 shift, uint8 keys )
     }
   }
 }
-
+static void showMessage(afMSGCommandFormat_t data)
+{
+  stimCommand* cmd = parseCommand(data.Data+1, data.DataLength-1);
+  HalLcdWriteValue ( cmd->direction, 10, HAL_LCD_LINE_1);
+  HalLcdWriteValue ( cmd->repeats, 10, HAL_LCD_LINE_2);
+  HalLcdWriteValue ( cmd->duration, 10, HAL_LCD_LINE_3);
+  osal_mem_free(cmd);
+}
 /*********************************************************************
  * @fn      RoachZStack_ProcessMSGCmd
  *
@@ -401,26 +408,12 @@ void RoachZStack_HandleKeys( uint8 shift, uint8 keys )
  */
 void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
 {
-  uint8 delay;
-
   switch ( pkt->clusterId )
   {
 
   // stimulation command
   case ROACHZSTACK_CLUSTER_CMD:
-    if ((pkt->cmd.Data[1] == RoachZStack_TxSeq) &&
-       ((pkt->cmd.Data[0] == OTA_SUCCESS) || (pkt->cmd.Data[0] == OTA_DUP_MSG)))
-    {
-      RoachZStack_TxLen = 0;
-      osal_stop_timerEx(RoachZStack_TaskID, ROACHZSTACK_SEND_EVT);
-    }
-    else
-    {
-      // Re-start timeout according to delay sent from other device.
-      delay = BUILD_UINT16( pkt->cmd.Data[2], pkt->cmd.Data[3] );
-      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_SEND_EVT, delay );
-    }
-    break;
+    showMessage(pkt->cmd);
 
     default:
       break;
