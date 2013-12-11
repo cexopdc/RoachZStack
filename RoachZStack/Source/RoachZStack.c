@@ -108,6 +108,7 @@
 #define SERIAL_APP_RSP_CNT  4
 
 unsigned char premic_signal[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+uint8 uart_buffer[SERIAL_APP_TX_MAX+2+6];
 
 // This list should be filled with Application specific Cluster IDs.
 const cId_t RoachZStack_ClusterListIn[1] =
@@ -203,6 +204,8 @@ volatile uint8 deallocCount = 0;
 void RoachZStack_Init( uint8 task_id )
 {
   halUARTCfg_t uartConfig;
+  
+  
 
   RoachZStack_TaskID = task_id;
   RoachZStack_RxSeq = 0xC3;
@@ -434,9 +437,12 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
     if ( (seqnb > RoachZStack_RxSeq) ||                    // Normal
         ((seqnb < 0x80 ) && ( RoachZStack_RxSeq > 0x80)) ) // Wrap-around
     {
+      
       HalUARTWrite( SERIAL_APP_PORT, premic_signal, sizeof(premic_signal) );
       uint16 size = pkt->cmd.DataLength-1;
-      uint8 array[2]={ size & 0xff, size >> 8 };
+      uart_buffer[0] = size & 0xff;
+      uart_buffer[1] = size >> 8;
+      mem
       HalUARTWrite( SERIAL_APP_PORT, array, sizeof(array) );
       // Transmit the data on the serial port.
       if ( HalUARTWrite( SERIAL_APP_PORT, pkt->cmd.Data+1, size ) )
@@ -452,6 +458,7 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
     }
     else
     {
+      
       stat = OTA_DUP_MSG;
     }
 

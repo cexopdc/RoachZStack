@@ -1,4 +1,7 @@
-fclose(port)
+try
+    fclose(port)
+catch
+end
 close all;
 
 port = serial('COM7','BaudRate',115200, 'FlowControl', 'hardware');
@@ -23,7 +26,7 @@ for channel = 1:channels
 end
 %figure; hold on;
 
-plotSamples = 1000;
+plotSamples = 10000;
 plotBuffer = zeros(channels,plotSamples);
 index = 1;
 drawCounter = 0;
@@ -45,11 +48,19 @@ while (1)
         end
     end
     
-    len = fread(port, 1, 'uint16')
+    len = fread(port, 1, 'uint16');
+    if (len ~= 90)
+        x = 0
+    end
 while(len > 1000 || len <=0 )
     len = fread(port, 1, 'uint16')
 end
     newData = fread(port, len/sampleSize, ['int',num2str(8*sampleSize)])';
+    if (min(newData) == -1)
+        x = 0
+        len
+        newData
+    end
     newData = reshape(newData, channels, length(newData)/channels);
     recording = [recording, newData];
     if sum(newData(1,:) > 100)
@@ -64,13 +75,13 @@ end
             axes(ah(channel));
             cla;
             plot(plotBuffer(channel,:));
-            ylim([0, 2^(8*sampleSize)])
+            ylim([0, 2^(8*sampleSize-1)])
         end
         drawnow;
         refresh;
         drawCounter = 0;
     end
-    drawCounter = drawCounter + 1;
+    %drawCounter = drawCounter + 1;
     playCount = playCount + len/channels/sampleSize;
     if playCount-lastPlay > 25000
         sample = recording(1,lastPlay:end);

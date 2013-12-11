@@ -62,10 +62,15 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
 {
   
   T1CTL = 0x00 | 0x0C | 0x00;
-  HAL_ENTER_ISR();
+  //HAL_ENTER_ISR();
 
   DMAIF = 0;
 
+  if (pBufferDone != NULL)
+  {
+    osal_msg_deallocate((uint8*)pBufferDone);
+    overflow++;
+  }
   pBufferDone = pBufferReading;
   pBufferReading = pBufferNext;
   pBufferNext = NULL;
@@ -79,7 +84,7 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
   osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
 
   CLEAR_SLEEP_MODE();
-  HAL_EXIT_ISR();
+  //HAL_EXIT_ISR();
 }
 #endif
 /*********************************************************************
@@ -101,7 +106,7 @@ void RoachZStack_ADC_Init( uint8 task_id )
 
     T1CTL = 0x00 | 0x0C | 0x02;
     
-    uint16 counter = 100;//200;//125;
+    uint16 counter = 60;//200;//125;
     
     T1CC0H = counter >> 8;
     T1CC0L = (uint8)counter;
@@ -174,6 +179,13 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
     {
       // Send the address to the task
       pBufferDone->hdr.event = RZS_ADC_VALUE;
+      for (int i = 0; i < (sizeof(pBufferDone->buffer)/sizeof(*(pBufferDone->buffer))); i++)
+      {
+        if (pBufferDone->buffer[i] > 127)
+        {
+          pBufferDone->buffer[i] = 0;
+        }
+      }
       osal_msg_send( registeredADCTaskID, (uint8 *)pBufferDone );
       pBufferDone = NULL;
     }
@@ -185,7 +197,6 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
       if (pBufferNext != NULL)
       {  
         pBufferNext->size = 0;
-        overflow = 0;
       }
       else
       {

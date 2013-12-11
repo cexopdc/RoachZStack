@@ -275,6 +275,7 @@
         <option>
           <name>CCDefines</name>
           <state>HAL_UART=TRUE</state>
+          <state>HAL_DMA=TRUE</state>
           <state>SERIAL_APP_PORT=0</state>
           <state>LCD_SUPPORTED</state>
           <state>HAL_LCD=TRUE</state>
@@ -2421,11 +2422,6 @@
           <state>HAL_DMA=TRUE</state>
           <state>LCD_SUPPORTED</state>
           <state>HAL_LCD=TRUE</state>
-          <state>MT_TASK</state>
-          <state>MT_ZDO_FUNC</state>
-          <state>MT_ZDO_CB_FUNC</state>
-          <state>MT_SYS_FUNC</state>
-          <state>MT_UTIL_FUNC</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
