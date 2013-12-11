@@ -8,9 +8,9 @@ function plotMics()
 
     sampleSize = 1;
     plotSamples = 5000;
-    readSamples = 40;
-    channels = 2;
-    scale = 3.3;
+    readSamples = 42;
+    channels = 3;
+    scale = 1.15;
 
     port = serial('COM7','BaudRate',115200, 'FlowControl', 'hardware');
     port.BytesAvailableFcnCount = readSamples;
