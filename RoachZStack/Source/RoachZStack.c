@@ -175,6 +175,7 @@ static uint8 RoachZStack_TxLen;
 static afAddrType_t RoachZStack_RxAddr;
 static uint8 RoachZStack_RxSeq;
 static uint8 RoachZStack_RspBuf[SERIAL_APP_RSP_CNT];
+static bool startStreaming;
 
 /*********************************************************************
  * LOCAL FUNCTIONS
@@ -205,7 +206,7 @@ void RoachZStack_Init( uint8 task_id )
 {
   halUARTCfg_t uartConfig;
   
-  
+  startStreaming = false;
 
   RoachZStack_TaskID = task_id;
   RoachZStack_RxSeq = 0xC3;
@@ -426,52 +427,54 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
   {
   // A message with microphone data to be transmitted on the serial port.
   case ROACHZSTACK_CLUSTER_MIC:
-    // Store the address for sending and retrying.
-    osal_memcpy(&RoachZStack_RxAddr, &(pkt->srcAddr), sizeof( afAddrType_t ));
-
-    seqnb = pkt->cmd.Data[0];
-#ifdef LCD_SUPPORTED          
-    HalLcdWriteValue ( pkt->nwkSeqNum, 16, HAL_LCD_LINE_3);
-#endif
-    // Keep message if not a repeat packet
-    if ( (seqnb > RoachZStack_RxSeq) ||                    // Normal
-        ((seqnb < 0x80 ) && ( RoachZStack_RxSeq > 0x80)) ) // Wrap-around
+    if (startStreaming)
     {
-      
-      HalUARTWrite( SERIAL_APP_PORT, premic_signal, sizeof(premic_signal) );
-      uint16 size = pkt->cmd.DataLength-1;
-      uart_buffer[0] = size & 0xff;
-      uart_buffer[1] = size >> 8;
-      mem
-      HalUARTWrite( SERIAL_APP_PORT, array, sizeof(array) );
-      // Transmit the data on the serial port.
-      if ( HalUARTWrite( SERIAL_APP_PORT, pkt->cmd.Data+1, size ) )
+      // Store the address for sending and retrying.
+      osal_memcpy(&RoachZStack_RxAddr, &(pkt->srcAddr), sizeof( afAddrType_t ));
+
+      seqnb = pkt->cmd.Data[0];
+  #ifdef LCD_SUPPORTED          
+      HalLcdWriteValue ( pkt->nwkSeqNum, 16, HAL_LCD_LINE_3);
+  #endif
+      // Keep message if not a repeat packet
+      if ( (seqnb > RoachZStack_RxSeq) ||                    // Normal
+          ((seqnb < 0x80 ) && ( RoachZStack_RxSeq > 0x80)) ) // Wrap-around
       {
-        // Save for next incoming message
-        RoachZStack_RxSeq = seqnb;
-        stat = OTA_SUCCESS;
+         uint16 size = pkt->cmd.DataLength-1;
+        /*HalUARTWrite( SERIAL_APP_PORT, premic_signal, sizeof(premic_signal) );
+       
+        uart_buffer[0] = size & 0xff;
+        uart_buffer[1] = size >> 8;
+        osal_memcpy(uart_buffer+2, pkt->cmd.Data+1, size);*/
+        // Transmit the data on the serial port.
+        if ( HalUARTWrite( SERIAL_APP_PORT,  pkt->cmd.Data+1, size ) )
+        {
+          // Save for next incoming message
+          RoachZStack_RxSeq = seqnb;
+          stat = OTA_SUCCESS;
+        }
+        else
+        {
+          stat = OTA_SER_BUSY;
+        }
       }
       else
       {
-        stat = OTA_SER_BUSY;
+        
+        stat = OTA_DUP_MSG;
       }
-    }
-    else
-    {
-      
-      stat = OTA_DUP_MSG;
-    }
 
-    // Select approproiate OTA flow-control delay.
-    delay = (stat == OTA_SER_BUSY) ? ROACHZSTACK_NAK_DELAY : ROACHZSTACK_ACK_DELAY;
+      // Select approproiate OTA flow-control delay.
+      delay = (stat == OTA_SER_BUSY) ? ROACHZSTACK_NAK_DELAY : ROACHZSTACK_ACK_DELAY;
 
-    // Build & send OTA response message.
-    RoachZStack_RspBuf[0] = stat;
-    RoachZStack_RspBuf[1] = seqnb;
-    RoachZStack_RspBuf[2] = LO_UINT16( delay );
-    RoachZStack_RspBuf[3] = HI_UINT16( delay );
-    osal_set_event( RoachZStack_TaskID, ROACHZSTACK_RESP_EVT );
-    osal_stop_timerEx(RoachZStack_TaskID, ROACHZSTACK_RESP_EVT);
+      // Build & send OTA response message.
+      RoachZStack_RspBuf[0] = stat;
+      RoachZStack_RspBuf[1] = seqnb;
+      RoachZStack_RspBuf[2] = LO_UINT16( delay );
+      RoachZStack_RspBuf[3] = HI_UINT16( delay );
+      osal_set_event( RoachZStack_TaskID, ROACHZSTACK_RESP_EVT );
+      osal_stop_timerEx(RoachZStack_TaskID, ROACHZSTACK_RESP_EVT);
+    }
     break;
 
     default:
@@ -481,6 +484,10 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
 
 static void showMessage(void)
 {
+  if (*(RoachZStack_TxBuf+1) == '*')
+  {
+    startStreaming = true;
+  }
   stimCommand* cmd = parseCommand(RoachZStack_TxBuf+1, RoachZStack_TxLen);
   HalLcdWriteValue ( cmd->direction, 10, HAL_LCD_LINE_1);
   HalLcdWriteValue ( cmd->repeats, 10, HAL_LCD_LINE_2);

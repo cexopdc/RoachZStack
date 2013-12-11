@@ -26,7 +26,7 @@ for channel = 1:channels
 end
 %figure; hold on;
 
-plotSamples = 10000;
+plotSamples = 1000;
 plotBuffer = zeros(channels,plotSamples);
 index = 1;
 drawCounter = 0;
@@ -36,25 +36,27 @@ recording = [];
 lastPlay = 1;
 playCount = 1;
 
+fwrite(port, '*')
 
+len = 12;
 while (1)
     
     buffer = zeros(1, length(signal));
-    while (1)
-        data = fread(port, 1, 'uint8')';
-        buffer = [data(1), buffer(1:end-1)];
-        if signal==buffer
-            break;
-        end
-    end
+    %while (1)
+    %    data = fread(port, 1, 'uint8')';
+    %    buffer = [data(1), buffer(1:end-1)];
+    %    if signal==buffer
+    %        break;
+    %    end
+    %end
     
-    len = fread(port, 1, 'uint16');
-    if (len ~= 90)
-        x = 0
-    end
-while(len > 1000 || len <=0 )
-    len = fread(port, 1, 'uint16')
-end
+    %len = fread(port, 1, 'uint16');
+    %if (len ~= 90)
+    %    x = 0
+    %end
+%while(len > 1000 || len <=0 )
+%    len = fread(port, 1, 'uint16')
+%end
     newData = fread(port, len/sampleSize, ['int',num2str(8*sampleSize)])';
     if (min(newData) == -1)
         x = 0
@@ -62,7 +64,7 @@ end
         newData
     end
     newData = reshape(newData, channels, length(newData)/channels);
-    recording = [recording, newData];
+    %recording = [recording, newData];
     if sum(newData(1,:) > 100)
         t = 3;
     end
@@ -81,8 +83,8 @@ end
         refresh;
         drawCounter = 0;
     end
-    %drawCounter = drawCounter + 1;
-    playCount = playCount + len/channels/sampleSize;
+    drawCounter = drawCounter + 1;
+    %playCount = playCount + len/channels/sampleSize;
     if playCount-lastPlay > 25000
         sample = recording(1,lastPlay:end);
         isNonZero = sample > 2;

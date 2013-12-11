@@ -106,7 +106,7 @@ void RoachZStack_ADC_Init( uint8 task_id )
 
     T1CTL = 0x00 | 0x0C | 0x02;
     
-    uint16 counter = 60;//200;//125;
+    uint16 counter = 100;//200;//125;
     
     T1CC0H = counter >> 8;
     T1CC0L = (uint8)counter;
