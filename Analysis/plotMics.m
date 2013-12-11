@@ -15,7 +15,7 @@ fopen(port);
 % end
 figure; hold on;
 size = 93;
-channels = 2;
+channels = 1;
 data = zeros(channels,size);
 ah = zeros(1, channels);
 for channel = 1:channels
@@ -33,6 +33,17 @@ recording = [];
 lastPlay = 1;
 playCount = 1;
 
+Fs = 2500;  % Sampling Frequency
+
+N   = 4;     % Order
+Fc1 = 10;    % First Cutoff Frequency
+Fc2 = 1000;  % Second Cutoff Frequency
+
+% Construct an FDESIGN object and call its BUTTER method.
+h  = fdesign.bandpass('N,F3dB1,F3dB2', N, Fc1, Fc2, Fs);
+Hd = design(h, 'butter');
+
+window = load('window')
 
 while (1)
     
@@ -63,8 +74,11 @@ end
         for channel = 1:channels
             axes(ah(channel));
             cla;
-            plot(plotBuffer(channel,:));
-            ylim([0, 2^(8*sampleSize)])
+            scaled = plotBuffer(channel,:).*3.3./2^(8*sampleSize-1);
+            windowed = window.Win' .* scaled;
+            filtered = filter(Hd, windowed);
+            plot(filtered);
+            ylim([-1, 1])
         end
         drawnow;
         refresh;
