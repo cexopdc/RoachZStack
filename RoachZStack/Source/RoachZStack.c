@@ -217,7 +217,7 @@ void RoachZStack_Init( uint8 task_id )
 
   uartConfig.configured           = TRUE;              // 2x30 don't care - see uart driver.
   uartConfig.baudRate             = SERIAL_APP_BAUD;
-  uartConfig.flowControl          = TRUE;
+  uartConfig.flowControl          = FALSE;
   uartConfig.flowControlThreshold = SERIAL_APP_THRESH; // 2x30 don't care - see uart driver.
   uartConfig.rx.maxBufSize        = SERIAL_APP_RX_SZ;  // 2x30 don't care - see uart driver.
   uartConfig.tx.maxBufSize        = SERIAL_APP_TX_SZ;  // 2x30 don't care - see uart driver.

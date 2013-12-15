@@ -12,7 +12,7 @@ function plotMics()
     channels = 3;
     scale = 1.15;
 
-    port = serial('COM7','BaudRate',115200, 'FlowControl', 'hardware');
+    port = serial('COM14','BaudRate',115200)%, 'FlowControl', 'hardware');
     port.BytesAvailableFcnCount = readSamples;
     port.BytesAvailableFcnMode = 'byte';
     port.BytesAvailableFcn = @serial_callback;
@@ -42,8 +42,6 @@ function plotMics()
     recording = [];
     lastPlay = 1;
     playCount = 1;
-
-    len = 12
     
     fwrite(port, '*')
 
@@ -76,10 +74,13 @@ end
 function serial_callback(obj,event)
     global port plotBuffer channels drawCounter readSamples sampleSize
     newData = fread(port, readSamples/sampleSize, ['int',num2str(8*sampleSize)])';
-    newData = reshape(newData, channels, length(newData)/channels);
-    
-    
-    drawCounter = drawCounter + readSamples;
-    plotBuffer = [plotBuffer(:,readSamples/channels/sampleSize+1:end), newData];
+    length(newData)
+    if (length(newData) > 0)
+        newData = reshape(newData, channels, length(newData)/channels);
+
+
+        drawCounter = drawCounter + readSamples;
+        plotBuffer = [plotBuffer(:,readSamples/channels/sampleSize+1:end), newData];
+    end
         
 end
