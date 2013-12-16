@@ -1,99 +1,84 @@
-fclose(port)
-close all;
+function plotMics()
+    global port plotBuffer readSamples channels drawCounter sampleSize
+    try
+        fclose(port)
+    catch
+    end
+    close all;
 
-port = serial('COM7','BaudRate',115200, 'FlowControl', 'hardware');
-fopen(port);
+    sampleSize = 1;
+    plotSamples = 5000;
+    readSamples = 42;
+    channels = 3;
+    scale = 1.15;
 
-% signal = [255, 255, 255, 255, 255, 255];
-% buffer = zeros(1, length(signal));
-% while (1)
-%     data = fread(port, 1, 'uint8')';
-%     buffer = [data(1), buffer(1:end-1)]
-%     if signal==buffer
-%         break;
-%     end
-% end
-figure; hold on;
-size = 93;
-channels = 1;
-data = zeros(channels,size);
-ah = zeros(1, channels);
-for channel = 1:channels
-    ah(channel) = subplot(channels,1,channel);
-end
-%figure; hold on;
+    port = serial('COM14','BaudRate',115200)%, 'FlowControl', 'hardware');
+    port.BytesAvailableFcnCount = readSamples;
+    port.BytesAvailableFcnMode = 'byte';
+    port.BytesAvailableFcn = @serial_callback;
+    fopen(port);
 
-plotSamples = 1000;
-plotBuffer = zeros(channels,plotSamples);
-index = 1;
-drawCounter = 0;
-signal = [255, 255, 255, 255, 255, 255];
-sampleSize = 1;
-recording = [];
-lastPlay = 1;
-playCount = 1;
+    % signal = [255, 255, 255, 255, 255, 255];
+    % buffer = zeros(1, length(signal));
+    % while (1)
+    %     data = fread(port, 1, 'uint8')';
+    %     buffer = [data(1), buffer(1:end-1)]
+    %     if signal==buffer
+    %         break;
+    %     end
+    % end
+    figure; hold on;
+    size = 93;
+    data = zeros(channels,size);
+    ah = zeros(1, channels);
+    for channel = 1:channels
+        ah(channel) = subplot(channels,1,channel);
+    end
+    %figure; hold on;
 
-Fs = 2500;  % Sampling Frequency
-
-N   = 4;     % Order
-Fc1 = 10;    % First Cutoff Frequency
-Fc2 = 1000;  % Second Cutoff Frequency
-
-% Construct an FDESIGN object and call its BUTTER method.
-h  = fdesign.bandpass('N,F3dB1,F3dB2', N, Fc1, Fc2, Fs);
-Hd = design(h, 'butter');
-
-window = load('window')
-
-while (1)
+    plotBuffer = zeros(channels,plotSamples);
+    index = 1;
+    drawCounter = 0;
+    recording = [];
+    lastPlay = 1;
+    playCount = 1;
     
-    buffer = zeros(1, length(signal));
+    fwrite(port, '*')
+
     while (1)
-        data = fread(port, 1, 'uint8')';
-        buffer = [data(1), buffer(1:end-1)];
-        if signal==buffer
-            break;
+        pause(0.005);
+        %if drawCounter >= plotSamples/20
+            for channel = 1:channels
+                axes(ah(channel));
+                cla;
+                plot(plotBuffer(channel,:).*scale ./ 2^(8*sampleSize-1));
+                ylim([0, scale])
+            end
+            drawnow;
+            refresh;
+            drawCounter = 0;
+        %end
+        %playCount = playCount + len/channels/sampleSize;
+        if playCount-lastPlay > 25000
+            sample = recording(1,lastPlay:end);
+            isNonZero = sample > 2;
+            sample = sample .* isNonZero;
+            %p = audioplayer(sample,5000);
+            %p.play();
+            lastPlay = length(recording)+1;
         end
     end
-    
-    len = fread(port, 1, 'uint16')
-while(len > 1000 || len <=0 )
-    len = fread(port, 1, 'uint16')
+
+    fclose(port);
 end
-    newData = fread(port, len/sampleSize, ['int',num2str(8*sampleSize)])';
-    newData = reshape(newData, channels, length(newData)/channels);
-    recording = [recording, newData];
-    if sum(newData(1,:) > 100)
-        t = 3;
+function serial_callback(obj,event)
+    global port plotBuffer channels drawCounter readSamples sampleSize
+    newData = fread(port, readSamples/sampleSize, ['int',num2str(8*sampleSize)])';
+    length(newData)
+    if (length(newData) > 0)
+        newData = reshape(newData, channels, length(newData)/channels);
+        drawCounter = drawCounter + readSamples;
+        plotBuffer = [plotBuffer(:,readSamples/channels/sampleSize+1:end), newData];
     end
-
-    plotBuffer = [plotBuffer(:,len/channels/sampleSize+1:end), newData];
-    
-
-    if drawCounter == plotSamples/20
-        for channel = 1:channels
-            axes(ah(channel));
-            cla;
-            scaled = plotBuffer(channel,:).*3.3./2^(8*sampleSize-1);
-            windowed = window.Win' .* scaled;
-            filtered = filter(Hd, windowed);
-            plot(filtered);
-            ylim([-1, 1])
-        end
-        drawnow;
-        refresh;
-        drawCounter = 0;
-    end
-    drawCounter = drawCounter + 1;
-    playCount = playCount + len/channels/sampleSize;
-    if playCount-lastPlay > 25000
-        sample = recording(1,lastPlay:end);
-        isNonZero = sample > 2;
-        sample = sample .* isNonZero;
-        %p = audioplayer(sample,5000);
-        %p.play();
-        lastPlay = length(recording)+1;
-    end
+        
 end
-
-fclose(port);
