@@ -3248,52 +3248,52 @@
     <group>
       <name>Common</name>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\common\hal_assert.c</name>
+        <name>$_ZSTACK_$\hal\common\hal_assert.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\common\hal_drivers.c</name>
+        <name>$_ZSTACK_$\hal\common\hal_drivers.c</name>
       </file>
     </group>
     <group>
       <name>Include</name>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_adc.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_adc.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_assert.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_assert.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_board.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_board.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_ccm.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_ccm.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_defs.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_defs.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_drivers.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_drivers.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_flash.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_flash.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_key.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_key.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_lcd.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_lcd.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_led.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_led.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_sleep.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_sleep.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_timer.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_timer.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\include\hal_uart.h</name>
+        <name>$_ZSTACK_$\hal\include\hal_uart.h</name>
       </file>
     </group>
     <group>
@@ -3303,55 +3303,55 @@
         <group>
           <name>Config</name>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_board_cfg.h</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_board_cfg.h</name>
           </file>
         </group>
         <group>
           <name>Drivers</name>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_adc.c</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_adc.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_dma.c</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_dma.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_flash.c</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_flash.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_key.c</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_key.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_lcd.c</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_lcd.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_led.c</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_led.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_sleep.c</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_sleep.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_startup.c</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_startup.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_timer.c</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_timer.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_uart.c</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_uart.c</name>
           </file>
         </group>
         <group>
           <name>Includes</name>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_aes.h</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_aes.h</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_dma.h</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_dma.h</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_mcu.h</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_mcu.h</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\hal\target\CC2530EB\hal_types.h</name>
+            <name>$_ZSTACK_$\hal\target\CC2530EB\hal_types.h</name>
           </file>
         </group>
       </group>
@@ -3362,25 +3362,25 @@
     <group>
       <name>High Level</name>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\high_level\mac_cfg.c</name>
+        <name>$_ZSTACK_$\mac\high_level\mac_cfg.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\high_level\mac_high_level.h</name>
+        <name>$_ZSTACK_$\mac\high_level\mac_high_level.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\high_level\mac_pib.c</name>
+        <name>$_ZSTACK_$\mac\high_level\mac_pib.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\high_level\mac_pib.h</name>
+        <name>$_ZSTACK_$\mac\high_level\mac_pib.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\high_level\mac_spec.h</name>
+        <name>$_ZSTACK_$\mac\high_level\mac_spec.h</name>
       </file>
     </group>
     <group>
       <name>Include</name>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\include\mac_api.h</name>
+        <name>$_ZSTACK_$\mac\include\mac_api.h</name>
       </file>
     </group>
     <group>
@@ -3388,85 +3388,85 @@
       <group>
         <name>Common</name>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_assert.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_assert.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_autopend.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_autopend.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_autopend.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_autopend.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_backoff_timer.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_backoff_timer.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_backoff_timer.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_backoff_timer.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_low_level.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_low_level.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_low_level.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_low_level.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_radio.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_radio.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_radio.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_radio.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_rx.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_rx.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_rx.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_rx.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_rx_onoff.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_rx_onoff.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_rx_onoff.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_rx_onoff.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_sleep.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_sleep.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_sleep.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_sleep.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_tx.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_tx.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\mac_tx.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\mac_tx.h</name>
         </file>
       </group>
       <group>
         <name>System</name>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\single_chip\mac_csp_tx.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\single_chip\mac_csp_tx.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\single_chip\mac_csp_tx.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\single_chip\mac_csp_tx.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\single_chip\mac_mcu.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\single_chip\mac_mcu.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\single_chip\mac_mcu.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\single_chip\mac_mcu.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\single_chip\mac_mem.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\single_chip\mac_mem.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\single_chip\mac_mem.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\single_chip\mac_mem.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\single_chip\mac_radio_defs.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\single_chip\mac_radio_defs.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\single_chip\mac_radio_defs.h</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\single_chip\mac_radio_defs.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mac\low_level\srf04\single_chip\mac_rffrontend.c</name>
+          <name>$_ZSTACK_$\mac\low_level\srf04\single_chip\mac_rffrontend.c</name>
         </file>
       </group>
     </group>
@@ -3474,229 +3474,229 @@
   <group>
     <name>MT</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\DebugTrace.c</name>
+      <name>$_ZSTACK_$\mt\DebugTrace.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\DebugTrace.h</name>
+      <name>$_ZSTACK_$\mt\DebugTrace.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT.c</name>
+      <name>$_ZSTACK_$\mt\MT.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT.h</name>
+      <name>$_ZSTACK_$\mt\MT.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_AF.c</name>
+      <name>$_ZSTACK_$\mt\MT_AF.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_AF.h</name>
+      <name>$_ZSTACK_$\mt\MT_AF.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_APP.c</name>
+      <name>$_ZSTACK_$\mt\MT_APP.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_APP.h</name>
+      <name>$_ZSTACK_$\mt\MT_APP.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_DEBUG.c</name>
+      <name>$_ZSTACK_$\mt\MT_DEBUG.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_DEBUG.h</name>
+      <name>$_ZSTACK_$\mt\MT_DEBUG.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_NWK.c</name>
+      <name>$_ZSTACK_$\mt\MT_NWK.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_NWK.h</name>
+      <name>$_ZSTACK_$\mt\MT_NWK.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_RPC.h</name>
+      <name>$_ZSTACK_$\mt\MT_RPC.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_SAPI.c</name>
+      <name>$_ZSTACK_$\mt\MT_SAPI.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_SAPI.h</name>
+      <name>$_ZSTACK_$\mt\MT_SAPI.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_SYS.c</name>
+      <name>$_ZSTACK_$\mt\MT_SYS.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_SYS.h</name>
+      <name>$_ZSTACK_$\mt\MT_SYS.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_TASK.c</name>
+      <name>$_ZSTACK_$\mt\MT_TASK.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_TASK.h</name>
+      <name>$_ZSTACK_$\mt\MT_TASK.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_UART.c</name>
+      <name>$_ZSTACK_$\mt\MT_UART.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_UART.h</name>
+      <name>$_ZSTACK_$\mt\MT_UART.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_UTIL.c</name>
+      <name>$_ZSTACK_$\mt\MT_UTIL.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_UTIL.h</name>
+      <name>$_ZSTACK_$\mt\MT_UTIL.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_VERSION.c</name>
+      <name>$_ZSTACK_$\mt\MT_VERSION.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_VERSION.h</name>
+      <name>$_ZSTACK_$\mt\MT_VERSION.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_ZDO.c</name>
+      <name>$_ZSTACK_$\mt\MT_ZDO.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\mt\MT_ZDO.h</name>
+      <name>$_ZSTACK_$\mt\MT_ZDO.h</name>
     </file>
   </group>
   <group>
     <name>NWK</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\AddrMgr.h</name>
+      <name>$_ZSTACK_$\stack\nwk\AddrMgr.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\APS.h</name>
+      <name>$_ZSTACK_$\stack\nwk\APS.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\aps_frag.h</name>
+      <name>$_ZSTACK_$\stack\nwk\aps_frag.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\aps_groups.h</name>
+      <name>$_ZSTACK_$\stack\nwk\aps_groups.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\aps_util.h</name>
+      <name>$_ZSTACK_$\stack\nwk\aps_util.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\APSMEDE.h</name>
+      <name>$_ZSTACK_$\stack\nwk\APSMEDE.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\AssocList.h</name>
+      <name>$_ZSTACK_$\stack\nwk\AssocList.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\BindingTable.c</name>
+      <name>$_ZSTACK_$\stack\nwk\BindingTable.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\BindingTable.h</name>
+      <name>$_ZSTACK_$\stack\nwk\BindingTable.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\NLMEDE.h</name>
+      <name>$_ZSTACK_$\stack\nwk\NLMEDE.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\nwk.h</name>
+      <name>$_ZSTACK_$\stack\nwk\nwk.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\nwk_bufs.h</name>
+      <name>$_ZSTACK_$\stack\nwk\nwk_bufs.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\nwk_globals.c</name>
+      <name>$_ZSTACK_$\stack\nwk\nwk_globals.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\nwk_globals.h</name>
+      <name>$_ZSTACK_$\stack\nwk\nwk_globals.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\nwk_util.h</name>
+      <name>$_ZSTACK_$\stack\nwk\nwk_util.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\reflecttrack.h</name>
+      <name>$_ZSTACK_$\stack\nwk\reflecttrack.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\rtg.h</name>
+      <name>$_ZSTACK_$\stack\nwk\rtg.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\stub_aps.c</name>
+      <name>$_ZSTACK_$\stack\nwk\stub_aps.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\nwk\stub_aps.h</name>
+      <name>$_ZSTACK_$\stack\nwk\stub_aps.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\sys\ZGlobals.c</name>
+      <name>$_ZSTACK_$\stack\sys\ZGlobals.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\sys\ZGlobals.h</name>
+      <name>$_ZSTACK_$\stack\sys\ZGlobals.h</name>
     </file>
   </group>
   <group>
     <name>OSAL</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\include\comdef.h</name>
+      <name>$_ZSTACK_$\osal\include\comdef.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\common\OSAL.c</name>
+      <name>$_ZSTACK_$\osal\common\OSAL.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\include\OSAL.h</name>
+      <name>$_ZSTACK_$\osal\include\OSAL.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\common\OSAL_Clock.c</name>
+      <name>$_ZSTACK_$\osal\common\OSAL_Clock.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\include\OSAL_Clock.h</name>
+      <name>$_ZSTACK_$\osal\include\OSAL_Clock.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\mcu\cc2530\OSAL_Math.s51</name>
+      <name>$_ZSTACK_$\osal\mcu\cc2530\OSAL_Math.s51</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\common\OSAL_Memory.c</name>
+      <name>$_ZSTACK_$\osal\common\OSAL_Memory.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\include\OSAL_Memory.h</name>
+      <name>$_ZSTACK_$\osal\include\OSAL_Memory.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\mcu\cc2530\OSAL_Nv.c</name>
+      <name>$_ZSTACK_$\osal\mcu\cc2530\OSAL_Nv.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\include\OSAL_Nv.h</name>
+      <name>$_ZSTACK_$\osal\include\OSAL_Nv.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\common\OSAL_PwrMgr.c</name>
+      <name>$_ZSTACK_$\osal\common\OSAL_PwrMgr.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\include\OSAL_PwrMgr.h</name>
+      <name>$_ZSTACK_$\osal\include\OSAL_PwrMgr.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\include\OSAL_Tasks.h</name>
+      <name>$_ZSTACK_$\osal\include\OSAL_Tasks.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\common\OSAL_Timers.c</name>
+      <name>$_ZSTACK_$\osal\common\OSAL_Timers.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\include\OSAL_Timers.h</name>
+      <name>$_ZSTACK_$\osal\include\OSAL_Timers.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\osal\include\ZComDef.h</name>
+      <name>$_ZSTACK_$\osal\include\ZComDef.h</name>
     </file>
   </group>
   <group>
     <name>Profile</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\af\AF.c</name>
+      <name>$_ZSTACK_$\stack\af\AF.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\af\AF.h</name>
+      <name>$_ZSTACK_$\stack\af\AF.h</name>
     </file>
   </group>
   <group>
     <name>Security</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\sec\ssp.h</name>
+      <name>$_ZSTACK_$\stack\sec\ssp.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\sec\ssp_hash.h</name>
+      <name>$_ZSTACK_$\stack\sec\ssp_hash.h</name>
     </file>
   </group>
   <group>
     <name>Services</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\services\saddr\saddr.c</name>
+      <name>$_ZSTACK_$\services\saddr\saddr.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\services\saddr\saddr.h</name>
+      <name>$_ZSTACK_$\services\saddr\saddr.h</name>
     </file>
   </group>
   <group>
@@ -3732,55 +3732,55 @@
   <group>
     <name>ZDO</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\zdo\ZDApp.c</name>
+      <name>$_ZSTACK_$\stack\zdo\ZDApp.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\zdo\ZDApp.h</name>
+      <name>$_ZSTACK_$\stack\zdo\ZDApp.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\zdo\ZDConfig.c</name>
+      <name>$_ZSTACK_$\stack\zdo\ZDConfig.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\zdo\ZDConfig.h</name>
+      <name>$_ZSTACK_$\stack\zdo\ZDConfig.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\zdo\ZDNwkMgr.c</name>
+      <name>$_ZSTACK_$\stack\zdo\ZDNwkMgr.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\zdo\ZDNwkMgr.h</name>
+      <name>$_ZSTACK_$\stack\zdo\ZDNwkMgr.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\zdo\ZDObject.c</name>
+      <name>$_ZSTACK_$\stack\zdo\ZDObject.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\zdo\ZDObject.h</name>
+      <name>$_ZSTACK_$\stack\zdo\ZDObject.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\zdo\ZDProfile.c</name>
+      <name>$_ZSTACK_$\stack\zdo\ZDProfile.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\zdo\ZDProfile.h</name>
+      <name>$_ZSTACK_$\stack\zdo\ZDProfile.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\zdo\ZDSecMgr.c</name>
+      <name>$_ZSTACK_$\stack\zdo\ZDSecMgr.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\stack\zdo\ZDSecMgr.h</name>
+      <name>$_ZSTACK_$\stack\zdo\ZDSecMgr.h</name>
     </file>
   </group>
   <group>
     <name>ZMac</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\zmac\f8w\zmac.c</name>
+      <name>$_ZSTACK_$\zmac\f8w\zmac.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\zmac\ZMAC.h</name>
+      <name>$_ZSTACK_$\zmac\ZMAC.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\zmac\f8w\zmac_cb.c</name>
+      <name>$_ZSTACK_$\zmac\f8w\zmac_cb.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\ZStack-CC2530-2.5.1a\Components\zmac\f8w\zmac_internal.h</name>
+      <name>$_ZSTACK_$\zmac\f8w\zmac_internal.h</name>
     </file>
   </group>
   <group>
