@@ -68,6 +68,17 @@
  * CONSTANTS
  */
 
+#define MICROPHONE_ENABLED TRUE
+
+#define LEFT_PORT P1
+#define LEFT_PIN 4
+#define RIGHT_PORT P1
+#define RIGHT_PIN 2
+#define FORWARD_PORT P1
+#define FORWARD_PIN 1
+#define LED_PORT P1
+#define LED_PIN 5
+
 #if !defined( SERIAL_APP_PORT )
 #define SERIAL_APP_PORT  0
 #endif
@@ -172,6 +183,7 @@ static afAddrType_t RoachZStack_TxAddr;
 static uint8 RoachZStack_TxSeq;
 static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX+1];
 static uint8 RoachZStack_TxLen;
+static stimCommand* command = NULL;
 
 /*********************************************************************
  * LOCAL FUNCTIONS
@@ -205,6 +217,11 @@ void RoachZStack_Init( uint8 task_id )
   
   RegisterForKeys( task_id );
   
+  LED_PORT &= ~(0x1 << LED_PIN);
+  FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+  LEFT_PORT &= ~(0x1 << LEFT_PIN);
+  RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+  
 #if defined ( LCD_SUPPORTED )
   HalLcdWriteString( "RoachZStack", HAL_LCD_LINE_2 );
 #endif
@@ -229,6 +246,60 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
 {
   (void)task_id;  // Intentionally unreferenced parameter
   
+  if ( events & ROACHZSTACK_STIM_START )
+  {
+    if (command != NULL)
+    {
+      switch (command->direction)
+      {
+        case 0:
+          //forward
+          LED_PORT |= 0x1 << LED_PIN;
+          FORWARD_PORT |= 0x1 << FORWARD_PIN;
+          LEFT_PORT &= ~(0x1 << LEFT_PIN);
+          RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+           break;
+        case 1:
+           //back
+          LED_PORT |= 0x1 << LED_PIN;
+          LEFT_PORT |= 0x1 << LEFT_PIN;
+          RIGHT_PORT |= 0x1 << RIGHT_PIN;
+          FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+           break;
+        case 2:
+          //right
+          LED_PORT |= 0x1 << LED_PIN;
+          RIGHT_PORT |= 0x1 << RIGHT_PIN;
+          LEFT_PORT &= ~(0x1 << LEFT_PIN);
+          FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+           break;
+        case 3:
+           //left
+          LED_PORT |= 0x1 << LED_PIN;
+          LEFT_PORT |= 0x1 << LEFT_PIN;
+          RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+          FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+           break;
+      }
+      command->repeats--;
+      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_STIM_STOP, command->duration); 
+    }
+    return ( events ^ ROACHZSTACK_STIM_START );
+  }
+  if ( events & ROACHZSTACK_STIM_STOP )
+  {
+    LED_PORT &= ~(0x1 << LED_PIN);
+    FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+    LEFT_PORT &= ~(0x1 << LEFT_PIN);
+    RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+    if (command != NULL && command->repeats > 0)
+    {
+      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_STIM_START, command->duration);     
+    }
+    
+    return ( events ^ ROACHZSTACK_STIM_STOP );
+  }
+
 
   if ( events & SYS_EVENT_MSG )
   {
@@ -297,7 +368,8 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
     }
     return ( events ^ RZS_DO_HANDSHAKE );
   }
-
+  
+  
   return ( 0 );  // Discard unknown events.
 }
 
@@ -330,7 +402,8 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
             // Light LED
             HalLedSet( HAL_LED_4, HAL_LED_MODE_ON );
             
-            RegisterForADC( RoachZStack_TaskID );
+            if (MICROPHONE_ENABLED)
+              RegisterForADC( RoachZStack_TaskID );
           }
           osal_mem_free( pRsp );
         }
@@ -388,11 +461,14 @@ void RoachZStack_HandleKeys( uint8 shift, uint8 keys )
 }
 static void showMessage(afMSGCommandFormat_t data)
 {
-  stimCommand* cmd = parseCommand(data.Data+1, data.DataLength-1);
-  HalLcdWriteValue ( cmd->direction, 10, HAL_LCD_LINE_1);
-  HalLcdWriteValue ( cmd->repeats, 10, HAL_LCD_LINE_2);
-  HalLcdWriteValue ( cmd->duration, 10, HAL_LCD_LINE_3);
-  osal_mem_free(cmd);
+  if (command != NULL)
+  {
+    osal_mem_free(command);
+  }
+  command = parseCommand(data.Data+1, data.DataLength-1);
+  HalLcdWriteValue ( command->direction, 10, HAL_LCD_LINE_1);
+  HalLcdWriteValue ( command->repeats, 10, HAL_LCD_LINE_2);
+  HalLcdWriteValue ( command->duration, 10, HAL_LCD_LINE_3);
 }
 /*********************************************************************
  * @fn      RoachZStack_ProcessMSGCmd
@@ -414,7 +490,8 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
   // stimulation command
   case ROACHZSTACK_CLUSTER_CMD:
     showMessage(pkt->cmd);
-
+    
+    osal_set_event(RoachZStack_TaskID, ROACHZSTACK_STIM_START );
     default:
       break;
   }
