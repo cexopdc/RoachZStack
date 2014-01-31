@@ -9,12 +9,12 @@ function plotMics()
     sampleSize = 1;
     plotSamples = 5000;
     readSamples = 42;
-    channels = 2;
+    channels = 3;
     sampleRate = 1.25; % kHz
     scale = 1.15;
     recording = zeros(channels, 0);
     
-    xRange = (0:plotSamples)/(sampleRate * 1000);
+    xRange = (0:plotSamples);%/(sampleRate * 1000);
 
     port = serial('COM14','BaudRate',115200)%, 'FlowControl', 'hardware');
     port.BytesAvailableFcnCount = readSamples;
@@ -34,13 +34,16 @@ function plotMics()
     figure; hold on;
     size = 93;
     data = zeros(channels,size);
-    ah = zeros(1, channels);
+    hAxes = zeros(1, channels);
+    hPlots = zeros(1, channels);
+    plotBuffer = zeros(channels,plotSamples);
     for channel = 1:channels
-        ah(channel) = subplot(channels,1,channel);
+        hAxes(channel) = subplot(channels,1,channel);
+        axes(hAxes(channel));
+        hPlots(channel) = plot(xRange(1:length(plotBuffer)), plotBuffer(channel,:).*scale ./ 2^(8*sampleSize-1));
     end
     %figure; hold on;
 
-    plotBuffer = zeros(channels,plotSamples);
     index = 1;
     drawCounter = 0;
     recording = [];
@@ -50,13 +53,11 @@ function plotMics()
     fwrite(port, '*')
 
     while (1)
-        pause(0.005);
+        pause(0.1);
         %if drawCounter >= plotSamples/20
             for channel = 1:channels
-                axes(ah(channel));
-                cla;
-                plot(xRange(1:length(plotBuffer)), plotBuffer(channel,:).*scale ./ 2^(8*sampleSize-1));
-                ylim([0, scale])
+                set(hAxes(channel),'YLim', [0, scale]);
+                set(hPlots(channel),'ydata',plotBuffer(channel,:).*scale ./ 2^(8*sampleSize-1));
             end
             drawnow;
             refresh;
@@ -71,8 +72,8 @@ function plotMics()
             %p.play();
             lastPlay = length(recording)+1;
         end
-        recording;
-        assignin('caller', 'record', recording);
+        %recording;
+        %assignin('caller', 'record', recording);
     end
 
     fclose(port);
@@ -80,11 +81,10 @@ end
 function serial_callback(obj,event)
     global port plotBuffer channels drawCounter readSamples sampleSize recording
     newData = fread(port, readSamples/sampleSize, ['int',num2str(8*sampleSize)])';
-    length(newData)
     if (length(newData) > 0)
         newData = reshape(newData, channels, length(newData)/channels);
         drawCounter = drawCounter + readSamples;
-        recording = [recording, newData];
+        %recording = [recording, newData];
         plotBuffer = [plotBuffer(:,readSamples/channels/sampleSize+1:end), newData];
     end
         
