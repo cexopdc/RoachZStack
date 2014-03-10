@@ -68,7 +68,7 @@
  * CONSTANTS
  */
 
-#define MICROPHONE_ENABLED TRUE
+#define MICROPHONE_ENABLED FALSE
 
 #define LEFT_PORT P1
 #define LEFT_PIN 4
@@ -78,6 +78,8 @@
 #define FORWARD_PIN 1
 #define LED_PORT P1
 #define LED_PIN 5
+#define BICLK_PORT P1
+#define BICLK_PIN 7
 
 #if !defined( SERIAL_APP_PORT )
 #define SERIAL_APP_PORT  0
@@ -190,9 +192,11 @@ static stimCommand* command = NULL;
  */
 
 static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg );
-static void RoachZStack_HandleKeys( uint8 shift, uint8 keys );
 static void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt );
 static void showMessage(afMSGCommandFormat_t data);
+
+static void stimulate(byte direction);
+static void stopStimulate(void);
 
 volatile uint8 allocCount = 0;
 volatile uint8 deallocCount = 0;
@@ -217,10 +221,15 @@ void RoachZStack_Init( uint8 task_id )
   
   RegisterForKeys( task_id );
   
+  P1DIR |= (0x1 << FORWARD_PIN) | (0x1 << LED_PIN) | 
+    (0x1 << LEFT_PIN) | (0x1 << RIGHT_PIN) | (0x1 << BICLK_PIN);
+  
   LED_PORT &= ~(0x1 << LED_PIN);
   FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
   LEFT_PORT &= ~(0x1 << LEFT_PIN);
   RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+  BICLK_PORT &= ~(0x1 << BICLK_PIN);
+  
   
 #if defined ( LCD_SUPPORTED )
   HalLcdWriteString( "RoachZStack", HAL_LCD_LINE_2 );
@@ -250,54 +259,50 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
   {
     if (command != NULL)
     {
-      switch (command->direction)
-      {
-        case 0:
-          //forward
-          LED_PORT |= 0x1 << LED_PIN;
-          FORWARD_PORT |= 0x1 << FORWARD_PIN;
-          LEFT_PORT &= ~(0x1 << LEFT_PIN);
-          RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
-           break;
-        case 1:
-           //back
-          LED_PORT |= 0x1 << LED_PIN;
-          LEFT_PORT |= 0x1 << LEFT_PIN;
-          RIGHT_PORT |= 0x1 << RIGHT_PIN;
-          FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-           break;
-        case 2:
-          //right
-          LED_PORT |= 0x1 << LED_PIN;
-          RIGHT_PORT |= 0x1 << RIGHT_PIN;
-          LEFT_PORT &= ~(0x1 << LEFT_PIN);
-          FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-           break;
-        case 3:
-           //left
-          LED_PORT |= 0x1 << LED_PIN;
-          LEFT_PORT |= 0x1 << LEFT_PIN;
-          RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
-          FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-           break;
-      }
+      BICLK_PORT &= ~(0x1 << BICLK_PIN);
+      stimulate(command->direction);
       command->repeats--;
-      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_STIM_STOP, command->duration); 
+      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_STIM_STOP, command->posOn); 
     }
     return ( events ^ ROACHZSTACK_STIM_START );
   }
+  
   if ( events & ROACHZSTACK_STIM_STOP )
   {
-    LED_PORT &= ~(0x1 << LED_PIN);
-    FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-    LEFT_PORT &= ~(0x1 << LEFT_PIN);
-    RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
-    if (command != NULL && command->repeats > 0)
+    stopStimulate();
+    if (command->negOn)
     {
-      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_STIM_START, command->duration);     
+      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_NSTIM_START, command->posOff);
+    }
+    else
+    {
+      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_NSTIM_STOP, command->posOff);
     }
     
     return ( events ^ ROACHZSTACK_STIM_STOP );
+  }
+  
+  if ( events & ROACHZSTACK_NSTIM_START )
+  {
+    if (command != NULL)
+    {
+      BICLK_PORT |= (0x1 << BICLK_PIN);
+      stimulate(command->direction);
+      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_NSTIM_STOP, command->negOn); 
+    }
+    return ( events ^ ROACHZSTACK_NSTIM_START );
+  }
+  
+  if ( events & ROACHZSTACK_NSTIM_STOP )
+  {
+    BICLK_PORT &= ~(0x1 << BICLK_PIN);
+    stopStimulate();
+    if (command != NULL && command->repeats > 0)
+    {
+      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_STIM_START, command->negOff);   
+    }
+    
+    return ( events ^ ROACHZSTACK_NSTIM_STOP );
   }
 
 
@@ -311,10 +316,6 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
       {
       case ZDO_CB_MSG:
         RoachZStack_ProcessZDOMsgs( (zdoIncomingMsg_t *)MSGpkt );
-        break;
-          
-      case KEY_CHANGE:
-        RoachZStack_HandleKeys( ((keyChange_t *)MSGpkt)->state, ((keyChange_t *)MSGpkt)->keys );
         break;
 
       case AF_INCOMING_MSG_CMD:
@@ -373,6 +374,49 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
   return ( 0 );  // Discard unknown events.
 }
 
+static void stopStimulate(void)
+{
+  LED_PORT &= ~(0x1 << LED_PIN);
+  FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+  LEFT_PORT &= ~(0x1 << LEFT_PIN);
+  RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+}
+
+static void stimulate(byte direction)
+{
+  switch (direction)
+  {
+    case 0:
+      //forward
+      LED_PORT |= 0x1 << LED_PIN;
+      FORWARD_PORT |= 0x1 << FORWARD_PIN;
+      LEFT_PORT &= ~(0x1 << LEFT_PIN);
+      RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+       break;
+    case 1:
+       //back
+      LED_PORT |= 0x1 << LED_PIN;
+      LEFT_PORT |= 0x1 << LEFT_PIN;
+      RIGHT_PORT |= 0x1 << RIGHT_PIN;
+      FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+       break;
+    case 2:
+      //right
+      LED_PORT |= 0x1 << LED_PIN;
+      RIGHT_PORT |= 0x1 << RIGHT_PIN;
+      LEFT_PORT &= ~(0x1 << LEFT_PIN);
+      FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+       break;
+    case 3:
+       //left
+      LED_PORT |= 0x1 << LED_PIN;
+      LEFT_PORT |= 0x1 << LEFT_PIN;
+      RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+      FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+       break;
+  }
+}
+
 /*********************************************************************
  * @fn      RoachZStack_ProcessZDOMsgs()
  *
@@ -412,53 +456,6 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
   }
 }
 
-/*********************************************************************
- * @fn      RoachZStack_HandleKeys
- *
- * @brief   Handles all key events for this device.
- *
- * @param   shift - true if in shift/alt.
- * @param   keys  - bit field for key events.
- *
- * @return  none
- */
-void RoachZStack_HandleKeys( uint8 shift, uint8 keys )
-{
-  if ( shift )
-  {
-    if ( keys & HAL_KEY_SW_1 )
-    {
-    }
-    if ( keys & HAL_KEY_SW_2 )
-    {
-    }
-    if ( keys & HAL_KEY_SW_3 )
-    {
-    }
-    if ( keys & HAL_KEY_SW_4 )
-    {
-    }
-  }
-  else
-  {
-    if ( keys & HAL_KEY_SW_1 )
-    {
-    }
-
-    if ( keys & HAL_KEY_SW_2 )
-    {
-    }
-
-    if ( keys & HAL_KEY_SW_3 )
-    {
-    }
-
-    if ( keys & HAL_KEY_SW_4 )
-    {
-
-    }
-  }
-}
 static void showMessage(afMSGCommandFormat_t data)
 {
   if (command != NULL)
@@ -468,7 +465,7 @@ static void showMessage(afMSGCommandFormat_t data)
   command = parseCommand(data.Data+1, data.DataLength-1);
   HalLcdWriteValue ( command->direction, 10, HAL_LCD_LINE_1);
   HalLcdWriteValue ( command->repeats, 10, HAL_LCD_LINE_2);
-  HalLcdWriteValue ( command->duration, 10, HAL_LCD_LINE_3);
+  HalLcdWriteValue ( command->posOn, 10, HAL_LCD_LINE_3);
 }
 /*********************************************************************
  * @fn      RoachZStack_ProcessMSGCmd
