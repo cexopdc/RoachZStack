@@ -1,11 +1,10 @@
 function plotMics()
-    global port plotBuffer readSamples channels drawCounter sampleSize recording avgData dir
+    global port plotBuffer readSamples channels drawCounter sampleSize recording avgData dir windowSize frames
     try
         fclose(port)
     catch
     end
     close all;
-
 
     sampleSize = 1;
     plotSamples = 5000;
@@ -16,10 +15,13 @@ function plotMics()
     recording = zeros(channels, 0);
     avgData = zeros(channels, plotSamples);
     dir = zeros(1, plotSamples);
+    windowSize = .1 * sampleRate * 1000; %s * Hz = samples
+    frames = zeros(3,windowSize,0);
     
     xRange = (0:plotSamples);%/(sampleRate * 1000);
+    fRange = (0:windowSize-1)*sampleRate*1000/windowSize;%/(sampleRate * 1000);
 
-    port = serial('COM14','BaudRate',115200)%, 'FlowControl', 'hardware');
+    port = serial('COM18','BaudRate',115200)%, 'FlowControl', 'hardware');
     port.BytesAvailableFcnCount = readSamples;
     port.BytesAvailableFcnMode = 'byte';
     port.BytesAvailableFcn = @serial_callback;
@@ -35,12 +37,14 @@ function plotMics()
     %     end
     % end
     figure; hold on;
-    size = 93;
-    data = zeros(channels,size);
+    dataSize = 93;
+    data = zeros(channels,dataSize);
     hAxes = zeros(1, channels);
     hPlots = zeros(1, channels);
     hAxes2 = zeros(1, channels);
     hPlots2 = zeros(1, channels);
+    hAxes3 = zeros(1, channels);
+    hPlots3 = zeros(1, channels);
     plotBuffer = zeros(channels,plotSamples);
     for channel = 1:channels
         hAxes(channel) = subplot(channels,1,channel);
@@ -53,6 +57,12 @@ function plotMics()
         hAxes2(channel) = subplot(channels,1,channel);
         axes(hAxes2(channel));
         hPlots2(channel) = plot(xRange(1:length(avgData)), avgData(channel,:).*scale ./ 2^(8*sampleSize-1));
+    end
+    figure; hold on;
+    for channel = 1:channels    
+        hAxes3(channel) = subplot(channels,1,channel);
+        axes(hAxes3(channel));
+        hPlots3(channel) = plot(fRange, zeros(1, windowSize));
     end
     
     
@@ -69,7 +79,7 @@ function plotMics()
     fwrite(port, '*')
 
     while (1)
-        pause(0.1);
+        pause(0.01);
         %if drawCounter >= plotSamples/20
             for channel = 1:channels
                 set(hAxes(channel),'YLim', [0, scale]);
@@ -97,16 +107,48 @@ function plotMics()
         end
         %recording;
         assignin('caller', 'record', recording);
+        
+        if (size(frames, 3)>0)
+            currentFrame = frames(:,:,1);
+            frames = frames(:,:,2:end);
+            if (size(frames, 3) > 5)
+                size(frames)
+            end
+            for channel = 1:channels
+                set(hAxes3(channel),'YLim', [0, 1.2]);
+                set(hAxes3(channel),'XLim', [0, sampleRate*1000/2]);
+                set(hPlots3(channel),'ydata',abs(fft(currentFrame(channel,:))).*scale ./ 2^(8*sampleSize-1)/windowSize);
+            end
+            
+        end
     end
 
     fclose(port);
 end
+
+function fillFrame(newData)
+    global frames currentFrame windowSize
+    
+    if (size(currentFrame, 2)<windowSize)
+        if (windowSize-size(currentFrame, 2) > size(newData, 2))
+            currentFrame = [currentFrame newData];
+        else
+            currentFrame = [currentFrame newData(:, 1:windowSize-size(currentFrame, 2))];
+            frames = cat(3, frames, [currentFrame]);
+            currentFrame = [];
+        end
+    else
+        currentFrame = [];
+    end
+end
+
 function serial_callback(obj,event)
     global port plotBuffer channels drawCounter readSamples sampleSize recording avgData dir
     newData = fread(port, readSamples/sampleSize, ['int',num2str(8*sampleSize)])';
     length(newData);
     if (length(newData) > 0)
         newData = reshape(newData, channels, length(newData)/channels);
+        fillFrame(newData)
         drawCounter = drawCounter + readSamples;
         %recording = [recording, newData];
         maxes = max(newData')';
