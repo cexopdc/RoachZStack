@@ -21,7 +21,7 @@ function plotMics()
     xRange = (0:plotSamples);%/(sampleRate * 1000);
     fRange = (0:windowSize-1)*sampleRate*1000/windowSize;%/(sampleRate * 1000);
 
-    port = serial('COM18','BaudRate',115200)%, 'FlowControl', 'hardware');
+    port = serial('COM20','BaudRate',115200)%, 'FlowControl', 'hardware');
     port.BytesAvailableFcnCount = readSamples;
     port.BytesAvailableFcnMode = 'byte';
     port.BytesAvailableFcn = @serial_callback;
@@ -110,6 +110,9 @@ function plotMics()
         
         if (size(frames, 3)>0)
             currentFrame = frames(:,:,1);
+            f = abs(fft(currentFrame, [], 2)).*scale ./ 2^(8*sampleSize-1)/windowSize;
+            power = sqrt(mean(f(:,10:end) .^ 2, 2))
+            avgData = [avgData(:, 2:end), power];
             frames = frames(:,:,2:end);
             if (size(frames, 3) > 5)
                 size(frames)
@@ -117,7 +120,7 @@ function plotMics()
             for channel = 1:channels
                 set(hAxes3(channel),'YLim', [0, 1.2]);
                 set(hAxes3(channel),'XLim', [0, sampleRate*1000/2]);
-                set(hPlots3(channel),'ydata',abs(fft(currentFrame(channel,:))).*scale ./ 2^(8*sampleSize-1)/windowSize);
+                set(hPlots3(channel),'ydata',f(channel,:));
             end
             
         end
@@ -152,7 +155,7 @@ function serial_callback(obj,event)
         drawCounter = drawCounter + readSamples;
         %recording = [recording, newData];
         maxes = max(newData')';
-        avgData = [avgData(:, 2:end), maxes];
+        %avgData = [avgData(:, 2:end), maxes];
         newDir = 0;
         if (maxes(1) > maxes(2) && maxes(1) > maxes(3))
             newDir = 1;
