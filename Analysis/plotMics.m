@@ -11,7 +11,7 @@ function plotMics()
     readSamples = 42;
     channels = 3;
     sampleRate = 1.25; % kHz
-    scale = 1.15;
+    scale = 1.4;
     recording = zeros(channels, 0);
     avgData = zeros(channels, plotSamples);
     dir = zeros(1, plotSamples);
@@ -82,11 +82,11 @@ function plotMics()
         pause(0.01);
         %if drawCounter >= plotSamples/20
             for channel = 1:channels
-                set(hAxes(channel),'YLim', [0, scale]);
-                set(hPlots(channel),'ydata',plotBuffer(channel,:).*scale ./ 2^(8*sampleSize-1));
+                set(hAxes(channel),'YLim', [-scale, scale]);
+                set(hPlots(channel),'ydata',plotBuffer(channel,:).*scale ./ 2^(8*sampleSize-1) / 2);
                 
-                set(hAxes2(channel),'YLim', [0, scale]);
-                set(hPlots2(channel),'ydata',avgData(channel,:).*scale ./ 2^(8*sampleSize-1));
+                set(hAxes2(channel),'YLim', [-scale, scale]);
+                set(hPlots2(channel),'ydata',avgData(channel,:).*scale ./ 2^(8*sampleSize-1) / 2);
                 
             end
             
@@ -144,7 +144,7 @@ end
 
 function serial_callback(obj,event)
     global port plotBuffer channels drawCounter readSamples sampleSize recording avgData dir
-    newData = fread(port, readSamples/sampleSize, ['int',num2str(8*sampleSize)])';
+    newData = fread(port, readSamples/sampleSize, ['int',num2str(8*sampleSize)])'-64;
     length(newData);
     if (length(newData) > 0)
         newData = reshape(newData, channels, length(newData)/channels);
