@@ -80,6 +80,13 @@
 #define LED_PIN 5
 #define BICLK_PORT P1
 #define BICLK_PIN 7
+#define BICLK2_PORT P1
+#define BICLK2_PIN 6
+
+#define FORWARD 0
+#define BACK 1
+#define RIGHT 2
+#define LEFT 3
 
 #if !defined( SERIAL_APP_PORT )
 #define SERIAL_APP_PORT  0
@@ -260,6 +267,7 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
     if (command != NULL)
     {
       BICLK_PORT &= ~(0x1 << BICLK_PIN);
+      BICLK2_PORT &= ~(0x1 << BICLK2_PIN);
       stimulate(command->direction);
       command->repeats--;
       osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_STIM_STOP, command->posOn); 
@@ -286,7 +294,14 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
   {
     if (command != NULL)
     {
-      BICLK_PORT |= (0x1 << BICLK_PIN);
+      if (command->direction == LEFT)
+      {
+        BICLK_PORT |= (0x1 << BICLK_PIN);
+      }
+      else if (command->direction == RIGHT)
+      {
+        BICLK2_PORT |= (0x1 << BICLK2_PIN);
+      }
       stimulate(command->direction);
       osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_NSTIM_STOP, command->negOn); 
     }
@@ -296,6 +311,7 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
   if ( events & ROACHZSTACK_NSTIM_STOP )
   {
     BICLK_PORT &= ~(0x1 << BICLK_PIN);
+    BICLK2_PORT &= ~(0x1 << BICLK2_PIN);
     stopStimulate();
     if (command != NULL && command->repeats > 0)
     {
@@ -386,28 +402,28 @@ static void stimulate(byte direction)
 {
   switch (direction)
   {
-    case 0:
+    case FORWARD:
       //forward
       LED_PORT |= 0x1 << LED_PIN;
       FORWARD_PORT |= 0x1 << FORWARD_PIN;
       LEFT_PORT &= ~(0x1 << LEFT_PIN);
       RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
        break;
-    case 1:
+    case BACK:
        //back
       LED_PORT |= 0x1 << LED_PIN;
       LEFT_PORT |= 0x1 << LEFT_PIN;
       RIGHT_PORT |= 0x1 << RIGHT_PIN;
       FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
        break;
-    case 2:
+    case RIGHT:
       //right
       LED_PORT |= 0x1 << LED_PIN;
       RIGHT_PORT |= 0x1 << RIGHT_PIN;
       LEFT_PORT &= ~(0x1 << LEFT_PIN);
       FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
        break;
-    case 3:
+    case LEFT:
        //left
       LED_PORT |= 0x1 << LED_PIN;
       LEFT_PORT |= 0x1 << LEFT_PIN;
