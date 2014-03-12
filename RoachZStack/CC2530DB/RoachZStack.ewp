@@ -2422,6 +2422,7 @@
           <state>HAL_LED=FALSE</state>
           <state>HAL_LCD=FALSE</state>
           <state>HAL_AES=FALSE</state>
+          <state>HAL_KEY=FALSE</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
