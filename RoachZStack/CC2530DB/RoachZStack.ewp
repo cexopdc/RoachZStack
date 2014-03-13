@@ -2423,6 +2423,7 @@
           <state>HAL_LCD=FALSE</state>
           <state>HAL_AES=FALSE</state>
           <state>HAL_KEY=FALSE</state>
+          <state>OSC32K_CRYSTAL_INSTALLED=FALSE</state>
         </option>
         <option>
           <name>CCPreprocFile</name>

@@ -83,10 +83,10 @@ function plotMics()
         %if drawCounter >= plotSamples/20
             for channel = 1:channels
                 set(hAxes(channel),'YLim', [-scale, scale]);
-                set(hPlots(channel),'ydata',plotBuffer(channel,:).*scale ./ 2^(8*sampleSize-1) / 2);
+                set(hPlots(channel),'ydata',plotBuffer(channel,:).*scale ./ 2^(8*sampleSize-1) * 2);
                 
                 set(hAxes2(channel),'YLim', [-scale, scale]);
-                set(hPlots2(channel),'ydata',avgData(channel,:).*scale ./ 2^(8*sampleSize-1) / 2);
+                set(hPlots2(channel),'ydata',avgData(channel,:).*scale ./ 2^(8*sampleSize-1) * 2);
                 
             end
             
@@ -110,7 +110,7 @@ function plotMics()
         
         if (size(frames, 3)>0)
             currentFrame = frames(:,:,1);
-            f = abs(fft(currentFrame, [], 2)).*scale ./ 2^(8*sampleSize-1)/windowSize;
+            f = abs(fft(currentFrame, [], 2)).*scale ./ 2^(8*sampleSize-1)/windowSize*2;
             power = sqrt(mean(f(:,10:end) .^ 2, 2))
             avgData = [avgData(:, 2:end), power];
             frames = frames(:,:,2:end);
