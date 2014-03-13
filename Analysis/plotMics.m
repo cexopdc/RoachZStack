@@ -1,11 +1,15 @@
 function plotMics()
-    global port plotBuffer readSamples channels drawCounter sampleSize recording avgData dir windowSize frames
-    try
-        fclose(port)
-    catch
-    end
-    close all;
-
+     
+    global port output_socket plotBuffer readSamples channels drawCounter sampleSize recording avgData dir windowSize frames
+    close all;    
+    %cleanupObj = onCleanup(@cleanup);
+    
+    
+    %javaaddpath(pwd, '-end')
+    output_port = 1234; 
+    output_socket = MatlabOutputSocket(output_port);
+    assignin('caller', 'output_socket', output_socket);
+    
     sampleSize = 1;
     plotSamples = 5000;
     readSamples = 42;
@@ -20,12 +24,15 @@ function plotMics()
     
     xRange = (0:plotSamples);%/(sampleRate * 1000);
     fRange = (0:windowSize-1)*sampleRate*1000/windowSize;%/(sampleRate * 1000);
-
+    
+    
     port = serial('COM20','BaudRate',115200)%, 'FlowControl', 'hardware');
     port.BytesAvailableFcnCount = readSamples;
     port.BytesAvailableFcnMode = 'byte';
     port.BytesAvailableFcn = @serial_callback;
     fopen(port);
+    closeFID = onCleanup(@() fclose(port));
+
 
     % signal = [255, 255, 255, 255, 255, 255];
     % buffer = zeros(1, length(signal));
@@ -77,7 +84,9 @@ function plotMics()
     playCount = 1;
     
     fwrite(port, '*')
-
+    
+ 
+    
     while (1)
         pause(0.01);
         %if drawCounter >= plotSamples/20
@@ -122,10 +131,11 @@ function plotMics()
                 set(hAxes3(channel),'XLim', [0, sampleRate*1000/2]);
                 set(hPlots3(channel),'ydata',f(channel,:));
             end
-            
+            output_socket.write(unicode2native(mat2str(power)));
         end
     end
-
+    % close socket connection 
+    %output_socket.close();
     fclose(port);
 end
 
@@ -168,4 +178,14 @@ function serial_callback(obj,event)
         plotBuffer = [plotBuffer(:,readSamples/channels/sampleSize+1:end), newData];
     end
         
+end
+
+function cleanup()
+    disp 'CLOSING DOWN!';
+    global port output_socket
+    %output_socket.close();
+    try
+        fclose(port)
+    catch
+    end
 end
