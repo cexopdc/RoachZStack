@@ -297,13 +297,15 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
   {
     if (command != NULL)
     {
-      if (command->direction == LEFT)
+      if ((command->direction == LEFT)||(command->direction == BACK))
       {
         BICLK_PORT |= (0x1 << BICLK_PIN);
+        //BICLK2_PORT &= ~(0x1 << BICLK_PIN);
       }
-      else if (command->direction == RIGHT)
+      else if ((command->direction == RIGHT)||(command->direction == BACK))
       {
         BICLK2_PORT |= (0x1 << BICLK2_PIN);
+        //BICLK_PORT &= ~(0x1 << BICLK_PIN);
       }
       stimulate(command->direction);
       osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_NSTIM_STOP, command->negOn); 
