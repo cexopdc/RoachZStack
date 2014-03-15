@@ -26,7 +26,7 @@ function plotMics()
     fRange = (0:windowSize-1)*sampleRate*1000/windowSize;%/(sampleRate * 1000);
     
     
-    port = serial('COM20','BaudRate',115200)%, 'FlowControl', 'hardware');
+    port = serial('COM18','BaudRate',115200)%, 'FlowControl', 'hardware');
     port.BytesAvailableFcnCount = readSamples;
     port.BytesAvailableFcnMode = 'byte';
     port.BytesAvailableFcn = @serial_callback;
@@ -131,6 +131,15 @@ function plotMics()
                 set(hAxes3(channel),'XLim', [0, sampleRate*1000/2]);
                 set(hPlots3(channel),'ydata',f(channel,:));
             end
+            newDir = 0;
+            if (power(1) > power(2) && power(1) > power(3))
+                newDir = 1;
+            elseif (power(2) > power(3))
+                newDir = 2;
+            else
+                newDir = 3;
+            end
+            dir = [dir(:, 2:end), newDir];
             output_socket.write(unicode2native(mat2str(power)));
         end
     end
@@ -166,15 +175,7 @@ function serial_callback(obj,event)
         %recording = [recording, newData];
         maxes = max(newData')';
         %avgData = [avgData(:, 2:end), maxes];
-        newDir = 0;
-        if (maxes(1) > maxes(2) && maxes(1) > maxes(3))
-            newDir = 1;
-        elseif (maxes(2) > maxes(3))
-            newDir = 2;
-        else
-            newDir = 3;
-        end
-        dir = [dir(:, 2:end), newDir];
+        
         plotBuffer = [plotBuffer(:,readSamples/channels/sampleSize+1:end), newData];
     end
         
