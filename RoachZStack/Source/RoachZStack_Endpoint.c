@@ -59,6 +59,7 @@
 #include "RoachZStack_ADC.h"
 #include "ZConfig.h"
 #include "commands.h"
+#include "spi.h"
 
 /*********************************************************************
  * MACROS
@@ -87,6 +88,7 @@
 #define BACK 1
 #define RIGHT 2
 #define LEFT 3
+#define DIGIPOT 16
 
 #if !defined( SERIAL_APP_PORT )
 #define SERIAL_APP_PORT  0
@@ -220,7 +222,8 @@ volatile uint8 deallocCount = 0;
  */
 void RoachZStack_Init( uint8 task_id )
 {
-  halUARTCfg_t uartConfig;
+  
+
 
   RoachZStack_TaskID = task_id;
 
@@ -471,17 +474,45 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
       break;
   }
 }
-
+#define DIGIPOT_R 100000
 static void showMessage(afMSGCommandFormat_t data)
 {
-  if (command != NULL)
+
+  uint8 commandType  = data.Data[1];
+  uint16 r;
+  uint8 val;
+  uint8 buf[2];
+  switch (commandType)
   {
-    osal_mem_free(command);
+  case FORWARD:
+  case RIGHT:
+  case LEFT:
+  case BACK:
+    if (command != NULL)
+    {
+      if (command->repeats > 0)
+      {
+        return;
+      }
+      else
+      {
+        osal_mem_free(command);
+        command = NULL;
+      }
+    }
+    command = parseCommand(data.Data+1, data.DataLength-1);
+    HalLcdWriteValue ( command->direction, 10, HAL_LCD_LINE_1);
+    HalLcdWriteValue ( command->repeats, 10, HAL_LCD_LINE_2);
+    HalLcdWriteValue ( command->posOn, 10, HAL_LCD_LINE_3);
+    break;
+  case DIGIPOT:
+    r = data.Data[2] + data.Data[3]>>8;
+    val = r;
+    buf[0] = 0x13;
+    buf[1] = val;
+    SPI_Write(2, buf);
+    break;
   }
-  command = parseCommand(data.Data+1, data.DataLength-1);
-  HalLcdWriteValue ( command->direction, 10, HAL_LCD_LINE_1);
-  HalLcdWriteValue ( command->repeats, 10, HAL_LCD_LINE_2);
-  HalLcdWriteValue ( command->posOn, 10, HAL_LCD_LINE_3);
 }
 /*********************************************************************
  * @fn      RoachZStack_ProcessMSGCmd
@@ -503,8 +534,10 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
   // stimulation command
   case ROACHZSTACK_CLUSTER_CMD:
     showMessage(pkt->cmd);
-    
-    osal_set_event(RoachZStack_TaskID, ROACHZSTACK_STIM_START );
+    if (command != NULL)
+    {
+      osal_set_event(RoachZStack_TaskID, ROACHZSTACK_STIM_START );
+    }
     default:
       break;
   }

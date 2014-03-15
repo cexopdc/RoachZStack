@@ -3243,6 +3243,12 @@
       <name>$PROJ_DIR$\..\Source\RoachZStack_Endpoint.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\Source\spi.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\spi.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\Source\ZConfig.h</name>
     </file>
   </group>
