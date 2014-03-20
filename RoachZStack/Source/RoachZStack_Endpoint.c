@@ -81,8 +81,7 @@
 #define LED_PIN 5
 #define BICLK_PORT P1
 #define BICLK_PIN 7
-#define BICLK2_PORT P1
-#define BICLK2_PIN 6
+
 
 #define FORWARD 0
 #define BACK 1
@@ -270,7 +269,6 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
     if (command != NULL)
     {
       BICLK_PORT &= ~(0x1 << BICLK_PIN);
-      BICLK2_PORT &= ~(0x1 << BICLK2_PIN);
       stimulate(command->direction);
       command->repeats--;
       osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_STIM_STOP, command->posOn); 
@@ -297,16 +295,7 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
   {
     if (command != NULL)
     {
-      if ((command->direction == LEFT)||(command->direction == BACK))
-      {
-        BICLK_PORT |= (0x1 << BICLK_PIN);
-        //BICLK2_PORT &= ~(0x1 << BICLK_PIN);
-      }
-      else if ((command->direction == RIGHT)||(command->direction == BACK))
-      {
-        BICLK2_PORT |= (0x1 << BICLK2_PIN);
-        //BICLK_PORT &= ~(0x1 << BICLK_PIN);
-      }
+      BICLK_PORT |= (0x1 << BICLK_PIN);
       stimulate(command->direction);
       osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_NSTIM_STOP, command->negOn); 
     }
@@ -316,7 +305,6 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
   if ( events & ROACHZSTACK_NSTIM_STOP )
   {
     BICLK_PORT &= ~(0x1 << BICLK_PIN);
-    BICLK2_PORT &= ~(0x1 << BICLK2_PIN);
     stopStimulate();
     if (command != NULL && command->repeats > 0)
     {
