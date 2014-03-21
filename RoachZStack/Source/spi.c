@@ -4,7 +4,7 @@
 #define MISO_PIN 7
 #define MOSI_PIN 6
 #define SCK_PIN 5
-#define CS_PIN 0
+#define CS_PIN 1
 
 void SPI_Init()
 {
@@ -20,15 +20,15 @@ void SPI_Init()
 
   // Set baud rate to max (system clock frequency / 8) 
   // Assuming a 32 MHz crystal (CC1110Fx/CC2510Fx), 
-  // max baud rate = 32 MHz / 8 = 4 MHz. 
+  // max baud rate = 32 MHz / 4096 = 976 hz. 
   U1BAUD = 0x00; // BAUD_M = 0 
-  U1GCR |= 0x11; // BAUD_E = 17
+  U1GCR |= 0x03; // BAUD_E = 8
   
   // SPI Master Mode
   U1CSR &= ~0xA0;
   
   // Configure phase, polarity, and bit order 
-  U1GCR &= ~0xC0; // CPOL = 0; CPHA = 0
+  U1GCR &= ~0x80; // CPOL = 0; CPHA = 1
   U1GCR |= 0x20; // ORDER = 1 
   
   
@@ -38,11 +38,11 @@ void SPI_Init()
 void SPI_Write(uint8 len, uint8* buffer)
 {
   P1 &= ~(0x1<<CS_PIN);
-  for (int i = 0; i <= len; i++) 
+  for (int i = 0; i < len; i++) 
   { 
    U1DBUF = buffer[i]; 
-   while (!(U1CSR & 0x02)); 
-   U1CSR &= ~0x02;
+   while (!U1TX_BYTE); 
+   U1TX_BYTE = 0;
   } 
   P1 |= (0x1<<CS_PIN);
 }

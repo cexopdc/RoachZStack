@@ -76,7 +76,7 @@
 #define RIGHT_PORT P1
 #define RIGHT_PIN 2
 #define FORWARD_PORT P1
-#define FORWARD_PIN 1
+#define FORWARD_PIN 2 // temporary
 #define LED_PORT P1
 #define LED_PIN 5
 #define BICLK_PORT P1
@@ -222,7 +222,7 @@ volatile uint8 deallocCount = 0;
 void RoachZStack_Init( uint8 task_id )
 {
   
-
+  SPI_Init();
 
   RoachZStack_TaskID = task_id;
 
@@ -496,10 +496,10 @@ static void showMessage(afMSGCommandFormat_t data)
     HalLcdWriteValue ( command->posOn, 10, HAL_LCD_LINE_3);
     break;
   case DIGIPOT:
-    r = data.Data[2] + data.Data[3]>>8;
-    val = r;
+    r = data.Data[2] + (data.Data[3]<<8);
+    val = (int8)(r*255.0/DIGIPOT_R);
     buf[0] = 0x13;
-    buf[1] = val;
+    buf[1] = 255-val;
     SPI_Write(2, buf);
     break;
   }
