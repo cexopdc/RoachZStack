@@ -7,7 +7,7 @@ function fSweep()
     close all;
 
     sampleSize = 1;
-    plotSamples = 1000;
+    plotSamples = 100;
     readSamples = 42;
     channels = 3;
     sampleRate = 1.25; % kHz
@@ -60,7 +60,7 @@ function fSweep()
     angles = [];
     
     INC = 1.8;
-    STEP_SIZE_FACTOR = 2;
+    STEP_SIZE_FACTOR = 1;
     STEP_SIZE = INC * STEP_SIZE_FACTOR;
     NUM_STEPS = 360 / STEP_SIZE;
     for i=1:NUM_STEPS
@@ -77,6 +77,7 @@ function fSweep()
     return
     
     fclose(port);
+    analyze
 end
 function serial_callback(obj,event)
     global port plotBuffer channels drawCounter readSamples sampleSize recording

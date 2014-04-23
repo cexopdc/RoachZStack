@@ -60,15 +60,13 @@ function fSweep()
     angles = [];
     
     INC = 1.8;
-    STEP_SIZE_FACTOR = 10;
+    STEP_SIZE_FACTOR = 1;
     STEP_SIZE = INC * STEP_SIZE_FACTOR;
     NUM_STEPS = 360 / STEP_SIZE;
     for i=1:NUM_STEPS
         for j=1:STEP_SIZE_FACTOR
             putvalue(dio,[1,1]); %[x,y] x is direction y is the step
-            pause(0.001)
             putvalue(dio,[1,0]);
-            pause(0.001)
         end
         disp('step')
         disp(i*STEP_SIZE);
