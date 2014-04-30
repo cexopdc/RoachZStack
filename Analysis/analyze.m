@@ -12,19 +12,53 @@ function mic_data=analyze(dataset)
         for channel=1:3
             data = trial_data(channel,:);
             f = abs(fft(data))/length(data);
-            sum(data)
+            sum(data);
             %figure; plot(fAxis, f);
-            power = mean(f(10:end));
+            power = mean(f(10:end).^2);
+            %power = mean(f(900:1000));
             trial_results = cat(1, trial_results, power);
         end
         mic_data = [mic_data, trial_results];
     end
     figure;
+    mic_data = [mic_data, mic_data(:,1)];
+    offset = 36 * pi / 180;
     
-    polar([0:points-1]*360/points*pi/180, mic_data(3,:));
+    h1 = polar([0:points]*360/points*pi/180 - offset, mic_data(1,:));
+
     hold on;
+    e = 98;
+    mic_data(2,e) = (mic_data(2, e-1)+mic_data(2, e+1))/2;
+    h2 = polar([0:points]*360/points*pi/180 - offset, mic_data(2,:),'r');
     
-    polar([0:points-1]*360/points*pi/180, mic_data(2,:),'r');
+    h3 = polar([0:points]*360/points*pi/180 - offset, mic_data(3,:),'g');
     
-    polar([0:points-1]*360/points*pi/180, mic_data(1,:),'g');
+    set(h1, 'Color', [2, 105, 214] ./ 255);
+    set(h2, 'Color', [14, 138, 3] ./ 255);
+    set(h3, 'Color', [196, 22, 22] ./ 255);
+    
+    set([h1, h2, h3], 'LineWidth', 2);
+    hTitle = title('Polar Microphone Response');
+    hLegend = legend('Mic A', 'Mic B', 'Mic C');
+    set( gca                       , ...
+    'FontName'   , 'Helvetica' );
+    set([hTitle], ...
+        'FontName'   , 'AvantGarde');
+    set([hLegend, gca]             , ...
+        'FontSize'   , 8           );
+    set( hTitle                    , ...
+        'FontSize'   , 12          , ...
+        'FontWeight' , 'bold'      );
+
+    set(gca, ...
+      'Box'         , 'off'     , ...
+      'TickDir'     , 'out'     , ...
+      'TickLength'  , [.02 .02] , ...
+      'XMinorTick'  , 'on'      , ...
+      'YMinorTick'  , 'on'      , ...
+      'YGrid'       , 'on'      , ...
+      'XColor'      , [.3 .3 .3], ...
+      'YColor'      , [.3 .3 .3], ...
+      'YTick'       , 0:500:2500, ...
+      'LineWidth'   , 1         );
 end

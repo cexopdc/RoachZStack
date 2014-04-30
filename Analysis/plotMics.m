@@ -7,7 +7,7 @@ function plotMics()
     
     %javaaddpath(pwd, '-end')
     output_port = 1234; 
-    output_socket = MatlabOutputSocket(output_port);
+    %output_socket = MatlabOutputSocket(output_port);
     assignin('caller', 'output_socket', output_socket);
     
     sampleSize = 1;
@@ -26,7 +26,7 @@ function plotMics()
     fRange = (0:windowSize-1)*sampleRate*1000/windowSize;%/(sampleRate * 1000);
     
     
-    port = serial('COM18','BaudRate',115200)%, 'FlowControl', 'hardware');
+    port = serial('COM21','BaudRate',115200)%, 'FlowControl', 'hardware');
     port.BytesAvailableFcnCount = readSamples;
     port.BytesAvailableFcnMode = 'byte';
     port.BytesAvailableFcn = @serial_callback;
@@ -140,7 +140,7 @@ function plotMics()
                 newDir = 3;
             end
             dir = [dir(:, 2:end), newDir];
-            output_socket.write(unicode2native(mat2str(power)));
+            %output_socket.write(unicode2native(mat2str(power)));
         end
     end
     % close socket connection 
@@ -172,7 +172,7 @@ function serial_callback(obj,event)
         newData = reshape(newData, channels, length(newData)/channels);
         fillFrame(newData)
         drawCounter = drawCounter + readSamples;
-        %recording = [recording, newData];
+        % recording = [recording, newData];
         maxes = max(newData')';
         %avgData = [avgData(:, 2:end), maxes];
         

@@ -103,7 +103,8 @@ void RoachZStack_ADC_Init( uint8 task_id )
     RoachZStack_ADC_TaskID = task_id;   
     APCFG = 0x00 | (1 << HAL_ADC_CHANNEL_1) | (1 << HAL_ADC_CHANNEL_3) |  (1 << HAL_ADC_CHANNEL_5);
     ADCCON1 = HAL_ADC_STSEL_T1C0 | 0x03; // 0x03 reserved
-    ADCCON2 = HAL_ADC_REF_125V | HAL_ADC_DEC_064 | 0x05; //stop at channel 5
+    //HAL_ADC_REF_AVDD or HAL_ADC_REF_125V
+    ADCCON2 = HAL_ADC_REF_AVDD | HAL_ADC_DEC_064 | 0x05; //stop at channel 5
     //P2INP |= 0x20;
     T1CTL = 0x00 | 0x0C | 0x02;
     
