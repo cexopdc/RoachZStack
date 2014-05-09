@@ -127,10 +127,6 @@
 <smd name="INPUT" x="-2" y="-1" dx="0.2" dy="1" layer="1" rot="R90"/>
 <smd name="GATE_THRS" x="2" y="-0.5" dx="0.2" dy="1" layer="1" rot="R90"/>
 <smd name="AVG_CAP" x="2" y="-1" dx="0.2" dy="1" layer="1" rot="R90"/>
-<wire x1="-1.55" y1="1.55" x2="1.55" y2="1.55" width="0.127" layer="21"/>
-<wire x1="1.55" y1="1.55" x2="1.55" y2="-1.55" width="0.127" layer="21"/>
-<wire x1="1.55" y1="-1.55" x2="-1.55" y2="-1.55" width="0.127" layer="21"/>
-<wire x1="-1.55" y1="-1.55" x2="-1.55" y2="1.55" width="0.127" layer="21"/>
 </package>
 <package name="FFC4POS">
 <description>FFC Connector 4POS</description>
@@ -446,25 +442,21 @@ MCP42100-I/SL-ND</description>
 <smd name="P$4" x="-0.039859375" y="0.7582" dx="0.254" dy="0.762" layer="1" rot="R270"/>
 </package>
 <package name="TLV2764">
-<smd name="VDD" x="-2.65" y="0" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="1IN+" x="-2.65" y="1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="1IN-" x="-2.65" y="2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="2IN+" x="-2.65" y="-1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<circle x="-1.55" y="3.78" radius="0.1" width="0.2" layer="21"/>
-<smd name="2IN-" x="-2.65" y="-2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="1OUT" x="-2.65" y="3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="2OUT" x="-2.65" y="-3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="GND" x="2.65" y="0" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="4IN+" x="2.65" y="1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="4IN-" x="2.65" y="2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="3IN+" x="2.65" y="-1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="3IN-" x="2.65" y="-2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="4OUT" x="2.65" y="3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="3OUT" x="2.65" y="-3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<wire x1="-2" y1="4.35" x2="2" y2="4.35" width="0.127" layer="21"/>
-<wire x1="2" y1="4.35" x2="2" y2="-4.4" width="0.127" layer="21"/>
-<wire x1="2" y1="-4.4" x2="-2" y2="-4.4" width="0.127" layer="21"/>
-<wire x1="-2" y1="-4.4" x2="-2" y2="4.35" width="0.127" layer="21"/>
+<smd name="VDD" x="-2" y="0" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="1IN+" x="-2" y="1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="1IN-" x="-2" y="2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="2IN+" x="-2" y="-1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<circle x="-1.1" y="3.83" radius="0.1" width="0.2" layer="21"/>
+<smd name="2IN-" x="-2" y="-2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="1OUT" x="-2" y="3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="2OUT" x="-2" y="-3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="GND" x="2" y="0" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="4IN+" x="2" y="1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="4IN-" x="2" y="2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="3IN+" x="2" y="-1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="3IN-" x="2" y="-2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="4OUT" x="2" y="3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="3OUT" x="2" y="-3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
 </package>
 <package name="FMN4POS">
 <wire x1="-3" y1="1.6" x2="3" y2="1.6" width="0.127" layer="21"/>
@@ -475,8 +467,8 @@ MCP42100-I/SL-ND</description>
 <smd name="2" x="-0.5" y="-1.975" dx="0.4" dy="1" layer="1"/>
 <smd name="3" x="0.5" y="-1.975" dx="0.4" dy="1" layer="1"/>
 <smd name="4" x="1.5" y="-1.975" dx="0.4" dy="1" layer="1"/>
-<smd name="P$1" x="-2.8" y="1.4" dx="1" dy="1" layer="1"/>
-<smd name="P$2" x="2.8" y="1.4" dx="1" dy="1" layer="1"/>
+<rectangle x1="-3.3" y1="0.9" x2="-2.3" y2="1.9" layer="1"/>
+<rectangle x1="2.3" y1="0.9" x2="3.3" y2="1.9" layer="1"/>
 </package>
 <package name="CC2533">
 <smd name="NC1" x="-3.048" y="2.286" dx="0.762" dy="0.254" layer="1"/>
@@ -548,10 +540,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <package name="SWITCH_MANUAL">
 <smd name="1" x="-4.130040625" y="0" dx="1.524" dy="1.016" layer="1"/>
 <smd name="2" x="3.81" y="0" dx="1.524" dy="1.016" layer="1"/>
-<wire x1="-3.05" y1="1.155" x2="2.75" y2="1.155" width="0.127" layer="21"/>
-<wire x1="2.75" y1="1.155" x2="2.75" y2="-1.155" width="0.127" layer="21"/>
-<wire x1="2.75" y1="-1.155" x2="-3.05" y2="-1.155" width="0.127" layer="21"/>
-<wire x1="-3.05" y1="-1.155" x2="-3.05" y2="1.155" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
