@@ -1010,8 +1010,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <part name="U$34" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
 <part name="U$35" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
 <part name="U$36" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
-<part name="U$37" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
-<part name="U$38" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
 <part name="U$39" library="CC2530_PCB_TL" deviceset="X32.768KHZ" device=""/>
 <part name="U$40" library="CC2530_PCB_TL" deviceset="0201" device=""/>
 <part name="U$41" library="CC2530_PCB_TL" deviceset="0201" device=""/>
@@ -1114,8 +1112,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <instance part="U$34" gate="G$1" x="109.22" y="60.96"/>
 <instance part="U$35" gate="G$1" x="109.22" y="53.34"/>
 <instance part="U$36" gate="G$1" x="96.52" y="124.46"/>
-<instance part="U$37" gate="G$1" x="81.28" y="124.46"/>
-<instance part="U$38" gate="G$1" x="86.36" y="30.48"/>
 <instance part="U$39" gate="G$1" x="106.68" y="106.68"/>
 <instance part="U$40" gate="G$1" x="124.46" y="119.38"/>
 <instance part="U$41" gate="G$1" x="124.46" y="93.98"/>
@@ -1421,12 +1417,10 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <segment>
 <pinref part="U$1" gate="G$1" pin="RESET_N"/>
 <wire x1="86.36" y1="33.02" x2="86.36" y2="30.48" width="0.1524" layer="91"/>
-<pinref part="U$38" gate="G$1" pin="1"/>
 </segment>
 <segment>
 <pinref part="U$17" gate="G$1" pin="3"/>
 <wire x1="81.28" y1="127" x2="81.28" y2="124.46" width="0.1524" layer="91"/>
-<pinref part="U$37" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$21" class="0">
@@ -1523,6 +1517,10 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <segment>
 <pinref part="U$13" gate="G$1" pin="NC2"/>
 <wire x1="10.16" y1="-12.7" x2="12.7" y2="-12.7" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$1" gate="G$1" pin="P0_3"/>
+<wire x1="76.2" y1="33.02" x2="76.2" y2="27.94" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$7" class="0">
@@ -1621,13 +1619,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <pinref part="U$31" gate="G$1" pin="1"/>
 <pinref part="U$29" gate="G$1" pin="2"/>
 <wire x1="-17.78" y1="71.12" x2="-17.78" y2="58.42" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$35" class="0">
-<segment>
-<pinref part="U$29" gate="G$1" pin="1"/>
-<pinref part="U$1" gate="G$1" pin="P1_5"/>
-<wire x1="10.16" y1="58.42" x2="45.72" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$33" class="0">
@@ -1778,8 +1769,9 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 </net>
 <net name="N$24" class="0">
 <segment>
-<pinref part="U$1" gate="G$1" pin="P0_3"/>
-<wire x1="76.2" y1="33.02" x2="76.2" y2="27.94" width="0.1524" layer="91"/>
+<pinref part="U$29" gate="G$1" pin="1"/>
+<pinref part="U$1" gate="G$1" pin="P1_5"/>
+<wire x1="10.16" y1="58.42" x2="45.72" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

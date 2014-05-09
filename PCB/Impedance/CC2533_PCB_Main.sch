@@ -1008,8 +1008,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 </part>
 <part name="U$32" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
 <part name="U$33" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
-<part name="U$34" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
-<part name="U$35" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
 <part name="U$36" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
 <part name="U$39" library="CC2530_PCB_TL" deviceset="X32.768KHZ" device=""/>
 <part name="U$40" library="CC2530_PCB_TL" deviceset="0201" device=""/>
@@ -1110,8 +1108,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 </instance>
 <instance part="U$32" gate="G$1" x="198.12" y="58.42"/>
 <instance part="U$33" gate="G$1" x="198.12" y="55.88"/>
-<instance part="U$34" gate="G$1" x="109.22" y="60.96"/>
-<instance part="U$35" gate="G$1" x="109.22" y="53.34"/>
 <instance part="U$36" gate="G$1" x="96.52" y="124.46"/>
 <instance part="U$39" gate="G$1" x="106.68" y="106.68"/>
 <instance part="U$40" gate="G$1" x="124.46" y="119.38"/>
@@ -1170,19 +1166,17 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="86.36" y1="81.28" x2="109.22" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="109.22" y1="81.28" x2="109.22" y2="66.04" width="0.1524" layer="91"/>
 <wire x1="109.22" y1="66.04" x2="104.14" y2="66.04" width="0.1524" layer="91"/>
-<pinref part="U$34" gate="G$1" pin="1"/>
 <wire x1="109.22" y1="60.96" x2="104.14" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="AVDD5"/>
-<wire x1="109.22" y1="53.34" x2="109.22" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="109.22" y1="45.72" x2="104.14" y2="45.72" width="0.1524" layer="91"/>
-<pinref part="U$35" gate="G$1" pin="1"/>
-<pinref part="U$1" gate="G$1" pin="AVDD3"/>
-<wire x1="104.14" y1="53.34" x2="109.22" y2="53.34" width="0.1524" layer="91"/>
 <wire x1="109.22" y1="60.96" x2="109.22" y2="53.34" width="0.1524" layer="91"/>
 <pinref part="U$48" gate="G$1" pin="1"/>
 <junction x="86.36" y="86.36"/>
 <pinref part="U$18" gate="G$1" pin="2"/>
+<wire x1="109.22" y1="53.34" x2="109.22" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="109.22" y1="25.4" x2="109.22" y2="45.72" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="AVDD3"/>
+<wire x1="104.14" y1="53.34" x2="109.22" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="U$1" gate="G$1" pin="DVDD2"/>
