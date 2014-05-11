@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="1" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<grid distance="0.01" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -127,10 +127,6 @@
 <smd name="INPUT" x="-2" y="-1" dx="0.2" dy="1" layer="1" rot="R90"/>
 <smd name="GATE_THRS" x="2" y="-0.5" dx="0.2" dy="1" layer="1" rot="R90"/>
 <smd name="AVG_CAP" x="2" y="-1" dx="0.2" dy="1" layer="1" rot="R90"/>
-<wire x1="-1.55" y1="1.55" x2="1.55" y2="1.55" width="0.127" layer="21"/>
-<wire x1="1.55" y1="1.55" x2="1.55" y2="-1.55" width="0.127" layer="21"/>
-<wire x1="1.55" y1="-1.55" x2="-1.55" y2="-1.55" width="0.127" layer="21"/>
-<wire x1="-1.55" y1="-1.55" x2="-1.55" y2="1.55" width="0.127" layer="21"/>
 </package>
 <package name="FFC4POS">
 <description>FFC Connector 4POS</description>
@@ -256,7 +252,7 @@ Not designed using SMD pads; needs revision</description>
 <smd name="P$5" x="4.9452" y="4.67651875" dx="0.5" dy="5" layer="16" rot="R180" stop="no"/>
 <smd name="P$6" x="3.3702" y="2.4264625" dx="2.65" dy="0.5" layer="16" rot="R180" stop="no"/>
 <smd name="P$7" x="2.2962875" y="1.179059375" dx="0.5" dy="2" layer="16" stop="no"/>
-<smd name="P$8" x="2.4952" y="4.62651875" dx="4.4" dy="0.5" layer="16" stop="no"/>
+<smd name="P$8" x="2.4952" y="4.62651875" dx="4.4" dy="0.5" layer="16"/>
 <smd name="P$9" x="4.9477375" y="-1.1709375" dx="0.5" dy="2.7" layer="16" rot="R180" stop="no"/>
 <smd name="P$10" x="2.7252" y="-6.96205" dx="0.5" dy="3.94" layer="16" rot="R90" stop="no"/>
 <smd name="P$11" x="3.380740625" y="-0.0706125" dx="2.667" dy="0.5" layer="16" rot="R180" stop="no"/>
@@ -265,12 +261,11 @@ Not designed using SMD pads; needs revision</description>
 <smd name="P$14" x="3.371596875" y="-4.759959375" dx="2.65" dy="0.5" layer="16" rot="R180" stop="no"/>
 <smd name="P$15" x="4.9452" y="-5.860778125" dx="0.5" dy="2.7" layer="16" rot="R180" stop="no"/>
 <smd name="P$16" x="0.0452" y="4.62651875" dx="0.5" dy="0.5" layer="16" rot="R180" stop="no"/>
-<smd name="A" x="-0.01396875" y="-0.0960125" dx="0.2032" dy="0.2032" layer="16" rot="R180" stop="no"/>
-<smd name="A1" x="-0.01396875" y="2.096678125" dx="0.381" dy="4.589" layer="16" rot="R180" stop="no"/>
+<smd name="A" x="-0.01396875" y="2.096678125" dx="0.381" dy="4.589" layer="16" rot="R180" stop="no"/>
 </package>
 <package name="DRILL_HOLE">
 <description>Drill holes for conecting two layers</description>
-<pad name="1" x="0" y="0" drill="0.3556" diameter="0.6096"/>
+<pad name="1" x="0" y="0" drill="0.381" diameter="0.635"/>
 </package>
 <package name="1206">
 <description>Package / Case	1206 (3216 Metric):
@@ -447,25 +442,21 @@ MCP42100-I/SL-ND</description>
 <smd name="P$4" x="-0.039859375" y="0.7582" dx="0.254" dy="0.762" layer="1" rot="R270"/>
 </package>
 <package name="TLV2764">
-<smd name="VDD" x="-2.65" y="0" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="1IN+" x="-2.65" y="1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="1IN-" x="-2.65" y="2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="2IN+" x="-2.65" y="-1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<circle x="-1.55" y="3.78" radius="0.1" width="0.2" layer="21"/>
-<smd name="2IN-" x="-2.65" y="-2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="1OUT" x="-2.65" y="3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="2OUT" x="-2.65" y="-3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="GND" x="2.65" y="0" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="4IN+" x="2.65" y="1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="4IN-" x="2.65" y="2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="3IN+" x="2.65" y="-1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="3IN-" x="2.65" y="-2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="4OUT" x="2.65" y="3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<smd name="3OUT" x="2.65" y="-3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
-<wire x1="-2" y1="4.35" x2="2" y2="4.35" width="0.127" layer="21"/>
-<wire x1="2" y1="4.35" x2="2" y2="-4.4" width="0.127" layer="21"/>
-<wire x1="2" y1="-4.4" x2="-2" y2="-4.4" width="0.127" layer="21"/>
-<wire x1="-2" y1="-4.4" x2="-2" y2="4.35" width="0.127" layer="21"/>
+<smd name="VDD" x="-2" y="0" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="1IN+" x="-2" y="1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="1IN-" x="-2" y="2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="2IN+" x="-2" y="-1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<circle x="-1.1" y="3.83" radius="0.1" width="0.2" layer="21"/>
+<smd name="2IN-" x="-2" y="-2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="1OUT" x="-2" y="3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="2OUT" x="-2" y="-3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="GND" x="2" y="0" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="4IN+" x="2" y="1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="4IN-" x="2" y="2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="3IN+" x="2" y="-1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="3IN-" x="2" y="-2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="4OUT" x="2" y="3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="3OUT" x="2" y="-3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
 </package>
 <package name="FMN4POS">
 <wire x1="-3" y1="1.6" x2="3" y2="1.6" width="0.127" layer="21"/>
@@ -476,8 +467,8 @@ MCP42100-I/SL-ND</description>
 <smd name="2" x="-0.5" y="-1.975" dx="0.4" dy="1" layer="1"/>
 <smd name="3" x="0.5" y="-1.975" dx="0.4" dy="1" layer="1"/>
 <smd name="4" x="1.5" y="-1.975" dx="0.4" dy="1" layer="1"/>
-<smd name="P$1" x="-2.8" y="1.4" dx="1" dy="1" layer="1"/>
-<smd name="P$2" x="2.8" y="1.4" dx="1" dy="1" layer="1"/>
+<rectangle x1="-3.3" y1="0.9" x2="-2.3" y2="1.9" layer="1"/>
+<rectangle x1="2.3" y1="0.9" x2="3.3" y2="1.9" layer="1"/>
 </package>
 <package name="CC2533">
 <smd name="NC1" x="-3.048" y="2.286" dx="0.762" dy="0.254" layer="1"/>
@@ -549,10 +540,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <package name="SWITCH_MANUAL">
 <smd name="1" x="-4.130040625" y="0" dx="1.524" dy="1.016" layer="1"/>
 <smd name="2" x="3.81" y="0" dx="1.524" dy="1.016" layer="1"/>
-<wire x1="-3.05" y1="1.155" x2="2.75" y2="1.155" width="0.127" layer="21"/>
-<wire x1="2.75" y1="1.155" x2="2.75" y2="-1.155" width="0.127" layer="21"/>
-<wire x1="2.75" y1="-1.155" x2="-3.05" y2="-1.155" width="0.127" layer="21"/>
-<wire x1="-3.05" y1="-1.155" x2="-3.05" y2="1.155" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
