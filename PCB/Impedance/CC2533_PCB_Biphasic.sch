@@ -9,12 +9,12 @@
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
+<layer number="16" name="Bottom" color="9" fill="1" visible="no" active="no"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="no"/>
+<layer number="19" name="Unrouted" color="13" fill="1" visible="no" active="no"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="no" active="no"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="21" name="tPlace" color="7" fill="10" visible="no" active="no"/>
 <layer number="22" name="bPlace" color="7" fill="1" visible="no" active="no"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="no"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="no"/>
@@ -283,18 +283,6 @@ LED?,
 <smd name="1" x="-0.4754" y="0.0008" dx="0.5334" dy="0.3302" layer="1" rot="R90"/>
 <smd name="2" x="0.5008" y="0.0008" dx="0.5334" dy="0.3302" layer="1" rot="R90"/>
 </package>
-<package name="0402">
-<description>Package / Case	0402 (1005 Metric):
-10uF Cer Cap,
-0k/1k Thick Film Res,
-2k/75k/100k Thin Film Res</description>
-<smd name="1" x="-0.45" y="0.0008" dx="0.5" dy="0.3" layer="1" rot="R90"/>
-<smd name="2" x="0.45" y="0.0008" dx="0.5" dy="0.3" layer="1" rot="R90"/>
-</package>
-<package name="DRILL_HOLE">
-<description>Drill holes for conecting two layers</description>
-<pad name="1" x="0" y="0" drill="0.381" diameter="0.635"/>
-</package>
 <package name="X32.768KHZ">
 <description>X32.768kHz 9HT11-32.768KDZC-T</description>
 <smd name="Q2" x="0.008559375" y="0.78936875" dx="0.7" dy="1.25" layer="1" rot="R90"/>
@@ -303,6 +291,62 @@ LED?,
 <wire x1="0.61" y1="0.99" x2="0.61" y2="-1.01" width="0.127" layer="21"/>
 <wire x1="0.61" y1="-1.01" x2="-0.59" y2="-1.01" width="0.127" layer="21"/>
 <wire x1="-0.59" y1="-1.01" x2="-0.59" y2="0.99" width="0.127" layer="21"/>
+</package>
+<package name="AS1753_QUAD_SPST">
+<description>QUAD SPST SWITCH AS1753S</description>
+<smd name="GND" x="-2.8" y="-1.95" dx="1" dy="0.25" layer="1"/>
+<smd name="IN3" x="-2.8" y="-1.3" dx="1" dy="0.25" layer="1"/>
+<smd name="IN2" x="-2.8" y="-0.65" dx="1" dy="0.25" layer="1"/>
+<smd name="COM2" x="-2.8" y="0" dx="1" dy="0.25" layer="1"/>
+<smd name="NC2" x="-2.8" y="0.65" dx="1" dy="0.25" layer="1"/>
+<smd name="COM1" x="-2.8" y="1.3" dx="1" dy="0.25" layer="1"/>
+<smd name="NO1" x="-2.8" y="1.95" dx="1" dy="0.25" layer="1"/>
+<smd name="NO3" x="2.8" y="-1.95" dx="1" dy="0.25" layer="1"/>
+<smd name="COM3" x="2.8" y="-1.3" dx="1" dy="0.25" layer="1"/>
+<smd name="COM4" x="2.8" y="-0.65" dx="1" dy="0.25" layer="1"/>
+<smd name="NC4" x="2.8" y="0" dx="1" dy="0.25" layer="1"/>
+<smd name="IN4" x="2.8" y="0.65" dx="1" dy="0.25" layer="1"/>
+<smd name="IN1" x="2.8" y="1.3" dx="1" dy="0.25" layer="1"/>
+<smd name="V+" x="2.8" y="1.95" dx="1" dy="0.25" layer="1"/>
+<rectangle x1="-1.9" y1="1.5" x2="-1.5" y2="1.9" layer="21"/>
+<wire x1="-2.25" y1="2.55" x2="2.25" y2="2.55" width="0.127" layer="21"/>
+<wire x1="2.25" y1="2.55" x2="2.25" y2="-2.55" width="0.127" layer="21"/>
+<wire x1="2.25" y1="-2.55" x2="-2.25" y2="-2.55" width="0.127" layer="21"/>
+<wire x1="-2.25" y1="-2.55" x2="-2.25" y2="2.55" width="0.127" layer="21"/>
+</package>
+<package name="MP42100">
+<description>Digital Potentiometer 100K 2CH SPI 14-SOIC
+MCP42100-I/SL-ND</description>
+<smd name="RS-BAR" x="2.595" y="0" dx="1.2" dy="0.36" layer="1"/>
+<smd name="VSS" x="-2.595" y="0" dx="1.2" dy="0.36" layer="1"/>
+<smd name="SHDN-BAR" x="2.595" y="1.27" dx="1.2" dy="0.36" layer="1"/>
+<smd name="SO" x="2.595" y="2.54" dx="1.2" dy="0.36" layer="1"/>
+<smd name="VDD" x="2.595" y="3.81" dx="1.2" dy="0.36" layer="1"/>
+<smd name="PB0" x="2.595" y="-1.27" dx="1.2" dy="0.36" layer="1"/>
+<smd name="PW0" x="2.595" y="-2.54" dx="1.2" dy="0.36" layer="1"/>
+<smd name="PA0" x="2.595" y="-3.81" dx="1.2" dy="0.36" layer="1"/>
+<smd name="SI" x="-2.595" y="1.27" dx="1.2" dy="0.36" layer="1"/>
+<smd name="SCK" x="-2.595" y="2.54" dx="1.2" dy="0.36" layer="1"/>
+<smd name="CS-BAR" x="-2.595" y="3.81" dx="1.2" dy="0.36" layer="1"/>
+<smd name="PB1" x="-2.595" y="-1.27" dx="1.2" dy="0.36" layer="1"/>
+<smd name="PW1" x="-2.595" y="-2.54" dx="1.2" dy="0.36" layer="1"/>
+<smd name="PA1" x="-2.595" y="-3.81" dx="1.2" dy="0.36" layer="1"/>
+<circle x="-1.3" y="3.8" radius="0.1" width="0.2" layer="21"/>
+<wire x1="1.93" y1="-4.42" x2="-1.97" y2="-4.42" width="0.127" layer="21"/>
+<wire x1="-1.97" y1="-4.42" x2="-1.97" y2="4.38" width="0.127" layer="21"/>
+<wire x1="-1.97" y1="4.38" x2="1.93" y2="4.38" width="0.127" layer="21"/>
+<wire x1="1.93" y1="4.38" x2="1.93" y2="-4.42" width="0.127" layer="21"/>
+</package>
+<package name="NPN_2SC3707">
+<description>NPN Transistor
+2SC370700L</description>
+<smd name="C" x="0" y="1.15" dx="0.4" dy="0.8" layer="1" rot="R180"/>
+<smd name="B" x="-0.95" y="-1.15" dx="0.4" dy="0.8" layer="1" rot="R180"/>
+<smd name="E" x="0.95" y="-1.15" dx="0.4" dy="0.8" layer="1" rot="R180"/>
+</package>
+<package name="DRILL_HOLE">
+<description>Drill holes for conecting two layers</description>
+<pad name="1" x="0" y="0" drill="0.381" diameter="0.635"/>
 </package>
 </packages>
 <symbols>
@@ -507,18 +551,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="7.62" y1="-2.54" x2="-10.16" y2="-2.54" width="0.254" layer="94"/>
 <wire x1="-10.16" y1="-2.54" x2="-10.16" y2="2.54" width="0.254" layer="94"/>
 </symbol>
-<symbol name="0402">
-<description>Package / Case	0402 (1005 Metric)</description>
-<pin name="1" x="-12.7" y="0" length="middle"/>
-<pin name="2" x="15.24" y="0" length="middle" rot="R180"/>
-<wire x1="-7.62" y1="2.54" x2="10.16" y2="2.54" width="0.254" layer="94"/>
-<wire x1="10.16" y1="2.54" x2="10.16" y2="-2.54" width="0.254" layer="94"/>
-<wire x1="10.16" y1="-2.54" x2="-7.62" y2="-2.54" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="-2.54" x2="-7.62" y2="2.54" width="0.254" layer="94"/>
-</symbol>
-<symbol name="DRILL_HOLE">
-<pin name="1" x="0" y="0" length="point"/>
-</symbol>
 <symbol name="X32.768KHZ">
 <description>X32.768kHz 9HT11-32.768KDZC-T</description>
 <pin name="Q2" x="0" y="12.7" length="middle" rot="R270"/>
@@ -527,6 +559,64 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="7.62" y1="7.62" x2="7.62" y2="-7.62" width="0.254" layer="94"/>
 <wire x1="7.62" y1="-7.62" x2="-7.62" y2="-7.62" width="0.254" layer="94"/>
 <wire x1="-7.62" y1="-7.62" x2="-7.62" y2="7.62" width="0.254" layer="94"/>
+</symbol>
+<symbol name="AS1753_QUAD_SPST">
+<description>QUAD SPST SWITCH AS1753S</description>
+<pin name="NO1" x="-15.24" y="7.62" length="middle"/>
+<pin name="COM1" x="-15.24" y="5.08" length="middle"/>
+<pin name="NC2" x="-15.24" y="2.54" length="middle"/>
+<pin name="COM2" x="-15.24" y="0" length="middle"/>
+<pin name="IN2" x="-15.24" y="-2.54" length="middle"/>
+<pin name="IN3" x="-15.24" y="-5.08" length="middle"/>
+<pin name="GND" x="-15.24" y="-7.62" length="middle" direction="pwr"/>
+<pin name="NO3" x="15.24" y="-7.62" length="middle" rot="R180"/>
+<pin name="COM3" x="15.24" y="-5.08" length="middle" rot="R180"/>
+<pin name="COM4" x="15.24" y="-2.54" length="middle" rot="R180"/>
+<pin name="NC4" x="15.24" y="0" length="middle" rot="R180"/>
+<pin name="IN4" x="15.24" y="2.54" length="middle" rot="R180"/>
+<pin name="IN1" x="15.24" y="5.08" length="middle" rot="R180"/>
+<pin name="V+" x="15.24" y="7.62" length="middle" direction="pwr" rot="R180"/>
+<wire x1="-10.16" y1="10.16" x2="-10.16" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-10.16" x2="10.16" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-10.16" x2="10.16" y2="10.16" width="0.254" layer="94"/>
+<wire x1="10.16" y1="10.16" x2="-10.16" y2="10.16" width="0.254" layer="94"/>
+</symbol>
+<symbol name="MP42100">
+<description>Digital Potentiometer 100K 2CH SPI 14-SOIC
+MCP42100-I/SL-ND</description>
+<pin name="CS-BAR" x="-15.24" y="7.62" length="middle"/>
+<pin name="SCK" x="-15.24" y="5.08" length="middle"/>
+<pin name="SI" x="-15.24" y="2.54" length="middle"/>
+<pin name="VSS" x="-15.24" y="0" length="middle"/>
+<pin name="PB1" x="-15.24" y="-2.54" length="middle"/>
+<pin name="PW1" x="-15.24" y="-5.08" length="middle"/>
+<pin name="PA1" x="-15.24" y="-7.62" length="middle"/>
+<pin name="PA0" x="15.24" y="-7.62" length="middle" rot="R180"/>
+<pin name="PW0" x="15.24" y="-5.08" length="middle" rot="R180"/>
+<pin name="PB0" x="15.24" y="-2.54" length="middle" rot="R180"/>
+<pin name="RS-BAR" x="15.24" y="0" length="middle" rot="R180"/>
+<pin name="SHDN-BAR" x="15.24" y="2.54" length="middle" rot="R180"/>
+<pin name="SO" x="15.24" y="5.08" length="middle" rot="R180"/>
+<pin name="VDD" x="15.24" y="7.62" length="middle" rot="R180"/>
+<wire x1="-10.16" y1="10.16" x2="-10.16" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-10.16" x2="10.16" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-10.16" x2="10.16" y2="10.16" width="0.254" layer="94"/>
+<wire x1="10.16" y1="10.16" x2="-10.16" y2="10.16" width="0.254" layer="94"/>
+</symbol>
+<symbol name="NPN_2SC3707">
+<description>NPN Transistor
+2SC370700L</description>
+<pin name="E" x="7.62" y="-2.54" length="middle" rot="R180"/>
+<pin name="C" x="7.62" y="2.54" length="middle" rot="R180"/>
+<pin name="B" x="-7.62" y="0" length="middle"/>
+<wire x1="2.54" y1="-2.54" x2="0" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="-2.54" x2="0" y2="0" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="0" x2="0" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="0" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="2.54" y2="2.54" width="0.254" layer="94"/>
+</symbol>
+<symbol name="DRILL_HOLE">
+<pin name="1" x="0" y="0" length="point"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -864,16 +954,94 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="0402">
-<description>Package / Case	0402 (1005 Metric)</description>
+<deviceset name="X32.768KHZ">
+<description>X32.768kHz 9HT11-32.768KDZC-T</description>
 <gates>
-<gate name="G$1" symbol="0402" x="0" y="0"/>
+<gate name="G$1" symbol="X32.768KHZ" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="0402">
+<device name="" package="X32.768KHZ">
 <connects>
-<connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2"/>
+<connect gate="G$1" pin="Q1" pad="Q1"/>
+<connect gate="G$1" pin="Q2" pad="Q2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="AS1753_QUAD_SPST">
+<description>QUAD SPST SWITCH AS1753S</description>
+<gates>
+<gate name="G$1" symbol="AS1753_QUAD_SPST" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="AS1753_QUAD_SPST">
+<connects>
+<connect gate="G$1" pin="COM1" pad="COM1"/>
+<connect gate="G$1" pin="COM2" pad="COM2"/>
+<connect gate="G$1" pin="COM3" pad="COM3"/>
+<connect gate="G$1" pin="COM4" pad="COM4"/>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="IN1" pad="IN1"/>
+<connect gate="G$1" pin="IN2" pad="IN2"/>
+<connect gate="G$1" pin="IN3" pad="IN3"/>
+<connect gate="G$1" pin="IN4" pad="IN4"/>
+<connect gate="G$1" pin="NC2" pad="NC2"/>
+<connect gate="G$1" pin="NC4" pad="NC4"/>
+<connect gate="G$1" pin="NO1" pad="NO1"/>
+<connect gate="G$1" pin="NO3" pad="NO3"/>
+<connect gate="G$1" pin="V+" pad="V+"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="MP42100">
+<description>Digital Potentiometer 100K 2CH SPI 14-SOIC
+MCP42100-I/SL-ND</description>
+<gates>
+<gate name="G$1" symbol="MP42100" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="MP42100">
+<connects>
+<connect gate="G$1" pin="CS-BAR" pad="CS-BAR"/>
+<connect gate="G$1" pin="PA0" pad="PA0"/>
+<connect gate="G$1" pin="PA1" pad="PA1"/>
+<connect gate="G$1" pin="PB0" pad="PB0"/>
+<connect gate="G$1" pin="PB1" pad="PB1"/>
+<connect gate="G$1" pin="PW0" pad="PW0"/>
+<connect gate="G$1" pin="PW1" pad="PW1"/>
+<connect gate="G$1" pin="RS-BAR" pad="RS-BAR"/>
+<connect gate="G$1" pin="SCK" pad="SCK"/>
+<connect gate="G$1" pin="SHDN-BAR" pad="SHDN-BAR"/>
+<connect gate="G$1" pin="SI" pad="SI"/>
+<connect gate="G$1" pin="SO" pad="SO"/>
+<connect gate="G$1" pin="VDD" pad="VDD"/>
+<connect gate="G$1" pin="VSS" pad="VSS"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="NPN_2SC3707">
+<description>NPN Transistor
+2SC370700L</description>
+<gates>
+<gate name="G$1" symbol="NPN_2SC3707" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="NPN_2SC3707">
+<connects>
+<connect gate="G$1" pin="B" pad="B"/>
+<connect gate="G$1" pin="C" pad="C"/>
+<connect gate="G$1" pin="E" pad="E"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -889,23 +1057,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <device name="" package="DRILL_HOLE">
 <connects>
 <connect gate="G$1" pin="1" pad="1"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-<deviceset name="X32.768KHZ">
-<description>X32.768kHz 9HT11-32.768KDZC-T</description>
-<gates>
-<gate name="G$1" symbol="X32.768KHZ" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="X32.768KHZ">
-<connects>
-<connect gate="G$1" pin="Q1" pad="Q1"/>
-<connect gate="G$1" pin="Q2" pad="Q2"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -997,24 +1148,21 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <attribute name="RES" value="49.9k"/>
 </part>
 <part name="U$30" library="CC2530_PCB_TL" deviceset="FFC6POS" device=""/>
-<part name="U$13" library="CC2530_PCB_TL" deviceset="SPDT_DUAL" device="">
-<attribute name="SPDT-TS3A24159_R" value=""/>
-</part>
-<part name="U$29" library="CC2530_PCB_TL" deviceset="0603_RES" device="">
-<attribute name="LED" value=""/>
-</part>
-<part name="U$31" library="CC2530_PCB_TL" deviceset="0402" device="">
-<attribute name="RES" value="1k"/>
-</part>
-<part name="U$32" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
-<part name="U$33" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
-<part name="U$36" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
 <part name="U$39" library="CC2530_PCB_TL" deviceset="X32.768KHZ" device=""/>
 <part name="U$40" library="CC2530_PCB_TL" deviceset="0201" device=""/>
 <part name="U$41" library="CC2530_PCB_TL" deviceset="0201" device=""/>
-<part name="U$42" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
-<part name="U$43" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
-<part name="U$48" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
+<part name="U$32" library="CC2530_PCB_TL" deviceset="AS1753_QUAD_SPST" device=""/>
+<part name="U$33" library="CC2530_PCB_TL" deviceset="AS1753_QUAD_SPST" device=""/>
+<part name="U$34" library="CC2530_PCB_TL" deviceset="AD8606_OPAMP" device=""/>
+<part name="U$35" library="CC2530_PCB_TL" deviceset="MP42100" device=""/>
+<part name="U$36" library="CC2530_PCB_TL" deviceset="NPN_2SC3707" device=""/>
+<part name="U$37" library="CC2530_PCB_TL" deviceset="NPN_2SC3707" device=""/>
+<part name="U$13" library="CC2530_PCB_TL" deviceset="SPDT_DUAL" device="">
+<attribute name="SPDT-TS3A24159_R" value=""/>
+</part>
+<part name="U$29" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
+<part name="U$31" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
+<part name="U$38" library="CC2530_PCB_TL" deviceset="DRILL_HOLE" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -1093,24 +1241,21 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <attribute name="RES" x="-78.74" y="43.18" size="1.778" layer="96"/>
 </instance>
 <instance part="U$30" gate="G$1" x="-10.16" y="-33.02" rot="R270"/>
-<instance part="U$13" gate="G$1" x="-5.08" y="-10.16">
-<attribute name="SPDT-TS3A24159_R" x="-15.24" y="-2.54" size="1.778" layer="96" display="name"/>
-</instance>
-<instance part="U$29" gate="G$1" x="-2.54" y="58.42" rot="R180">
-<attribute name="LED" x="-2.54" y="58.42" size="1.778" layer="96" rot="R180" display="name"/>
-</instance>
-<instance part="U$31" gate="G$1" x="-5.08" y="71.12">
-<attribute name="RES" x="-5.08" y="71.12" size="1.778" layer="96"/>
-</instance>
-<instance part="U$32" gate="G$1" x="198.12" y="58.42"/>
-<instance part="U$33" gate="G$1" x="198.12" y="55.88"/>
-<instance part="U$36" gate="G$1" x="96.52" y="124.46"/>
 <instance part="U$39" gate="G$1" x="106.68" y="106.68"/>
 <instance part="U$40" gate="G$1" x="124.46" y="119.38"/>
 <instance part="U$41" gate="G$1" x="124.46" y="93.98"/>
-<instance part="U$42" gate="G$1" x="167.64" y="50.8"/>
-<instance part="U$43" gate="G$1" x="167.64" y="68.58"/>
-<instance part="U$48" gate="G$1" x="86.36" y="86.36"/>
+<instance part="U$32" gate="G$1" x="-121.92" y="124.46"/>
+<instance part="U$33" gate="G$1" x="-78.74" y="124.46"/>
+<instance part="U$34" gate="G$1" x="-33.02" y="127"/>
+<instance part="U$35" gate="G$1" x="10.16" y="127"/>
+<instance part="U$36" gate="G$1" x="-114.3" y="104.14"/>
+<instance part="U$37" gate="G$1" x="-86.36" y="104.14"/>
+<instance part="U$13" gate="G$1" x="-5.08" y="-10.16">
+<attribute name="SPDT-TS3A24159_R" x="-15.24" y="-2.54" size="1.778" layer="96" display="name"/>
+</instance>
+<instance part="U$29" gate="G$1" x="71.12" y="27.94"/>
+<instance part="U$31" gate="G$1" x="76.2" y="27.94"/>
+<instance part="U$38" gate="G$1" x="81.28" y="27.94"/>
 </instances>
 <busses>
 </busses>
@@ -1149,12 +1294,7 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="104.14" y1="66.04" x2="104.14" y2="63.5" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="AVDD2"/>
 <wire x1="104.14" y1="63.5" x2="104.14" y2="60.96" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="DVDD1"/>
-<wire x1="66.04" y1="81.28" x2="66.04" y2="91.44" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="AVDD6"/>
-<wire x1="66.04" y1="91.44" x2="86.36" y2="91.44" width="0.1524" layer="91"/>
-<wire x1="86.36" y1="91.44" x2="86.36" y2="86.36" width="0.1524" layer="91"/>
-<wire x1="86.36" y1="86.36" x2="86.36" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="86.36" y1="81.28" x2="109.22" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="109.22" y1="81.28" x2="109.22" y2="66.04" width="0.1524" layer="91"/>
 <wire x1="109.22" y1="66.04" x2="104.14" y2="66.04" width="0.1524" layer="91"/>
@@ -1162,13 +1302,15 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <pinref part="U$1" gate="G$1" pin="AVDD5"/>
 <wire x1="109.22" y1="45.72" x2="104.14" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="109.22" y1="60.96" x2="109.22" y2="53.34" width="0.1524" layer="91"/>
-<pinref part="U$48" gate="G$1" pin="1"/>
-<junction x="86.36" y="86.36"/>
 <pinref part="U$18" gate="G$1" pin="2"/>
 <wire x1="109.22" y1="53.34" x2="109.22" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="109.22" y1="25.4" x2="109.22" y2="45.72" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="AVDD3"/>
 <wire x1="104.14" y1="53.34" x2="109.22" y2="53.34" width="0.1524" layer="91"/>
+<wire x1="66.04" y1="91.44" x2="86.36" y2="91.44" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="DVDD1"/>
+<wire x1="66.04" y1="81.28" x2="66.04" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="86.36" y1="91.44" x2="86.36" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="U$1" gate="G$1" pin="DVDD2"/>
@@ -1205,12 +1347,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="-20.32" y1="35.56" x2="-22.86" y2="33.02" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$13" gate="G$1" pin="V+"/>
-<wire x1="-20.32" y1="-5.08" x2="-20.32" y2="0" width="0.1524" layer="91"/>
-<wire x1="-17.78" y1="-2.54" x2="-20.32" y2="0" width="0.1524" layer="91"/>
-<wire x1="-20.32" y1="0" x2="-22.86" y2="-2.54" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="U$19" gate="G$1" pin="V+"/>
 <wire x1="-139.7" y1="15.24" x2="-139.7" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="-137.16" y1="17.78" x2="-139.7" y2="20.32" width="0.1524" layer="91"/>
@@ -1223,8 +1359,42 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="96.52" y1="124.46" x2="96.52" y2="129.54" width="0.1524" layer="91"/>
 <wire x1="99.06" y1="127" x2="96.52" y2="129.54" width="0.1524" layer="91"/>
 <wire x1="96.52" y1="129.54" x2="93.98" y2="127" width="0.1524" layer="91"/>
-<pinref part="U$36" gate="G$1" pin="1"/>
-<junction x="96.52" y="124.46"/>
+</segment>
+<segment>
+<pinref part="U$34" gate="G$1" pin="V+"/>
+<wire x1="-17.78" y1="129.54" x2="-15.24" y2="129.54" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$35" gate="G$1" pin="VDD"/>
+<wire x1="25.4" y1="134.62" x2="27.94" y2="134.62" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$33" gate="G$1" pin="V+"/>
+<pinref part="U$33" gate="G$1" pin="NO1"/>
+<wire x1="-93.98" y1="132.08" x2="-93.98" y2="137.16" width="0.1524" layer="91"/>
+<wire x1="-93.98" y1="137.16" x2="-63.5" y2="137.16" width="0.1524" layer="91"/>
+<wire x1="-63.5" y1="137.16" x2="-63.5" y2="132.08" width="0.1524" layer="91"/>
+<wire x1="-63.5" y1="137.16" x2="-60.96" y2="137.16" width="0.1524" layer="91"/>
+<wire x1="-60.96" y1="137.16" x2="-60.96" y2="124.46" width="0.1524" layer="91"/>
+<pinref part="U$33" gate="G$1" pin="NC4"/>
+<wire x1="-60.96" y1="124.46" x2="-63.5" y2="124.46" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$32" gate="G$1" pin="V+"/>
+<pinref part="U$32" gate="G$1" pin="NO1"/>
+<wire x1="-137.16" y1="132.08" x2="-137.16" y2="137.16" width="0.1524" layer="91"/>
+<wire x1="-137.16" y1="137.16" x2="-106.68" y2="137.16" width="0.1524" layer="91"/>
+<wire x1="-106.68" y1="137.16" x2="-104.14" y2="137.16" width="0.1524" layer="91"/>
+<wire x1="-104.14" y1="137.16" x2="-104.14" y2="124.46" width="0.1524" layer="91"/>
+<pinref part="U$32" gate="G$1" pin="NC4"/>
+<wire x1="-104.14" y1="124.46" x2="-106.68" y2="124.46" width="0.1524" layer="91"/>
+<wire x1="-106.68" y1="132.08" x2="-106.68" y2="137.16" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$13" gate="G$1" pin="V+"/>
+<wire x1="-20.32" y1="-5.08" x2="-20.32" y2="0" width="0.1524" layer="91"/>
+<wire x1="-17.78" y1="-2.54" x2="-20.32" y2="0" width="0.1524" layer="91"/>
+<wire x1="-22.86" y1="-2.54" x2="-20.32" y2="0" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$12" class="0">
@@ -1249,8 +1419,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <pinref part="U$10" gate="G$1" pin="2_GND"/>
 <wire x1="142.24" y1="-7.62" x2="167.64" y2="-7.62" width="0.1524" layer="91"/>
 <wire x1="167.64" y1="5.08" x2="167.64" y2="-7.62" width="0.1524" layer="91"/>
-<pinref part="U$42" gate="G$1" pin="1"/>
-<junction x="167.64" y="50.8"/>
 <wire x1="177.8" y1="66.04" x2="180.34" y2="66.04" width="0.1524" layer="91"/>
 <wire x1="177.8" y1="66.04" x2="175.26" y2="66.04" width="0.1524" layer="91"/>
 <pinref part="U$9" gate="G$1" pin="2"/>
@@ -1267,8 +1435,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="177.8" y1="78.74" x2="177.8" y2="73.66" width="0.1524" layer="91"/>
 <pinref part="U$8" gate="G$1" pin="3"/>
 <junction x="177.8" y="78.74"/>
-<pinref part="U$43" gate="G$1" pin="1"/>
-<junction x="167.64" y="68.58"/>
 <wire x1="167.64" y1="68.58" x2="167.64" y2="50.8" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -1322,16 +1488,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="10.16" y1="20.32" x2="10.16" y2="17.78" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$13" gate="G$1" pin="GND"/>
-<wire x1="10.16" y1="-15.24" x2="10.16" y2="-17.78" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="U$31" gate="G$1" pin="2"/>
-<wire x1="10.16" y1="71.12" x2="10.16" y2="68.58" width="0.1524" layer="91"/>
-<wire x1="10.16" y1="68.58" x2="7.62" y2="68.58" width="0.1524" layer="91"/>
-<wire x1="12.7" y1="68.58" x2="10.16" y2="68.58" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="U$19" gate="G$1" pin="GND"/>
 <wire x1="-109.22" y1="5.08" x2="-109.22" y2="2.54" width="0.1524" layer="91"/>
 <wire x1="-109.22" y1="2.54" x2="-111.76" y2="2.54" width="0.1524" layer="91"/>
@@ -1344,6 +1500,40 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="137.16" y1="93.98" x2="137.16" y2="88.9" width="0.1524" layer="91"/>
 <wire x1="137.16" y1="88.9" x2="134.62" y2="88.9" width="0.1524" layer="91"/>
 <wire x1="137.16" y1="88.9" x2="139.7" y2="88.9" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<wire x1="7.62" y1="17.78" x2="12.7" y2="17.78" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$34" gate="G$1" pin="V-"/>
+<wire x1="-48.26" y1="121.92" x2="-50.8" y2="121.92" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$35" gate="G$1" pin="VSS"/>
+<wire x1="-5.08" y1="127" x2="-7.62" y2="127" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$32" gate="G$1" pin="GND"/>
+<wire x1="-137.16" y1="116.84" x2="-137.16" y2="114.3" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$33" gate="G$1" pin="GND"/>
+<wire x1="-93.98" y1="116.84" x2="-93.98" y2="114.3" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$13" gate="G$1" pin="GND"/>
+<wire x1="10.16" y1="-15.24" x2="10.16" y2="-17.78" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$35" gate="G$1" pin="PA1"/>
+<wire x1="-5.08" y1="119.38" x2="-5.08" y2="114.3" width="0.1524" layer="91"/>
+<pinref part="U$35" gate="G$1" pin="PA0"/>
+<wire x1="-5.08" y1="114.3" x2="10.16" y2="114.3" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="114.3" x2="25.4" y2="114.3" width="0.1524" layer="91"/>
+<wire x1="25.4" y1="114.3" x2="25.4" y2="119.38" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="114.3" x2="10.16" y2="111.76" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="111.76" x2="12.7" y2="111.76" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="111.76" x2="7.62" y2="111.76" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$18" class="0">
@@ -1461,21 +1651,21 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 </net>
 <net name="N$15" class="0">
 <segment>
-<wire x1="-25.4" y1="-27.94" x2="-25.4" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="-17.78" y1="-30.48" x2="-17.78" y2="-27.94" width="0.1524" layer="91"/>
+<wire x1="-17.78" y1="-27.94" x2="-40.64" y2="-27.94" width="0.1524" layer="91"/>
+<wire x1="-40.64" y1="-27.94" x2="-40.64" y2="25.4" width="0.1524" layer="91"/>
 <pinref part="U$15" gate="G$1" pin="COM1"/>
-<wire x1="-25.4" y1="25.4" x2="-20.32" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="-40.64" y1="25.4" x2="-20.32" y2="25.4" width="0.1524" layer="91"/>
 <pinref part="U$30" gate="G$1" pin="2"/>
-<wire x1="-25.4" y1="-27.94" x2="-17.78" y2="-27.94" width="0.1524" layer="91"/>
-<wire x1="-17.78" y1="-27.94" x2="-17.78" y2="-30.48" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$30" class="0">
 <segment>
 <pinref part="U$15" gate="G$1" pin="COM2"/>
-<wire x1="17.78" y1="27.94" x2="10.16" y2="27.94" width="0.1524" layer="91"/>
-<wire x1="17.78" y1="27.94" x2="17.78" y2="-27.94" width="0.1524" layer="91"/>
+<wire x1="38.1" y1="27.94" x2="10.16" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="38.1" y1="27.94" x2="38.1" y2="-27.94" width="0.1524" layer="91"/>
 <pinref part="U$30" gate="G$1" pin="5"/>
-<wire x1="17.78" y1="-27.94" x2="-2.54" y2="-27.94" width="0.1524" layer="91"/>
+<wire x1="38.1" y1="-27.94" x2="-2.54" y2="-27.94" width="0.1524" layer="91"/>
 <wire x1="-2.54" y1="-27.94" x2="-2.54" y2="-30.48" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -1483,20 +1673,14 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <segment>
 <pinref part="U$1" gate="G$1" pin="P0_1"/>
 <wire x1="81.28" y1="33.02" x2="81.28" y2="27.94" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="U$13" gate="G$1" pin="NC1"/>
-<wire x1="-20.32" y1="-15.24" x2="-20.32" y2="-17.78" width="0.1524" layer="91"/>
+<pinref part="U$38" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="P0_3" class="0">
 <segment>
-<pinref part="U$13" gate="G$1" pin="NC2"/>
-<wire x1="10.16" y1="-12.7" x2="12.7" y2="-12.7" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="U$1" gate="G$1" pin="P0_3"/>
 <wire x1="76.2" y1="33.02" x2="76.2" y2="27.94" width="0.1524" layer="91"/>
+<pinref part="U$31" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$7" class="0">
@@ -1522,24 +1706,26 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="-139.7" y1="0" x2="-139.7" y2="5.08" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="IN1" class="0">
+<net name="IN_W" class="0">
 <segment>
-<pinref part="U$1" gate="G$1" pin="P1_1"/>
-<wire x1="45.72" y1="48.26" x2="30.48" y2="48.26" width="0.1524" layer="91"/>
-<wire x1="30.48" y1="48.26" x2="30.48" y2="38.1" width="0.1524" layer="91"/>
 <pinref part="U$15" gate="G$1" pin="IN2"/>
 <wire x1="30.48" y1="38.1" x2="30.48" y2="25.4" width="0.1524" layer="91"/>
 <wire x1="30.48" y1="25.4" x2="10.16" y2="25.4" width="0.1524" layer="91"/>
-<pinref part="U$13" gate="G$1" pin="IN2"/>
-<wire x1="10.16" y1="-10.16" x2="30.48" y2="-10.16" width="0.1524" layer="91"/>
-<wire x1="30.48" y1="-10.16" x2="30.48" y2="25.4" width="0.1524" layer="91"/>
 <pinref part="U$15" gate="G$1" pin="IN1"/>
 <wire x1="-20.32" y1="22.86" x2="-30.48" y2="22.86" width="0.1524" layer="91"/>
-<wire x1="-30.48" y1="22.86" x2="-30.48" y2="-12.7" width="0.1524" layer="91"/>
-<pinref part="U$13" gate="G$1" pin="IN1"/>
-<wire x1="-30.48" y1="-12.7" x2="-20.32" y2="-12.7" width="0.1524" layer="91"/>
 <wire x1="-30.48" y1="22.86" x2="-30.48" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="-30.48" y1="38.1" x2="30.48" y2="38.1" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="P1_0"/>
+<wire x1="63.5" y1="33.02" x2="63.5" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="63.5" y1="25.4" x2="30.48" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="25.4" x2="30.48" y2="-10.16" width="0.1524" layer="91"/>
+<pinref part="U$13" gate="G$1" pin="IN2"/>
+<wire x1="30.48" y1="-10.16" x2="10.16" y2="-10.16" width="0.1524" layer="91"/>
+<pinref part="U$13" gate="G$1" pin="IN1"/>
+<wire x1="-20.32" y1="-12.7" x2="-25.4" y2="-12.7" width="0.1524" layer="91"/>
+<wire x1="-25.4" y1="-12.7" x2="-25.4" y2="-20.32" width="0.1524" layer="91"/>
+<wire x1="-25.4" y1="-20.32" x2="30.48" y2="-20.32" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="-20.32" x2="30.48" y2="-10.16" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="RIGHT" class="0">
@@ -1549,8 +1735,8 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="27.94" y1="50.8" x2="30.48" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$15" gate="G$1" pin="NC2"/>
-<wire x1="10.16" y1="22.86" x2="12.7" y2="22.86" width="0.1524" layer="91"/>
+<pinref part="U$34" gate="G$1" pin="+INA"/>
+<wire x1="-48.26" y1="124.46" x2="-50.8" y2="124.46" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="LEFT" class="0">
@@ -1560,56 +1746,22 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="27.94" y1="55.88" x2="25.4" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$15" gate="G$1" pin="NC1"/>
-<wire x1="-20.32" y1="20.32" x2="-20.32" y2="17.78" width="0.1524" layer="91"/>
+<pinref part="U$34" gate="G$1" pin="+INB"/>
+<wire x1="-17.78" y1="121.92" x2="-15.24" y2="121.92" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$10" class="0">
 <segment>
-<pinref part="U$13" gate="G$1" pin="COM2"/>
-<wire x1="10.16" y1="-7.62" x2="15.24" y2="-7.62" width="0.1524" layer="91"/>
-<wire x1="15.24" y1="-7.62" x2="15.24" y2="-30.48" width="0.1524" layer="91"/>
-<pinref part="U$30" gate="G$1" pin="6"/>
-<wire x1="15.24" y1="-30.48" x2="2.54" y2="-30.48" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$31" class="0">
-<segment>
-<pinref part="U$19" gate="G$1" pin="NO2"/>
-<wire x1="-109.22" y1="15.24" x2="-68.58" y2="15.24" width="0.1524" layer="91"/>
-<wire x1="-68.58" y1="15.24" x2="-68.58" y2="-7.62" width="0.1524" layer="91"/>
-<pinref part="U$13" gate="G$1" pin="NO1"/>
-<wire x1="-68.58" y1="-7.62" x2="-20.32" y2="-7.62" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$32" class="0">
-<segment>
 <pinref part="U$19" gate="G$1" pin="NC2"/>
-<wire x1="-109.22" y1="7.62" x2="10.16" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="-109.22" y1="7.62" x2="12.7" y2="7.62" width="0.1524" layer="91"/>
 <pinref part="U$13" gate="G$1" pin="NO2"/>
-<wire x1="10.16" y1="7.62" x2="10.16" y2="-5.08" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$34" class="0">
-<segment>
-<pinref part="U$31" gate="G$1" pin="1"/>
-<pinref part="U$29" gate="G$1" pin="2"/>
-<wire x1="-17.78" y1="71.12" x2="-17.78" y2="58.42" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$33" class="0">
-<segment>
-<wire x1="7.62" y1="17.78" x2="12.7" y2="17.78" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="-5.08" x2="12.7" y2="-5.08" width="0.1524" layer="91"/>
+<wire x1="12.7" y1="-5.08" x2="12.7" y2="7.62" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$36" class="0">
 <segment>
 <wire x1="-68.58" y1="38.1" x2="-63.5" y2="38.1" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$37" class="0">
-<segment>
-<wire x1="12.7" y1="-17.78" x2="7.62" y2="-17.78" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="V+" class="0">
@@ -1640,16 +1792,16 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <wire x1="142.24" y1="-15.24" x2="142.24" y2="-12.7" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="IN2" class="0">
+<net name="IN_5933" class="0">
 <segment>
-<pinref part="U$1" gate="G$1" pin="P1_6"/>
-<wire x1="68.58" y1="81.28" x2="68.58" y2="96.52" width="0.1524" layer="91"/>
-<wire x1="68.58" y1="96.52" x2="55.88" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="96.52" x2="55.88" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="55.88" y1="96.52" x2="55.88" y2="99.06" width="0.1524" layer="91"/>
 <wire x1="55.88" y1="99.06" x2="50.8" y2="99.06" width="0.1524" layer="91"/>
 <wire x1="50.8" y1="99.06" x2="50.8" y2="93.98" width="0.1524" layer="91"/>
 <wire x1="50.8" y1="93.98" x2="55.88" y2="93.98" width="0.1524" layer="91"/>
 <wire x1="55.88" y1="93.98" x2="55.88" y2="96.52" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="P2_0"/>
+<wire x1="73.66" y1="96.52" x2="73.66" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="U$19" gate="G$1" pin="IN2"/>
@@ -1687,7 +1839,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <net name="N$1" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="RF_N"/>
-<pinref part="U$32" gate="G$1" pin="1"/>
 <wire x1="104.14" y1="58.42" x2="198.12" y2="58.42" width="0.1524" layer="91"/>
 <wire x1="198.12" y1="58.42" x2="198.12" y2="78.74" width="0.1524" layer="91"/>
 <pinref part="U$2" gate="G$1" pin="BALANCED4"/>
@@ -1697,7 +1848,6 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 <net name="N$2" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="RF_P"/>
-<pinref part="U$33" gate="G$1" pin="1"/>
 <wire x1="104.14" y1="55.88" x2="198.12" y2="55.88" width="0.1524" layer="91"/>
 <wire x1="198.12" y1="55.88" x2="198.12" y2="33.02" width="0.1524" layer="91"/>
 <pinref part="U$2" gate="G$1" pin="BALANCED3"/>
@@ -1737,17 +1887,233 @@ IC SWITCH DUAL SPDT 10MSOP</description>
 </net>
 <net name="N$9" class="0">
 <segment>
-<pinref part="U$13" gate="G$1" pin="COM1"/>
+<pinref part="U$19" gate="G$1" pin="NO2"/>
+<wire x1="-109.22" y1="15.24" x2="-68.58" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="-68.58" y1="15.24" x2="-68.58" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="-68.58" y1="-7.62" x2="-20.32" y2="-7.62" width="0.1524" layer="91"/>
+<pinref part="U$13" gate="G$1" pin="NO1"/>
+</segment>
+</net>
+<net name="CLK" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="P1_5"/>
+<wire x1="10.16" y1="58.42" x2="45.72" y2="58.42" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$35" gate="G$1" pin="SCK"/>
+<wire x1="-5.08" y1="132.08" x2="-7.62" y2="132.08" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="CS" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="P1_1"/>
+<wire x1="45.72" y1="48.26" x2="30.48" y2="48.26" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$35" gate="G$1" pin="CS-BAR"/>
+<wire x1="-5.08" y1="134.62" x2="-7.62" y2="134.62" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="MOSI" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="P1_6"/>
+<wire x1="68.58" y1="81.28" x2="68.58" y2="86.36" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$35" gate="G$1" pin="SI"/>
+<wire x1="-5.08" y1="129.54" x2="-7.62" y2="129.54" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="MISO" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="P1_7"/>
+<wire x1="71.12" y1="81.28" x2="71.12" y2="86.36" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$32" gate="G$1" pin="IN3"/>
+<pinref part="U$32" gate="G$1" pin="IN2"/>
+<wire x1="-137.16" y1="119.38" x2="-137.16" y2="121.92" width="0.1524" layer="91"/>
+<wire x1="-137.16" y1="121.92" x2="-121.92" y2="121.92" width="0.1524" layer="91"/>
+<wire x1="-121.92" y1="121.92" x2="-121.92" y2="127" width="0.1524" layer="91"/>
+<pinref part="U$32" gate="G$1" pin="IN4"/>
+<wire x1="-121.92" y1="127" x2="-106.68" y2="127" width="0.1524" layer="91"/>
+<pinref part="U$32" gate="G$1" pin="IN1"/>
+<wire x1="-106.68" y1="127" x2="-106.68" y2="129.54" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$33" gate="G$1" pin="IN3"/>
+<pinref part="U$33" gate="G$1" pin="IN2"/>
+<wire x1="-93.98" y1="119.38" x2="-93.98" y2="121.92" width="0.1524" layer="91"/>
+<wire x1="-93.98" y1="121.92" x2="-78.74" y2="121.92" width="0.1524" layer="91"/>
+<wire x1="-78.74" y1="121.92" x2="-78.74" y2="127" width="0.1524" layer="91"/>
+<pinref part="U$33" gate="G$1" pin="IN4"/>
+<wire x1="-78.74" y1="127" x2="-63.5" y2="127" width="0.1524" layer="91"/>
+<pinref part="U$33" gate="G$1" pin="IN1"/>
+<wire x1="-63.5" y1="127" x2="-63.5" y2="129.54" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="B1" class="0">
+<segment>
+<pinref part="U$36" gate="G$1" pin="B"/>
+<wire x1="-121.92" y1="104.14" x2="-124.46" y2="104.14" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$34" gate="G$1" pin="OUTA"/>
+<wire x1="-48.26" y1="129.54" x2="-50.8" y2="129.54" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="C1" class="0">
+<segment>
+<pinref part="U$36" gate="G$1" pin="C"/>
+<wire x1="-106.68" y1="106.68" x2="-104.14" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="-139.7" y1="127" x2="-139.7" y2="111.76" width="0.1524" layer="91"/>
+<wire x1="-139.7" y1="111.76" x2="-106.68" y2="111.76" width="0.1524" layer="91"/>
+<pinref part="U$32" gate="G$1" pin="NO3"/>
+<wire x1="-106.68" y1="111.76" x2="-106.68" y2="116.84" width="0.1524" layer="91"/>
+<wire x1="-106.68" y1="111.76" x2="-104.14" y2="111.76" width="0.1524" layer="91"/>
+<wire x1="-104.14" y1="111.76" x2="-104.14" y2="106.68" width="0.1524" layer="91"/>
+<pinref part="U$32" gate="G$1" pin="NC2"/>
+<wire x1="-139.7" y1="127" x2="-137.16" y2="127" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="E1" class="0">
+<segment>
+<pinref part="U$36" gate="G$1" pin="E"/>
+<wire x1="-106.68" y1="101.6" x2="-104.14" y2="101.6" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$34" gate="G$1" pin="-INA"/>
+<wire x1="-48.26" y1="127" x2="-50.8" y2="127" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$35" gate="G$1" pin="PB1"/>
+<pinref part="U$35" gate="G$1" pin="PW1"/>
+<wire x1="-5.08" y1="124.46" x2="-5.08" y2="121.92" width="0.1524" layer="91"/>
+<wire x1="-5.08" y1="124.46" x2="-7.62" y2="124.46" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="B2" class="0">
+<segment>
+<pinref part="U$37" gate="G$1" pin="B"/>
+<wire x1="-93.98" y1="104.14" x2="-96.52" y2="104.14" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$34" gate="G$1" pin="OUTB"/>
+<wire x1="-17.78" y1="127" x2="-15.24" y2="127" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="C2" class="0">
+<segment>
+<pinref part="U$37" gate="G$1" pin="C"/>
+<wire x1="-78.74" y1="106.68" x2="-76.2" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="-96.52" y1="127" x2="-96.52" y2="111.76" width="0.1524" layer="91"/>
+<wire x1="-96.52" y1="111.76" x2="-76.2" y2="111.76" width="0.1524" layer="91"/>
+<pinref part="U$33" gate="G$1" pin="NO3"/>
+<wire x1="-76.2" y1="111.76" x2="-63.5" y2="111.76" width="0.1524" layer="91"/>
+<wire x1="-63.5" y1="111.76" x2="-63.5" y2="116.84" width="0.1524" layer="91"/>
+<wire x1="-76.2" y1="106.68" x2="-76.2" y2="111.76" width="0.1524" layer="91"/>
+<pinref part="U$33" gate="G$1" pin="NC2"/>
+<wire x1="-96.52" y1="127" x2="-93.98" y2="127" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="E2" class="0">
+<segment>
+<pinref part="U$37" gate="G$1" pin="E"/>
+<wire x1="-78.74" y1="101.6" x2="-76.2" y2="101.6" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$34" gate="G$1" pin="-INB"/>
+<wire x1="-17.78" y1="124.46" x2="-15.24" y2="124.46" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$35" gate="G$1" pin="PB0"/>
+<pinref part="U$35" gate="G$1" pin="PW0"/>
+<wire x1="25.4" y1="124.46" x2="25.4" y2="121.92" width="0.1524" layer="91"/>
+<wire x1="25.4" y1="124.46" x2="27.94" y2="124.46" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$33" class="0">
+<segment>
+<wire x1="7.62" y1="-17.78" x2="12.7" y2="-17.78" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="I_LEFT" class="0">
+<segment>
+<pinref part="U$15" gate="G$1" pin="NC1"/>
+<wire x1="-20.32" y1="20.32" x2="-22.86" y2="20.32" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$33" gate="G$1" pin="COM2"/>
+<wire x1="-93.98" y1="124.46" x2="-99.06" y2="124.46" width="0.1524" layer="91"/>
+<wire x1="-99.06" y1="124.46" x2="-99.06" y2="127" width="0.1524" layer="91"/>
+<pinref part="U$33" gate="G$1" pin="COM1"/>
+<wire x1="-99.06" y1="127" x2="-99.06" y2="129.54" width="0.1524" layer="91"/>
+<wire x1="-99.06" y1="129.54" x2="-93.98" y2="129.54" width="0.1524" layer="91"/>
+<wire x1="-99.06" y1="127" x2="-101.6" y2="127" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="I_RIGHT" class="0">
+<segment>
+<pinref part="U$15" gate="G$1" pin="NC2"/>
+<wire x1="10.16" y1="22.86" x2="12.7" y2="22.86" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$32" gate="G$1" pin="COM2"/>
+<wire x1="-137.16" y1="124.46" x2="-142.24" y2="124.46" width="0.1524" layer="91"/>
+<wire x1="-142.24" y1="124.46" x2="-142.24" y2="127" width="0.1524" layer="91"/>
+<pinref part="U$32" gate="G$1" pin="COM1"/>
+<wire x1="-142.24" y1="127" x2="-142.24" y2="129.54" width="0.1524" layer="91"/>
+<wire x1="-142.24" y1="129.54" x2="-137.16" y2="129.54" width="0.1524" layer="91"/>
+<wire x1="-142.24" y1="127" x2="-144.78" y2="127" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="I_RIGHT_REF" class="0">
+<segment>
+<pinref part="U$13" gate="G$1" pin="NC2"/>
+<wire x1="10.16" y1="-12.7" x2="12.7" y2="-12.7" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$32" gate="G$1" pin="COM4"/>
+<pinref part="U$32" gate="G$1" pin="COM3"/>
+<wire x1="-106.68" y1="121.92" x2="-106.68" y2="119.38" width="0.1524" layer="91"/>
+<wire x1="-106.68" y1="119.38" x2="-104.14" y2="119.38" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="I_LEFT_REF" class="0">
+<segment>
+<pinref part="U$13" gate="G$1" pin="NC1"/>
+<wire x1="-20.32" y1="-15.24" x2="-22.86" y2="-15.24" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$33" gate="G$1" pin="COM4"/>
+<pinref part="U$33" gate="G$1" pin="COM3"/>
+<wire x1="-63.5" y1="121.92" x2="-63.5" y2="119.38" width="0.1524" layer="91"/>
+<wire x1="-63.5" y1="119.38" x2="-60.96" y2="119.38" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$32" class="0">
+<segment>
+<pinref part="U$30" gate="G$1" pin="6"/>
+<pinref part="U$13" gate="G$1" pin="COM2"/>
+<wire x1="20.32" y1="-30.48" x2="2.54" y2="-30.48" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="-7.62" x2="20.32" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="20.32" y1="-7.62" x2="20.32" y2="-30.48" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$35" class="0">
+<segment>
 <pinref part="U$30" gate="G$1" pin="1"/>
-<wire x1="-20.32" y1="-10.16" x2="-22.86" y2="-10.16" width="0.1524" layer="91"/>
-<wire x1="-22.86" y1="-10.16" x2="-22.86" y2="-30.48" width="0.1524" layer="91"/>
+<wire x1="-33.02" y1="-30.48" x2="-22.86" y2="-30.48" width="0.1524" layer="91"/>
+<wire x1="-33.02" y1="-10.16" x2="-33.02" y2="-30.48" width="0.1524" layer="91"/>
+<pinref part="U$13" gate="G$1" pin="COM1"/>
+<wire x1="-20.32" y1="-10.16" x2="-33.02" y2="-10.16" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$24" class="0">
 <segment>
+<pinref part="U$1" gate="G$1" pin="P0_5"/>
+<wire x1="71.12" y1="33.02" x2="71.12" y2="27.94" width="0.1524" layer="91"/>
 <pinref part="U$29" gate="G$1" pin="1"/>
-<pinref part="U$1" gate="G$1" pin="P1_5"/>
-<wire x1="10.16" y1="58.42" x2="45.72" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
