@@ -6,8 +6,8 @@ stimCommand* parseCommand(uint8* buf, uint8 len)
   if (cmd != NULL)
   {
     cmd->direction = buf[0];
-    byte h = buf[1];
-    byte l = buf[2];
+    uint8 h = buf[1];
+    uint8 l = buf[2];
     cmd->duration = (h<<8)+l;
     h = buf[3];
     l = buf[4];

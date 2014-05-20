@@ -1,13 +1,12 @@
 /**************************************************************************************************
-  Filename:       OSAL_RoachZStack.c
-  Revised:        $Date: 2008-02-07 12:10:00 -0800 (Thu, 07 Feb 2008) $
-  Revision:       $Revision: 16360 $
+  Filename:       humidityservice.h
+  Revised:        $Date: 2013-08-23 11:45:31 -0700 (Fri, 23 Aug 2013) $
+  Revision:       $Revision: 35100 $
 
-  Description:    This file contains all the settings and other functions
-                  that the user should set and change.
+  Description:    Humidity service definitions and prototypes
 
 
-  Copyright 2004-2007 Texas Instruments Incorporated. All rights reserved.
+  Copyright 2012 - 2013  Texas Instruments Incorporated. All rights reserved.
 
   IMPORTANT: Your use of this Software is limited to those specific rights
   granted under the terms of a software license agreement between the user
@@ -38,98 +37,97 @@
   contact Texas Instruments Incorporated at www.TI.com.
 **************************************************************************************************/
 
+#ifndef HUMIDITYSERVICE_H
+#define HUMIDITYSERVICE_H
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /*********************************************************************
  * INCLUDES
  */
-
-#include "ZComDef.h"
-#include "hal_drivers.h"
-#include "OSAL.h"
-#include "OSAL_Tasks.h"
-
-#if defined ( MT_TASK )
-  #include "MT.h"
-  #include "MT_TASK.h"
-#endif
-
-#include "nwk.h"
-#include "APS.h"
-#include "ZDApp.h"
-#if defined ( ZIGBEE_FREQ_AGILITY ) || defined ( ZIGBEE_PANID_CONFLICT )
-  #include "ZDNwkMgr.h"
-#endif
-#if defined ( ZIGBEE_FRAGMENTATION )
-  #include "aps_frag.h"
-#endif
-
-#include "RoachZStack.h"
-#include "RoachZStack_ADC.h"
-
-
+#include "st_util.h"
+  
 /*********************************************************************
- * GLOBAL VARIABLES
+ * CONSTANTS
  */
 
-// The order in this table must be identical to the task initialization calls below in osalInitTask.
-const pTaskEventHandlerFn tasksArr[] = {
-  macEventLoop,
-  nwk_event_loop,
-  Hal_ProcessEvent,
-#if defined( MT_TASK )
-  MT_ProcessEvent,
-#endif
-  APS_event_loop,
-#if defined ( ZIGBEE_FRAGMENTATION )
-  APSF_ProcessEvent,
-#endif
-  ZDApp_event_loop,
-#if defined ( ZIGBEE_FREQ_AGILITY ) || defined ( ZIGBEE_PANID_CONFLICT )
-  ZDNwkMgr_event_loop,
-#endif
-  RoachZStack_ProcessEvent,
-  RoachZStack_ADC
-};
+// Service UUID
+#define HUMIDITY_SERV_UUID              0xAA20  // F000AA20-0451-4000-B000-00000000-0000
+#define HUMIDITY_DATA_UUID              0xAA21
+#define HUMIDITY_CONF_UUID              0xAA22
+#define HUMIDITY_PERI_UUID              0xAA23
 
-const uint8 tasksCnt = sizeof( tasksArr ) / sizeof( tasksArr[0] );
-uint16 *tasksEvents;
+// Sensor Profile Services bit fields
+#define HUMIDITY_SERVICE                0x00000004
+
+// Length of sensor data in bytes
+#define HUMIDITY_DATA_LEN               4
 
 /*********************************************************************
- * FUNCTIONS
- *********************************************************************/
-
-/*********************************************************************
- * @fn      osalInitTasks
- *
- * @brief   This function invokes the initialization function for each task.
- *
- * @param   void
- *
- * @return  none
+ * TYPEDEFS
  */
-void osalInitTasks( void )
-{
-  uint8 taskID = 0;
 
-  tasksEvents = (uint16 *)osal_mem_alloc( sizeof( uint16 ) * tasksCnt);
-  osal_memset( tasksEvents, 0, (sizeof( uint16 ) * tasksCnt));
 
-  macTaskInit( taskID++ );
-  nwk_init( taskID++ );
-  Hal_Init( taskID++ );
-#if defined( MT_TASK )
-  MT_TaskInit( taskID++ );
-#endif
-  APS_Init( taskID++ );
-#if defined ( ZIGBEE_FRAGMENTATION )
-  APSF_Init( taskID++ );
-#endif
-  ZDApp_Init( taskID++ );
-#if defined ( ZIGBEE_FREQ_AGILITY ) || defined ( ZIGBEE_PANID_CONFLICT )
-  ZDNwkMgr_Init( taskID++ );
-#endif
-  RoachZStack_Init( taskID++ );
-  RoachZStack_ADC_Init( taskID );
-}
+/*********************************************************************
+ * MACROS
+ */
+
+
+/*********************************************************************
+ * API FUNCTIONS
+ */
+
+
+/*
+ * Humidity_AddService- Initializes the Sensor GATT Profile service by registering
+ *          GATT attributes with the GATT server.
+ *
+ * @param   services - services to add. This is a bit map and can
+ *                     contain more than one service.
+ */
+extern bStatus_t Humidity_AddService( uint32 services );
+
+/*
+ * Humidity_RegisterAppCBs - Registers the application callback function.
+ *                    Only call this function once.
+ *
+ *    appCallbacks - pointer to application callbacks.
+ */
+extern bStatus_t Humidity_RegisterAppCBs( sensorCBs_t *appCallbacks );
+
+/*
+ * Humidity_SetParameter - Set a Sensor GATT Profile parameter.
+ *
+ *    param - Profile parameter ID
+ *    len - length of data to right
+ *    value - pointer to data to write.  This is dependent on
+ *          the parameter ID and WILL be cast to the appropriate
+ *          data type (example: data type of uint16 will be cast to
+ *          uint16 pointer).
+ */
+extern bStatus_t Humidity_SetParameter( uint8 param, uint8 len, void *value );
+
+/*
+ * Humidity_GetParameter - Get a Sensor GATT Profile parameter.
+ *
+ *    param - Profile parameter ID
+ *    value - pointer to data to write.  This is dependent on
+ *          the parameter ID and WILL be cast to the appropriate
+ *          data type (example: data type of uint16 will be cast to
+ *          uint16 pointer).
+ */
+extern bStatus_t Humidity_GetParameter( uint8 param, void *value );
+
 
 /*********************************************************************
 *********************************************************************/
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* HUMIDITYSERVICE_H */
+

@@ -1,12 +1,12 @@
 /**************************************************************************************************
-  Filename:       RoachZStack.h
-  Revised:        $Date: 2009-02-25 17:31:49 -0800 (Wed, 25 Feb 2009) $
-  Revision:       $Revision: 19273 $
+  Filename:       simplekeys.h
+  Revised:        $Date: 2010-10-01 14:14:58 -0700 (Fri, 01 Oct 2010) $
+  Revision:       $Revision: 23960 $
 
-  Description:    This file contains the Serial Transfer Application definitions.
+  Description:    This file contains the Simple Keys Profile header file.
 
 
-  Copyright 2004-2007 Texas Instruments Incorporated. All rights reserved.
+  Copyright 2010 Texas Instruments Incorporated. All rights reserved.
 
   IMPORTANT: Your use of this Software is limited to those specific rights
   granted under the terms of a software license agreement between the user
@@ -37,8 +37,8 @@
   contact Texas Instruments Incorporated at www.TI.com. 
 **************************************************************************************************/
 
-#ifndef ROACHZSTACK_H
-#define ROACHZSTACK_H
+#ifndef SIMPLEKEYS_H
+#define SIMPLEKEYS_H
 
 #ifdef __cplusplus
 extern "C"
@@ -48,62 +48,79 @@ extern "C"
 /*********************************************************************
  * INCLUDES
  */
-#include "ZComDef.h"
 
 /*********************************************************************
  * CONSTANTS
  */
 
-// These constants are only for example and should be changed to the
-// device's needs
+// Profile Parameters
+#define SK_KEY_ATTR                   0  // RW uint8 - Profile Attribute value
+ 
+// SK Service UUID
+#define SK_SERV_UUID                  0xFFE0
+    
+// Key Pressed UUID
+#define SK_KEYPRESSED_UUID            0xFFE1
+
+// Key Values
+#define SK_KEY_LEFT                   0x01
+#define SK_KEY_RIGHT                  0x02
+
+// Simple Keys Profile Services bit fields
+#define SK_SERVICE                    0x00000001
+
+/*********************************************************************
+ * TYPEDEFS
+ */
+
   
-#define ROACHZSTACK_ENDPOINT           10
-
-#define ROACHZSTACK_PROFID             0x0F05
-#define ROACHZSTACK_DEVICEID           0x0001
-#define ROACHZSTACK_DEVICE_VERSION     0
-#define ROACHZSTACK_FLAGS              0
-
-#define ROACHZSTACK_CLUSTER_MIC         1
-#define ROACHZSTACK_CLUSTER_CMD         2
-
-#define ROACHZSTACK_SEND_EVT           0x0001
-#define ROACHZSTACK_RESP_EVT           0x0002
-#define ROACHZSTACK_STIM_START         0x0004
-#define ROACHZSTACK_STIM_STOP          0x0008
-#define RZS_DO_HANDSHAKE               0x0010
-
-// OTA Flow Control Delays
-#define ROACHZSTACK_ACK_DELAY          1
-#define ROACHZSTACK_NAK_DELAY          16
-
-// OTA Flow Control Status
-#define OTA_SUCCESS                  ZSuccess
-#define OTA_DUP_MSG                 (ZSuccess+1)
-#define OTA_SER_BUSY                (ZSuccess+2)
-
+  
 /*********************************************************************
  * MACROS
  */
 
 /*********************************************************************
- * GLOBAL VARIABLES
+ * Profile Callbacks
  */
-extern byte RoachZStack_TaskID;
+
 
 /*********************************************************************
- * FUNCTIONS
+ * API FUNCTIONS 
  */
 
 /*
- * Task Initialization for the Serial Transfer Application
+ * SK_AddService- Initializes the Simple Key service by registering
+ *          GATT attributes with the GATT server.
+ *
+ * @param   services - services to add. This is a bit map and can
+ *                     contain more than one service.
  */
-extern void RoachZStack_Init( byte task_id );
 
+extern bStatus_t SK_AddService( uint32 services );
+  
 /*
- * Task Event Processor for the Serial Transfer Application
+ * SK_SetParameter - Set a Simple Key Profile parameter.
+ *
+ *    param - Profile parameter ID
+ *    len - length of data to right
+ *    pValue - pointer to data to write.  This is dependent on
+ *          the parameter ID and WILL be cast to the appropriate 
+ *          data type (example: data type of uint16 will be cast to 
+ *          uint16 pointer).
  */
-extern UINT16 RoachZStack_ProcessEvent( byte task_id, UINT16 events );
+extern bStatus_t SK_SetParameter( uint8 param, uint8 len, void *pValue );
+  
+/*
+ * SK_GetParameter - Get a Simple Key Profile parameter.
+ *
+ *    param - Profile parameter ID
+ *    pValue - pointer to data to write.  This is dependent on
+ *          the parameter ID and WILL be cast to the appropriate 
+ *          data type (example: data type of uint16 will be cast to 
+ *          uint16 pointer).
+ */
+extern bStatus_t SK_GetParameter( uint8 param, void *pValue );
+
 
 /*********************************************************************
 *********************************************************************/
@@ -112,4 +129,4 @@ extern UINT16 RoachZStack_ProcessEvent( byte task_id, UINT16 events );
 }
 #endif
 
-#endif /* ROACHZSTACK_H */
+#endif /* SIMPLEKEYS_H */
