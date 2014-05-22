@@ -9,6 +9,7 @@ import time
 import threading
 from struct import unpack, pack
 import code
+import threading
 
 from connection import TIConnection
 
@@ -17,6 +18,10 @@ Handle_IncFreq = '\x3E\x00'
 Handle_Range = '\x41\x00'
 Handle_Gain = '\x44\x00'
 Handle_Electrodes = '\x47\x00'
+
+Handle_Direction = '\x4B\x00'
+Handle_Repeats = '\x4E\x00'
+Handle_Duration = '\x51\x00'
 
 class Device:
 
@@ -187,13 +192,20 @@ def data_ready(packet_dictionary):
 
 conn = None
 
-def monitor():
+def stimulate(direction, repeats, duration):
+	conn.GATT_WriteCharValue(handle=Handle_Direction, value=pack("<L", direction))
+	conn.GATT_WriteCharValue(handle=Handle_Repeats, value=pack("<L", repeats))
+	conn.GATT_WriteCharValue(handle=Handle_Duration, value=pack("<L", duration))
 
+def monitor():
+	t = threading.Thread(target=monitor_thread)
+	t.start()
+
+def monitor_thread():
 	setInc(100)
 	setRange(RANGE_2000)
 	setStart(60000)
 
-	setElectrodes(0x13)
 	calibrate(7600)
 
 	setElectrodes(0x25)
@@ -217,79 +229,6 @@ def monitor():
 		graph.set_ydata(data[0:index])
 		graph.set_xdata(list(range(0,index)))
 		pause(1) 
-
-
-def doWork(prefix="data"):
-	setElectrodes(0x21)
-	i12 = measure(showPlot=False, prefix=prefix)
-	setElectrodes(0x23)
-	i23 = measure(showPlot=False, prefix=prefix)
-	setElectrodes(0x13)
-	i13 = measure(showPlot=False, prefix=prefix)
-
-	setElectrodes(0x45)
-	i45 = measure(showPlot=False, prefix=prefix)
-	setElectrodes(0x65)
-	i56 = measure(showPlot=False, prefix=prefix)
-	setElectrodes(0x46)
-	i46 = measure(showPlot=False, prefix=prefix)
-
-	setElectrodes(0x25)
-	i25 = measure(showPlot=False, prefix=prefix)
-
-	f_axis = i12[0]
-	f, axarr = plt.subplots(7, sharex=True)
-	axarr[0].plot(f_axis, abs(i12[1]))
-	axarr[1].plot(f_axis, abs(i23[1]))
-	axarr[2].plot(f_axis, abs(i13[1]))
-	axarr[3].plot(f_axis, abs(i45[1]))
-	axarr[4].plot(f_axis, abs(i56[1]))
-	axarr[5].plot(f_axis, abs(i46[1]))
-	axarr[6].plot(f_axis, abs(i25[1]))
-
-	print("i12: %f" % mean(abs(i12[1])))
-	print("i23: %f" % mean(abs(i23[1])))
-	print("i13: %f" % mean(abs(i13[1])))
-	print("i45: %f" % mean(abs(i45[1])))
-	print("i56: %f" % mean(abs(i56[1])))
-	print("i46: %f" % mean(abs(i46[1])))
-	print("i25: %f" % mean(abs(i25[1])))
-
-	i2 = (mean(abs(i12[1])) + mean(abs(i23[1])) - mean(abs(i13[1])))/2
-	i5 = (mean(abs(i45[1])) + mean(abs(i56[1])) - mean(abs(i46[1])))/2
-	iti = mean(abs(i25[1])) - i2 - i5
-	print("i2: %f" % i2)
-	print("i5: %f" % i5)
-	print("iti: %f" % iti)
-
-def doWork2(prefix):
-	setInc(100)
-	setRange(RANGE_2000)
-	for start in range(10000, 95000, 5000):
-		setStart(start)
-		setElectrodes(0x15)
-		raw_input("Switch to calibration resistor on 1, 5")
-		calibrate(667)
-		raw_input("Switch to electrodes")
-		doWork(prefix + "_" + str(start))
-
-def doWork3(prefix):
-	setInc(100)
-	setRange(RANGE_2000)
-	setStart(60000)
-	setElectrodes(0x15)
-	raw_input("Switch to calibration resistor on 1, 5")
-	calibrate(667)
-	raw_input("Switch to electrodes")
-	for i in range(0, 30):
-		doWork(prefix + "_" + str(i))
-
-def doWork4(prefix):
-	setInc(100)
-	setRange(RANGE_2000)
-	for start in range(50000, 70000, 5000):
-		setStart(start)
-		doWork(prefix + "_" + str(start))
 
 def main():
 	global conn
