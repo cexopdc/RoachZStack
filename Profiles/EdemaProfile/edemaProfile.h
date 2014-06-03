@@ -88,7 +88,7 @@ extern "C"
 #define EDEMAPROFILE_SERVICE               0x00000123
 
 // Length of Characteristic 5 in bytes
-#define NUM_FREQ 2
+#define NUM_FREQ 50
 #define EDEMAPROFILE_SWEEPDATA_LEN           NUM_FREQ*4  
 #define EDEMAPROFILE_SWEEP_DONE_LEN          1
 #define EDEMAPROFILE_STARTFREQ_LEN           4

@@ -11,18 +11,18 @@
 #include "stdio.h"
 #include "hal_i2c.h"
 #include "AD5933.h"
-#include "multiplexer.h"
 #include <math.h>
 
 #define MSG_SIZE 60
 
+#define SPDT_BV                        BV(0)
+#define SPDT_SBIT                      P2_0
+#define SPDT_DDR                       P2DIR
+
 // Task ID not initialized
 #define NO_TASK_ID 0xFF
 
-
 // Registered keys task ID, initialized to NOT USED.
-
-
 uint8 Sampler_TaskID = NO_TASK_ID;    // Task ID for internal task/event processing.
 
 
@@ -42,6 +42,7 @@ void Sampler_Init( uint8 task_id )
 {
   Sampler_TaskID = task_id;   
   isEnabled = FALSE;
+  SPDT_DDR |= SPDT_BV;
 }
 
 
@@ -116,56 +117,8 @@ UINT16 Sampler_ProcessEvent( uint8 task_id, UINT16 events )
       EdemaProfile_GetParameter( EDEMAPROFILE_GAIN, &gain );
       EdemaProfile_GetParameter( EDEMAPROFILE_ELECTRODES, &electrodes );
       
-      SetMEnabled(true);
-      // M1: E1, E2, E4, E6
-      // M2: E1, E3, E5, E6
-      unsigned char e1 = electrodes >> 4;
-      unsigned char e2 = electrodes & 0x0F;
-      bool valid = true;
-      switch(e1)
-      {
-      case 1:
-        SetM1Input(0);
-        break;
-      case 2:
-        SetM1Input(1);
-        break;
-      case 4:
-        SetM1Input(2);
-        break;
-      case 6:
-        SetM1Input(3);
-        break;
-      default:
-        valid = false;
-      }
-      
-      
-      switch(e2)
-      {
-      case 1:
-        SetM2Input(0);
-        break;
-      case 3:
-        SetM2Input(1);
-        break;
-      case 5:
-        SetM2Input(2);
-        break;
-      case 6:
-        SetM2Input(3);
-        break;
-      default:
-        valid = false;
-      }
-      
-      
-      if (!valid)
-      {
-        // power off?
-        return events ^ SAMPLER_START_SWEEP;
-      }
-      
+      // Set SPDT Switch for AD5933
+      SPDT_SBIT = (electrodes == 0) ? 0 : 1 ;
       
       AD5933_ConfigSweep(startFreq, incFreq, NUM_FREQ);
       AD5933_SetRangeAndGain(range, gain);

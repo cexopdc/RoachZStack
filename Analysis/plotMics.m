@@ -16,7 +16,7 @@ function plotMics()
     
     xRange = (0:plotSamples);%/(sampleRate * 1000);
 
-    port = serial('COM14','BaudRate',115200)%, 'FlowControl', 'hardware');
+    port = serial('COM21','BaudRate',115200)%, 'FlowControl', 'hardware');
     port.BytesAvailableFcnCount = readSamples;
     port.BytesAvailableFcnMode = 'byte';
     port.BytesAvailableFcn = @serial_callback;

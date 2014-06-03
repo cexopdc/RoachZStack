@@ -70,7 +70,6 @@ extern "C"
 #define ROACHPROFILE_SERVICE               0x00000123
 
 // Length of Characteristic 5 in bytes
-#define NUM_FREQ 2
 #define ROACHPROFILE_DIRECTION_LEN         1  
 #define ROACHPROFILE_REPEATS_LEN           2 
 #define ROACHPROFILE_DURATION_LEN          2

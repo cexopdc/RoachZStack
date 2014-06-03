@@ -6481,9 +6481,6 @@
       <name>$PROJ_DIR$\..\Source\hal_i2c.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\Source\multiplexer.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\Source\OSAL_EdemaBand.c</name>
     </file>
     <file>

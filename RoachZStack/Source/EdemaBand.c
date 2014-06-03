@@ -60,7 +60,6 @@
 #include "devinfoservice.h"
 #include "edemaProfile.h"
 #include "roachProfile.h"
-#include "multiplexer.h"
 #include "commands.h"
 #include "stimulator.h"
 
@@ -450,8 +449,6 @@ void EdemaBand_Init( uint8 task_id )
   HCI_EXT_MapPmIoPortCmd( HCI_EXT_PM_IO_PORT_P0, HCI_EXT_PM_IO_PORT_PIN7 );
 
 #endif // defined ( DC_DC_P0_7 )
-
-  InitMultiplexers();
   
   // Setup a delayed profile startup
   osal_set_event( edemaBand_TaskID, SBP_START_DEVICE_EVT );
