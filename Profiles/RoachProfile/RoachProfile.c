@@ -193,7 +193,7 @@ static gattAttribute_t RoachProfileAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED] =
       // Repeats
       { 
         { ATT_BT_UUID_SIZE, RoachProfileRepeatsUUID },
-        GATT_PERMIT_READ, 
+        GATT_PERMIT_READ | GATT_PERMIT_WRITE, 
         0, 
         &RoachProfileRepeats
       },
@@ -217,7 +217,7 @@ static gattAttribute_t RoachProfileAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED] =
       // Duration
       { 
         { ATT_BT_UUID_SIZE, RoachProfileDurationUUID },
-        GATT_PERMIT_WRITE, 
+        GATT_PERMIT_READ | GATT_PERMIT_WRITE, 
         0, 
         &RoachProfileDuration 
       },
@@ -599,6 +599,7 @@ static bStatus_t RoachProfile_WriteAttrCB( uint16 connHandle, gattAttribute_t *p
           osal_memcpy(pCurValue, pValue, len);
           notifyApp = ROACHPROFILE_DURATION;
         }
+        break;
       
       case GATT_CLIENT_CHAR_CFG_UUID:
         status = GATTServApp_ProcessCCCWriteReq( connHandle, pAttr, pValue, len,

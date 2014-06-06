@@ -193,9 +193,9 @@ def data_ready(packet_dictionary):
 conn = None
 
 def stimulate(direction, repeats, duration):
-	conn.GATT_WriteCharValue(handle=Handle_Direction, value=pack("<L", direction))
-	conn.GATT_WriteCharValue(handle=Handle_Repeats, value=pack("<L", repeats))
-	conn.GATT_WriteCharValue(handle=Handle_Duration, value=pack("<L", duration))
+	conn.GATT_WriteCharValue(handle=Handle_Direction, value=pack("<B", direction))
+	conn.GATT_WriteCharValue(handle=Handle_Repeats, value=pack("<H", repeats))
+	conn.GATT_WriteCharValue(handle=Handle_Duration, value=pack("<H", duration))
 
 def monitor():
 	t = threading.Thread(target=monitor_thread)

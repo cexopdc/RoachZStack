@@ -166,6 +166,7 @@ void Stimulator_SetCommand(stimCommand* data)
     osal_mem_free(command);
   }
   command = data;
+  osal_set_event(Stimulator_TaskID, ROACHZSTACK_STIM_START);
 }
 
 
