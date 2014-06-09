@@ -785,7 +785,12 @@ static void roachProfileChangeCB( uint8 paramID )
       cmd = osal_mem_alloc(sizeof(stimCommand));
       RoachProfile_GetParameter(ROACHPROFILE_DIRECTION, &cmd->direction);
       RoachProfile_GetParameter(ROACHPROFILE_REPEATS, &cmd->repeats);
-      RoachProfile_GetParameter(ROACHPROFILE_DURATION, &cmd->duration);
+      uint8 duration[8];
+      RoachProfile_GetParameter(ROACHPROFILE_DURATION, duration);
+      osal_memcpy(&cmd->posOn, duration+0, 2);
+      osal_memcpy(&cmd->posOff, duration+2, 2);
+      osal_memcpy(&cmd->negOn, duration+4, 2);
+      osal_memcpy(&cmd->negOff, duration+6, 2);
       Stimulator_SetCommand(cmd);
       break;
 

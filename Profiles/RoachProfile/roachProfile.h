@@ -72,7 +72,7 @@ extern "C"
 // Length of Characteristic 5 in bytes
 #define ROACHPROFILE_DIRECTION_LEN         1  
 #define ROACHPROFILE_REPEATS_LEN           2 
-#define ROACHPROFILE_DURATION_LEN          2
+#define ROACHPROFILE_DURATION_LEN          8
 
 /*********************************************************************
  * TYPEDEFS

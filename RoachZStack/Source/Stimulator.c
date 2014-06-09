@@ -67,6 +67,9 @@ uint8 Stimulator_TaskID;    // Task ID for internal task/event processing.
 
 static stimCommand* command = NULL;
 
+static void stimulate(uint8 direction);
+static void stopStimulate(void);
+
 
 /*********************************************************************
  * @fn      Stimulator_Init
@@ -105,58 +108,98 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
   {
     if (command != NULL)
     {
-      switch (command->direction)
-      {
-        case 0:
-          //forward
-          LED_PORT |= 0x1 << LED_PIN;
-          FORWARD_PORT |= 0x1 << FORWARD_PIN;
-          LEFT_PORT &= ~(0x1 << LEFT_PIN);
-          RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
-           break;
-        case 1:
-           //back
-          LED_PORT |= 0x1 << LED_PIN;
-          LEFT_PORT |= 0x1 << LEFT_PIN;
-          RIGHT_PORT |= 0x1 << RIGHT_PIN;
-          FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-           break;
-        case 2:
-          //right
-          LED_PORT |= 0x1 << LED_PIN;
-          RIGHT_PORT |= 0x1 << RIGHT_PIN;
-          LEFT_PORT &= ~(0x1 << LEFT_PIN);
-          FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-           break;
-        case 3:
-           //left
-          LED_PORT |= 0x1 << LED_PIN;
-          LEFT_PORT |= 0x1 << LEFT_PIN;
-          RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
-          FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-           break;
-      }
+      BICLK_PORT &= ~(0x1 << BICLK_PIN);
+      stimulate(command->direction);
       command->repeats--;
-      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_STOP, command->duration); 
+      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_STOP, command->posOn); 
     }
     return ( events ^ ROACHZSTACK_STIM_START );
   }
+  
   if ( events & ROACHZSTACK_STIM_STOP )
   {
-    LED_PORT &= ~(0x1 << LED_PIN);
-    FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-    LEFT_PORT &= ~(0x1 << LEFT_PIN);
-    RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
-    if (command != NULL && command->repeats > 0)
+    stopStimulate();
+    if (command->negOn)
     {
-      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_START, command->duration);     
+      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_NSTIM_START, command->posOff);
+    }
+    else
+    {
+      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_NSTIM_STOP, command->posOff);
     }
     
     return ( events ^ ROACHZSTACK_STIM_STOP );
   }
   
+
+  if ( events & ROACHZSTACK_NSTIM_START )
+  {
+    if (command != NULL)
+    {
+      BICLK_PORT |= (0x1 << BICLK_PIN);
+      stimulate(command->direction);
+      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_NSTIM_STOP, command->negOn); 
+    }
+    return ( events ^ ROACHZSTACK_NSTIM_START );
+  }
   
+  if ( events & ROACHZSTACK_NSTIM_STOP )
+  {
+    BICLK_PORT &= ~(0x1 << BICLK_PIN);
+    stopStimulate();
+    if (command != NULL && command->repeats > 0)
+    {
+      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_START, command->negOff);   
+    }
+    
+    return ( events ^ ROACHZSTACK_NSTIM_STOP );
+  }
+
   return ( 0 );  // Discard unknown events.
+}
+
+
+static void stopStimulate(void)
+{
+  LED_PORT &= ~(0x1 << LED_PIN);
+  FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+  LEFT_PORT &= ~(0x1 << LEFT_PIN);
+  RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+}
+
+static void stimulate(uint8 direction)
+{
+  switch (direction)
+  {
+    case FORWARD:
+      //forward
+      LED_PORT |= 0x1 << LED_PIN;
+      FORWARD_PORT |= 0x1 << FORWARD_PIN;
+      LEFT_PORT &= ~(0x1 << LEFT_PIN);
+      RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+       break;
+    case BACK:
+       //back
+      LED_PORT |= 0x1 << LED_PIN;
+      LEFT_PORT |= 0x1 << LEFT_PIN;
+      RIGHT_PORT |= 0x1 << RIGHT_PIN;
+      FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+       break;
+    case RIGHT:
+      //right
+      LED_PORT |= 0x1 << LED_PIN;
+      RIGHT_PORT |= 0x1 << RIGHT_PIN;
+      LEFT_PORT &= ~(0x1 << LEFT_PIN);
+      FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+       break;
+    case LEFT:
+       //left
+      LED_PORT |= 0x1 << LED_PIN;
+      LEFT_PORT |= 0x1 << LEFT_PIN;
+      RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+      FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
+       break;
+  }
 }
 
 void Stimulator_SetCommand(stimCommand* data)
