@@ -81,6 +81,10 @@
   #include "oad_target.h"
 #endif
 
+#ifdef BIPHASIC
+#include "spi.h"
+#endif
+
 /*********************************************************************
  * MACROS
  */
@@ -88,6 +92,10 @@
 /*********************************************************************
  * CONSTANTS
  */
+
+#ifdef BIPHASIC
+#define DIGIPOT_R 100000
+#endif
 
 // How often to perform periodic event
 #define SBP_PERIODIC_EVT_PERIOD                   5000
@@ -518,82 +526,13 @@ static void edemaBand_ProcessOSALMsg( osal_event_hdr_t *pMsg )
 {
   switch ( pMsg->event )
   {
-  #if defined( CC2540_MINIDK )
-    case KEY_CHANGE:
-      edemaBand_HandleKeys( ((keyChange_t *)pMsg)->state, ((keyChange_t *)pMsg)->keys );
-      break;
-  #endif // #if defined( CC2540_MINIDK )
-
   default:
     // do nothing
     break;
   }
 }
 
-#if defined( CC2540_MINIDK )
-/*********************************************************************
- * @fn      edemaBand_HandleKeys
- *
- * @brief   Handles all key events for this device.
- *
- * @param   shift - true if in shift/alt.
- * @param   keys - bit field for key events. Valid entries:
- *                 HAL_KEY_SW_2
- *                 HAL_KEY_SW_1
- *
- * @return  none
- */
-static void edemaBand_HandleKeys( uint8 shift, uint8 keys )
-{
-  uint8 SK_Keys = 0;
 
-  VOID shift;  // Intentionally unreferenced parameter
-
-  if ( keys & HAL_KEY_SW_1 )
-  {
-    SK_Keys |= SK_KEY_LEFT;
-  }
-
-  if ( keys & HAL_KEY_SW_2 )
-  {
-
-    SK_Keys |= SK_KEY_RIGHT;
-
-    // if device is not in a connection, pressing the right key should toggle
-    // advertising on and off
-    // Note:  If PLUS_BROADCASTER is define this condition is ignored and
-    //        Device may advertise during connections as well. 
-#ifndef PLUS_BROADCASTER  
-    if( gapProfileState != GAPROLE_CONNECTED )
-    {
-#endif // PLUS_BROADCASTER
-      uint8 current_adv_enabled_status;
-      uint8 new_adv_enabled_status;
-
-      //Find the current GAP advertisement status
-      GAPRole_GetParameter( GAPROLE_ADVERT_ENABLED, &current_adv_enabled_status );
-
-      if( current_adv_enabled_status == FALSE )
-      {
-        new_adv_enabled_status = TRUE;
-      }
-      else
-      {
-        new_adv_enabled_status = FALSE;
-      }
-
-      //change the GAP advertisement status to opposite of current status
-      GAPRole_SetParameter( GAPROLE_ADVERT_ENABLED, sizeof( uint8 ), &new_adv_enabled_status );
-#ifndef PLUS_BROADCASTER
-    }
-#endif // PLUS_BROADCASTER
-  }
-
-  // Set the value of the keys state to the Simple Keys Profile;
-  // This will send out a notification of the keys state if enabled
-  SK_SetParameter( SK_KEY_ATTR, sizeof ( uint8 ), &SK_Keys );
-}
-#endif // #if defined( CC2540_MINIDK )
 
 /*********************************************************************
  * @fn      peripheralStateNotificationCB
@@ -746,7 +685,9 @@ static void edemaProfileChangeCB( uint8 paramID )
   {
     case EDEMAPROFILE_CHAR1:
       EdemaProfile_GetParameter( EDEMAPROFILE_CHAR1, &newValue );
+#ifdef IMPEDANCE
       Sampler_SetState(newValue);
+#endif
       #if (defined HAL_LCD) && (HAL_LCD == TRUE)
         HalLcdWriteStringValue( "Char 1:", (uint16)(newValue), 10,  HAL_LCD_LINE_3 );
       #endif // (defined HAL_LCD) && (HAL_LCD == TRUE)
@@ -779,6 +720,10 @@ static void edemaProfileChangeCB( uint8 paramID )
 static void roachProfileChangeCB( uint8 paramID )
 {
   stimCommand *cmd = NULL;
+#ifdef BIPHASIC
+  uint8 amplitude = 0;
+  uint8 buf[2];
+#endif
   switch( paramID )
   {
     case ROACHPROFILE_DURATION:
@@ -791,6 +736,13 @@ static void roachProfileChangeCB( uint8 paramID )
       osal_memcpy(&cmd->posOff, duration+2, 2);
       osal_memcpy(&cmd->negOn, duration+4, 2);
       osal_memcpy(&cmd->negOff, duration+6, 2);
+      
+#ifdef BIPHASIC
+      RoachProfile_GetParameter(ROACHPROFILE_AMP, &amplitude);
+      buf[0] = 0x13;
+      buf[1] = 255 - (uint8)(amplitude*255.0/DIGIPOT_R);
+      SPI_Write(2, buf);
+#endif
       Stimulator_SetCommand(cmd);
       break;
 

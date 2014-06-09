@@ -22,6 +22,9 @@ Handle_Electrodes = '\x47\x00'
 Handle_Direction = '\x4B\x00'
 Handle_Repeats = '\x4E\x00'
 Handle_Duration = '\x51\x00'
+Handle_Amplitude = '\x54\x00'
+Handle_Voltage = '\x57\x00'
+Handle_Voltage_Notify = '\x58\x00'
 
 class Device:
 
@@ -192,49 +195,28 @@ def data_ready(packet_dictionary):
 
 conn = None
 
-def stimulate(direction, repeats, duration):
+def stimulate(direction, repeats, onP, offP, onN, offN):
+	duration = pack("<H", onP) + pack("<H", offP) + pack("<H", onN) + pack("<H", offN)
 	conn.GATT_WriteCharValue(handle=Handle_Direction, value=pack("<B", direction))
 	conn.GATT_WriteCharValue(handle=Handle_Repeats, value=pack("<H", repeats))
-	conn.GATT_WriteCharValue(handle=Handle_Duration, value=pack("<H", duration))
+	conn.GATT_WriteCharValue(handle=Handle_Duration, value=duration)
 
 def monitor():
-	t = threading.Thread(target=monitor_thread)
-	t.start()
+	conn.register_notification(Handle_Voltage, Handle_Voltage_Notify, callback=voltage_ready)
 
-def monitor_thread():
-	setInc(100)
-	setRange(RANGE_2000)
-	setStart(60000)
+def voltage_ready(packet_dictionary):
+	packet, dictionary = packet_dictionary
+	data = dictionary["values"][0]
+	dataList = [data[i:i+2] for i in range(0, len(data), 2)]
+	voltages = [unpack("<H", x)[0] for x in dataList]
+	print(voltages)
 
-	calibrate(7600)
-
-	setElectrodes(0x25)
-
-	data = zeros(100)
-	graph, = plot(data)
-	ylim([0,10000])
-
-	ion()
-	show()
-
-	index = 0;
-
-
-	while (True):
-		result = measure(showPlot=False, prefix=None)
-		imp = mean(abs(result[1]))
-		print(imp)
-		data[index] = imp
-		index = index + 1 % len(data)
-		graph.set_ydata(data[0:index])
-		graph.set_xdata(list(range(0,index)))
-		pause(1) 
 
 def main():
 	global conn
 	conn = TIConnection(port=COM_port, baudrate=115200, callback=analyse_packet)
 	conn.connect("Edema_Band v0.1*V3*")
-	conn.register_notification('\x2E\x00', '\x2F\x00', callback=data_ready)
+	
 	setStart(startFreq)
 	setInc(incFreq)
 	setRange(outRange)

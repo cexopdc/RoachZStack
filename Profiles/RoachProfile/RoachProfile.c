@@ -59,7 +59,7 @@
  * CONSTANTS
  */
 
-#define SERVAPP_NUM_ATTR_SUPPORTED        10
+#define ROACH_NUM_ATTR_SUPPORTED        17
 
 /*********************************************************************
  * TYPEDEFS
@@ -74,22 +74,34 @@ CONST uint8 RoachProfileServUUID[ATT_BT_UUID_SIZE] =
   LO_UINT16(ROACHPROFILE_SERV_UUID), HI_UINT16(ROACHPROFILE_SERV_UUID)
 };
 
-// Characteristic 1 UUID: 0xFFF1
+// UUID: 0xFFE1
 CONST uint8 RoachProfileDirectionUUID[ATT_BT_UUID_SIZE] =
 { 
   LO_UINT16(ROACHPROFILE_DIRECTION_UUID), HI_UINT16(ROACHPROFILE_DIRECTION_UUID)
 };
 
-// Characteristic 2 UUID: 0xFFF2
+// UUID: 0xFFE2
 CONST uint8 RoachProfileRepeatsUUID[ATT_BT_UUID_SIZE] =
 { 
   LO_UINT16(ROACHPROFILE_REPEATS_UUID), HI_UINT16(ROACHPROFILE_REPEATS_UUID)
 };
 
-// Characteristic 3 UUID: 0xFFF3
+// UUID: 0xFFE3
 CONST uint8 RoachProfileDurationUUID[ATT_BT_UUID_SIZE] =
 { 
   LO_UINT16(ROACHPROFILE_DURATION_UUID), HI_UINT16(ROACHPROFILE_DURATION_UUID)
+};
+
+// UUID: 0xFFE4
+CONST uint8 RoachProfileAmpUUID[ATT_BT_UUID_SIZE] =
+{ 
+  LO_UINT16(ROACHPROFILE_AMP_UUID), HI_UINT16(ROACHPROFILE_AMP_UUID)
+};
+
+// UUID: 0xFFE5
+CONST uint8 RoachProfileVoltageUUID[ATT_BT_UUID_SIZE] =
+{ 
+  LO_UINT16(ROACHPROFILE_VOLTAGE_UUID), HI_UINT16(ROACHPROFILE_VOLTAGE_UUID)
 };
 
 /*********************************************************************
@@ -138,17 +150,38 @@ static uint8 RoachProfileRepeatsUserDesp[17] = "Repeats         \0";
 static uint8 RoachProfileDurationProps = GATT_PROP_READ | GATT_PROP_WRITE;
 
 // Duration Value
-static uint8 RoachProfileDuration = 0;
+static uint8 RoachProfileDuration[ROACHPROFILE_DURATION_LEN];
 
 // Duration User Description
 static uint8 RoachProfileDurationUserDesp[17] = "Duration        \0";
 
 
+// Amp Properties
+static uint8 RoachProfileAmpProps = GATT_PROP_READ | GATT_PROP_WRITE;
+
+// Amp Value
+static uint8 RoachProfileAmp = 0;
+
+// Amp User Description
+static uint8 RoachProfileAmpUserDesp[17] = "Amplitude       \0";
+
+
+// Voltage Properties
+static uint8 RoachProfileVoltageProps = GATT_PROP_NOTIFY;
+
+// Voltage Value
+static uint8 RoachProfileVoltage[4];
+
+static gattCharCfg_t RoachProfileVoltageConfig[GATT_MAX_NUM_CONN];
+
+// Voltage User Description
+static uint8 RoachProfileVoltageUserDesp[17] = "Voltage         \0";
+
 /*********************************************************************
  * Profile Attributes - Table
  */
 
-static gattAttribute_t RoachProfileAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED] = 
+static gattAttribute_t RoachProfileAttrTbl[ROACH_NUM_ATTR_SUPPORTED] = 
 {
   // Roach Profile Service
   { 
@@ -219,7 +252,7 @@ static gattAttribute_t RoachProfileAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED] =
         { ATT_BT_UUID_SIZE, RoachProfileDurationUUID },
         GATT_PERMIT_READ | GATT_PERMIT_WRITE, 
         0, 
-        &RoachProfileDuration 
+        RoachProfileDuration 
       },
 
       // Duration User Description
@@ -228,7 +261,65 @@ static gattAttribute_t RoachProfileAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED] =
         GATT_PERMIT_READ, 
         0, 
         RoachProfileDurationUserDesp 
-      }
+      },
+      
+    // Amp Declaration
+    { 
+      { ATT_BT_UUID_SIZE, characterUUID },
+      GATT_PERMIT_READ, 
+      0,
+      &RoachProfileAmpProps 
+    },
+
+      // Amp
+      { 
+        { ATT_BT_UUID_SIZE, RoachProfileAmpUUID },
+        GATT_PERMIT_READ | GATT_PERMIT_WRITE, 
+        0, 
+        &RoachProfileAmp
+      },
+
+      // Amp User Description
+      { 
+        { ATT_BT_UUID_SIZE, charUserDescUUID },
+        GATT_PERMIT_READ, 
+        0, 
+        RoachProfileAmpUserDesp 
+      },
+     
+    // Voltage Declaration
+    { 
+      { ATT_BT_UUID_SIZE, characterUUID },
+      GATT_PERMIT_READ, 
+      0,
+      &RoachProfileVoltageProps 
+    },
+
+      // Voltage 
+      { 
+        { ATT_BT_UUID_SIZE, RoachProfileVoltageUUID },
+        0, 
+        0, 
+        RoachProfileVoltage
+      },
+
+      // Voltage Configuration
+      { 
+        { ATT_BT_UUID_SIZE, clientCharCfgUUID },
+        GATT_PERMIT_READ | GATT_PERMIT_WRITE, 
+        0, 
+        (uint8 *)RoachProfileVoltageConfig 
+      },
+      
+      // Voltage User Description
+      { 
+        { ATT_BT_UUID_SIZE, charUserDescUUID },
+        GATT_PERMIT_READ, 
+        0, 
+        RoachProfileVoltageUserDesp 
+      },
+      
+      
 };
 
 
@@ -272,7 +363,9 @@ CONST gattServiceCBs_t RoachProfileCBs =
 bStatus_t RoachProfile_AddService( uint32 services )
 {
   uint8 status = SUCCESS;
-
+  
+  // Initialize Client Characteristic Configuration attributes
+  GATTServApp_InitCharCfg( INVALID_CONNHANDLE, RoachProfileVoltageConfig );
 
   // Register with Link DB to receive link status change callback
   VOID linkDB_Register( RoachProfile_HandleConnStatusCB );  
@@ -356,16 +449,42 @@ bStatus_t RoachProfile_SetParameter( uint8 param, unsigned int len, void *value 
       break;
 
     case ROACHPROFILE_DURATION:
-      if ( len == sizeof ( uint16 ) ) 
+      if ( len == ROACHPROFILE_DURATION_LEN ) 
       {
-        RoachProfileDuration = *((uint16*)value);
+        osal_memcpy(&RoachProfileDuration, value, len);
       }
       else
       {
         ret = bleInvalidRange;
       }
       break;
-
+      
+     case ROACHPROFILE_AMP:
+      if ( len == sizeof ( uint8 ) ) 
+      {
+        RoachProfileAmp = *((uint8*)value);
+      }
+      else
+      {
+        ret = bleInvalidRange;
+      }
+      break;
+      
+     case ROACHPROFILE_VOLTAGE:
+      if ( len == ROACHPROFILE_VOLTAGE_LEN ) 
+      {
+        osal_memcpy(RoachProfileVoltage, value, len);
+        
+        // See if Notification has been enabled
+        ret = GATTServApp_ProcessCharCfg( RoachProfileVoltageConfig, RoachProfileVoltage, FALSE,
+                                    RoachProfileAttrTbl, GATT_NUM_ATTRS( RoachProfileAttrTbl ),
+                                    INVALID_TASK_ID );
+      }
+      else
+      {
+        ret = bleInvalidRange;
+      }
+      break;
     default:
       ret = INVALIDPARAMETER;
       break;
@@ -399,9 +518,17 @@ bStatus_t RoachProfile_GetParameter( uint8 param, void *value )
       break;      
 
     case ROACHPROFILE_DURATION:
-      *((uint16*)value) = RoachProfileDuration;
+      osal_memcpy(value, RoachProfileDuration, ROACHPROFILE_DURATION_LEN);
       break;  
-
+    
+    case ROACHPROFILE_AMP:
+      *((uint8*)value) = RoachProfileAmp;
+      break;
+    
+    case ROACHPROFILE_VOLTAGE:
+      osal_memcpy(value, RoachProfileVoltage, sizeof(RoachProfileVoltage));
+      break;
+  
     default:
       ret = INVALIDPARAMETER;
       break;
@@ -476,6 +603,24 @@ static uint8 RoachProfile_ReadAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
         break;
       }
         
+      case ROACHPROFILE_AMP_UUID:
+        if ( offset > 0 )
+        {
+          return ( ATT_ERR_ATTR_NOT_LONG );
+        }
+        *pLen = 1;
+        pValue[0] = *pAttr->pValue;
+        break;
+
+      case ROACHPROFILE_VOLTAGE_UUID:
+        if ( offset > 0 )
+        {
+          return ( ATT_ERR_ATTR_NOT_LONG );
+        }
+        *pLen = ROACHPROFILE_VOLTAGE_LEN;
+        VOID osal_memcpy( pValue, pAttr->pValue, ROACHPROFILE_VOLTAGE_LEN );
+        break;
+      
       default:
         // Should never get here! (characteristics 3 and 4 do not have read permissions)
         *pLen = 0;
@@ -600,7 +745,34 @@ static bStatus_t RoachProfile_WriteAttrCB( uint16 connHandle, gattAttribute_t *p
           notifyApp = ROACHPROFILE_DURATION;
         }
         break;
-      
+       
+      case ROACHPROFILE_AMP_UUID:
+
+        //Validate the value
+        // Make sure it's not a blob oper
+        if ( offset == 0 )
+        {
+          if ( len != ROACHPROFILE_AMP_LEN )
+          {
+            status = ATT_ERR_INVALID_VALUE_SIZE;
+          }
+        }
+        else
+        {
+          status = ATT_ERR_ATTR_NOT_LONG;
+        }
+        
+        //Write the value
+        if ( status == SUCCESS )
+        {
+          uint8 *pCurValue = (uint8 *)pAttr->pValue;        
+          *pCurValue = pValue[0];
+
+          notifyApp = ROACHPROFILE_AMP;
+        }
+             
+        break;
+        
       case GATT_CLIENT_CHAR_CFG_UUID:
         status = GATTServApp_ProcessCCCWriteReq( connHandle, pAttr, pValue, len,
                                                  offset, GATT_CLIENT_CFG_NOTIFY );

@@ -15,22 +15,41 @@ extern "C"
 #define ROACHZSTACK_NSTIM_START        0x0010
 #define ROACHZSTACK_NSTIM_STOP         0x0020
  
-#define LEFT_PORT P1
-#define LEFT_PIN 4
-#define RIGHT_PORT P1
-#define RIGHT_PIN 2
-#define FORWARD_PORT P1
-#define FORWARD_PIN 2 //temporary
-#define LED_PORT P1
-#define LED_PIN 5
-#define BICLK_PORT P1
-#define BICLK_PIN 7
+#define LEFT_DDR                        P1DIR
+#define LEFT_BV                         BV(4)
+#define LEFT_SBIT                       P1_4
+  
+#define RIGHT_DDR                       P1DIR
+#define RIGHT_BV                        BV(2)
+#define RIGHT_SBIT                      P1_2
 
+#ifdef FORWARD_STIM
+#define FORWARD_DDR                     P1DIR
+#define FORWARD_BV                      BV(3)
+#define FORWARD_SBIT                    P1_3
+  
 #define FORWARD 0
+#endif
+  
+#define LED_DDR                         P1DIR
+#define LED_BV                          BV(5)
+#define LED_SBIT                        P1_5
+ 
+#ifdef BIPHASIC_STIM
+#define BICLK_DDR                       P0DIR
+#define BICLK_BV                        BV(7)
+#define BICLK_SBIT                      P0_7
+#endif
+  
+#if defined(IMPEDANCE) && (defined(BIPHASIC_STIM) || defined (VOLT_MONITOR))
+#define BI_IMP_DDR                      P1DIR
+#define BI_IMP_BV                       BV(0)
+#define BI_IMP_SBIT                     P1_0
+#endif
+  
 #define BACK 1
 #define RIGHT 2
 #define LEFT 3
-#define DIGIPOT 16
 
 /*********************************************************************
  * GLOBAL VARIABLES

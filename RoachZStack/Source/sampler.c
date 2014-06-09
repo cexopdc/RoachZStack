@@ -1,3 +1,4 @@
+#ifdef IMPEDANCE
 
 #include "sampler.h"
 #include "hal_lcd.h"
@@ -12,6 +13,9 @@
 #include "hal_i2c.h"
 #include "AD5933.h"
 #include <math.h>
+#ifdef BIPHASIC_STIM
+#include "Stimulator.h"
+#endif
 
 #define MSG_SIZE 60
 
@@ -105,6 +109,9 @@ UINT16 Sampler_ProcessEvent( uint8 task_id, UINT16 events )
       AD5933_Init();
       AD5933_SetSystemClk(AD5933_CONTROL_INT_SYSCLK, AD5933_INTERNAL_SYS_CLK);
       
+      #if defined BIPHASIC_STIM || defined VOLT_MONITOR
+        BI_IMP_SBIT = 1;
+      #endif
       
       unsigned long incFreq = 0;
       unsigned long startFreq = 0;
@@ -254,3 +261,5 @@ void Sampler_SetState( int cmd )
   
   return;
 }
+
+#endif

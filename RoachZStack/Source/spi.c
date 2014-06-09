@@ -1,3 +1,5 @@
+#ifdef BIPHASIC
+
 #include "spi.h"
 #include "OnBoard.h"
 
@@ -46,3 +48,4 @@ void SPI_Write(uint8 len, uint8* buffer)
   } 
   P1 |= (0x1<<CS_PIN);
 }
+#endif

@@ -76,7 +76,7 @@ class TIConnection(TIBuilder):
 		self.state = State.DISCOVERY
 		self.desiredName = name
 		self.cv.acquire()
-		print(print_output(self.GATT_DeviceDiscoveryRequest(mode="\x03")))
+		self.GATT_DeviceDiscoveryRequest(mode="\x03")
 		self.cv.wait(4)
 		if not self.state == State.FOUND:
 			raise Exception("No device found")
@@ -85,7 +85,7 @@ class TIConnection(TIBuilder):
 		
 		self.state = State.LINKING
 		self.cv.acquire()
-		print(print_output(self.GATT_EstablishLinkRequest(peer_addr = self.mac)))
+		self.GATT_EstablishLinkRequest(peer_addr = self.mac)
 		self.cv.wait(4)
 		if not self.state == State.CONNECTED:
 			raise Exception("Could not establish link")
@@ -102,7 +102,7 @@ class TIConnection(TIBuilder):
 			raise "Not connected"
 		self.cv.acquire()
 		self.wasSuccess = False
-		print(print_output(super( TIConnection, self ).GATT_WriteCharValue(conn_handle=conn_handle, handle=handle, value=value)))
+		super( TIConnection, self ).GATT_WriteCharValue(conn_handle=conn_handle, handle=handle, value=value)
 		self.cv.wait(8)
 		if not self.wasSuccess:
 			raise Exception("Write char failed")
@@ -111,7 +111,6 @@ class TIConnection(TIBuilder):
 	def analyse_packet(self, packet_dictionary):
 		packet, dictionary = packet_dictionary
 
-		print("EVENT: Response received from the device")
 		if self.state == State.DISCOVERY:
 			if dictionary["event"][1] == "GAP_DeviceInformation":
 				if self.desiredName in dictionary['data_field'][0]:

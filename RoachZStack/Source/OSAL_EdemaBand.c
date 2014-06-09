@@ -100,7 +100,9 @@ const pTaskEventHandlerFn tasksArr[] =
   GAPBondMgr_ProcessEvent,                                          // task 9
   GATTServApp_ProcessEvent,                                         // task 10
   EdemaBand_ProcessEvent,                                           // task 11
+#ifdef IMPEDANCE
   Sampler_ProcessEvent,                                             // task 12
+#endif
   Stimulator_ProcessEvent                                           // task 13
 };
 
@@ -162,7 +164,9 @@ void osalInitTasks( void )
 
   /* Application */
   EdemaBand_Init( taskID++ );
+#ifdef IMPEDANCE
   Sampler_Init( taskID++ );
+#endif
   Stimulator_Init( taskID );
 }
 

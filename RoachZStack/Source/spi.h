@@ -1,3 +1,5 @@
+#ifdef BIPHASIC
+
 #ifndef SPI_H
 #define SPI_H
 
@@ -13,6 +15,8 @@ extern void SPI_Write(uint8 len, uint8* buffer);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
 
 #endif

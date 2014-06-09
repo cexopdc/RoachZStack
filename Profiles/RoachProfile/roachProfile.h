@@ -48,7 +48,8 @@ extern "C"
 /*********************************************************************
  * INCLUDES
  */
-
+#include "bcomdef.h"
+  
 /*********************************************************************
  * CONSTANTS
  */
@@ -57,14 +58,18 @@ extern "C"
 #define ROACHPROFILE_DIRECTION               0
 #define ROACHPROFILE_REPEATS                 1
 #define ROACHPROFILE_DURATION                2
+#define ROACHPROFILE_AMP                     3
+#define ROACHPROFILE_VOLTAGE                 4
   
 // Simple Profile Service UUID
 #define ROACHPROFILE_SERV_UUID               0xFFF1
 
 
-#define ROACHPROFILE_DIRECTION_UUID          0xFFFD
-#define ROACHPROFILE_REPEATS_UUID            0xFFFE
-#define ROACHPROFILE_DURATION_UUID           0xFFFF
+#define ROACHPROFILE_DIRECTION_UUID          0xFFE1
+#define ROACHPROFILE_REPEATS_UUID            0xFFE2
+#define ROACHPROFILE_DURATION_UUID           0xFFE3
+#define ROACHPROFILE_AMP_UUID                0xFFE4
+#define ROACHPROFILE_VOLTAGE_UUID            0xFFE5
   
 // Simple Keys Profile Services bit fields
 #define ROACHPROFILE_SERVICE               0x00000123
@@ -73,6 +78,8 @@ extern "C"
 #define ROACHPROFILE_DIRECTION_LEN         1  
 #define ROACHPROFILE_REPEATS_LEN           2 
 #define ROACHPROFILE_DURATION_LEN          8
+#define ROACHPROFILE_AMP_LEN               1
+#define ROACHPROFILE_VOLTAGE_LEN           4
 
 /*********************************************************************
  * TYPEDEFS

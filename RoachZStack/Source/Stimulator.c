@@ -54,6 +54,10 @@
 #include "Stimulator.h"
 #include "ZConfig.h"
 #include "commands.h"
+#ifdef VOLT_MONITOR
+#include "hal_adc.h"
+#include "RoachProfile.h"
+#endif
 
 /*********************************************************************
  * GLOBAL VARIABLES
@@ -70,6 +74,9 @@ static stimCommand* command = NULL;
 static void stimulate(uint8 direction);
 static void stopStimulate(void);
 
+#ifdef VOLT_MONITOR
+static void measureVoltage(void);
+#endif
 
 /*********************************************************************
  * @fn      Stimulator_Init
@@ -83,11 +90,22 @@ static void stopStimulate(void);
 void Stimulator_Init( uint8 task_id )
 {
   Stimulator_TaskID = task_id;
+  LEFT_DDR |= LEFT_BV;
+  RIGHT_DDR |= RIGHT_BV;
+  LED_DDR |= LED_BV;
 
-  LED_PORT &= ~(0x1 << LED_PIN);
-  FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-  LEFT_PORT &= ~(0x1 << LEFT_PIN);
-  RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+#ifdef FORWARD_STIM
+  FORWARD_DDR |= FORWARD_BV;
+#endif
+  
+#if defined IMPEDANCE && (defined BIPHASIC_STIM || defined VOLT_MONITOR)
+  BI_IMP_DDR |= BI_IMP_BV;
+#endif
+    
+#ifdef VOLT_MONITOR
+  HalAdcInit();
+#endif
+  stopStimulate();
 }
 
 /*********************************************************************
@@ -106,10 +124,15 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
   
   if ( events & ROACHZSTACK_STIM_START )
   {
-    if (command != NULL)
+    if (command != NULL && command->repeats > 0)
     {
-      BICLK_PORT &= ~(0x1 << BICLK_PIN);
+#ifdef BIPHASIC_STIM
+      BICLK_SBIT = 0;
+#endif
       stimulate(command->direction);
+#ifdef VOLT_MONITOR
+      measureVoltage();
+#endif
       command->repeats--;
       osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_STOP, command->posOn); 
     }
@@ -118,12 +141,17 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
   
   if ( events & ROACHZSTACK_STIM_STOP )
   {
+#ifdef VOLT_MONITOR
+    measureVoltage();
+#endif
     stopStimulate();
+#ifdef BIPHASIC_STIM
     if (command->negOn)
     {
       osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_NSTIM_START, command->posOff);
     }
     else
+#endif
     {
       osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_NSTIM_STOP, command->posOff);
     }
@@ -136,7 +164,9 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
   {
     if (command != NULL)
     {
-      BICLK_PORT |= (0x1 << BICLK_PIN);
+#ifdef BIPHASIC_STIM
+      BICLK_SBIT = 1;
+#endif
       stimulate(command->direction);
       osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_NSTIM_STOP, command->negOn); 
     }
@@ -145,7 +175,9 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
   
   if ( events & ROACHZSTACK_NSTIM_STOP )
   {
-    BICLK_PORT &= ~(0x1 << BICLK_PIN);
+#ifdef BIPHASIC_STIM
+    BICLK_SBIT = 0;
+#endif
     stopStimulate();
     if (command != NULL && command->repeats > 0)
     {
@@ -161,44 +193,54 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
 
 static void stopStimulate(void)
 {
-  LED_PORT &= ~(0x1 << LED_PIN);
-  FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-  LEFT_PORT &= ~(0x1 << LEFT_PIN);
-  RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
+  LED_SBIT = 0;
+#ifdef FORWARD_STIM
+  FORWARD_SBIT = 0;
+#endif
+  LEFT_SBIT = 0;
+  RIGHT_SBIT = 0;
 }
 
 static void stimulate(uint8 direction)
 {
   switch (direction)
   {
-    case FORWARD:
+#ifdef FORWARD_STIM
+  case FORWARD:
       //forward
-      LED_PORT |= 0x1 << LED_PIN;
-      FORWARD_PORT |= 0x1 << FORWARD_PIN;
-      LEFT_PORT &= ~(0x1 << LEFT_PIN);
-      RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
-       break;
+      LED_SBIT = 1;
+      FORWARD_SBIT = 1;
+      LEFT_SBIT = 0;
+      RIGHT_SBIT = 0;
+      break;
+#endif
     case BACK:
        //back
-      LED_PORT |= 0x1 << LED_PIN;
-      LEFT_PORT |= 0x1 << LEFT_PIN;
-      RIGHT_PORT |= 0x1 << RIGHT_PIN;
-      FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-       break;
+      LED_SBIT = 1;
+      LEFT_SBIT = 1;
+      RIGHT_SBIT = 1;
+#ifdef FORWARD_STIM
+      FORWARD_SBIT = 0;
+#endif
+      break;
     case RIGHT:
       //right
-      LED_PORT |= 0x1 << LED_PIN;
-      RIGHT_PORT |= 0x1 << RIGHT_PIN;
-      LEFT_PORT &= ~(0x1 << LEFT_PIN);
-      FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-       break;
+      LED_SBIT = 1;
+      RIGHT_SBIT = 1;
+      LEFT_SBIT = 0;
+#ifdef FORWARD_STIM
+      FORWARD_SBIT = 0;
+#endif
+      break;
     case LEFT:
        //left
-      LED_PORT |= 0x1 << LED_PIN;
-      LEFT_PORT |= 0x1 << LEFT_PIN;
-      RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
-      FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-       break;
+      LED_SBIT = 1;
+      LEFT_SBIT = 1;
+      RIGHT_SBIT = 0;
+#ifdef FORWARD_STIM
+      FORWARD_SBIT = 0;
+#endif
+      break;
   }
 }
 
@@ -209,9 +251,25 @@ void Stimulator_SetCommand(stimCommand* data)
     osal_mem_free(command);
   }
   command = data;
+#if defined(IMPEDANCE) && (defined(BIPHASIC_STIM) || defined(VOLT_MONITOR))
+  BI_IMP_SBIT = 0;
+#endif
   osal_set_event(Stimulator_TaskID, ROACHZSTACK_STIM_START);
 }
 
+
+#ifdef VOLT_MONITOR
+void measureVoltage()
+{
+  uint16 v1 = HalAdcRead(HAL_ADC_CHN_AIN1, HAL_ADC_RESOLUTION_14);
+  uint16 v2 = HalAdcRead(HAL_ADC_CHN_AIN3, HAL_ADC_RESOLUTION_14);
+  
+  uint16 buf[2] = {v1, v2};
+  
+  RoachProfile_SetParameter(ROACHPROFILE_VOLTAGE, sizeof(buf), buf);
+  
+}
+#endif
 
 /*********************************************************************
 *********************************************************************/

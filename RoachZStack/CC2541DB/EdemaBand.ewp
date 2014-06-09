@@ -448,6 +448,7 @@
           <name>Compiler Extra Options Edit</name>
           <state>-f $PROJ_DIR$\..\..\config\buildComponents.cfg</state>
           <state>-f $PROJ_DIR$\buildConfig.cfg</state>
+          <state>-f $PROJ_DIR$\settings.cfg</state>
         </option>
         <option>
           <name>CCIncludePath2</name>
@@ -6469,7 +6470,7 @@
       <name>$PROJ_DIR$\..\Source\EdemaBand.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\Source\edemaband.h</name>
+      <name>$PROJ_DIR$\..\Source\EdemaBand.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Source\EdemaBand_Main.c</name>
@@ -6485,6 +6486,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\Source\sampler.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\spi.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Source\Stimulator.c</name>
