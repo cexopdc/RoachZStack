@@ -1,5 +1,6 @@
 
 from pylab import *
+from scipy import stats
 
 
 """ Sample application demonstrating use of pyblehci to write/read from a serial device """
@@ -12,6 +13,14 @@ import code
 import threading
 
 from connection import TIConnection
+
+Handle_StartSweep = '\x25\x00'
+Handle_SweepDone = '\x2E\x00'
+Handle_SweepDone_Notify = '\x2F\x00'
+
+Handle_SweepData1 = '\x32\x00'
+Handle_SweepData2 = '\x35\x00'
+
 
 Handle_StartFreq = '\x38\x00'
 Handle_IncFreq = '\x3E\x00'
@@ -81,7 +90,7 @@ def doSweep(mode = '\x01'):
 	print("Gain: " + gains[gain])
 
 	notify.acquire()
-	conn.GATT_WriteCharValue(handle='\x25\x00', value=mode)
+	conn.GATT_WriteCharValue(handle=Handle_StartSweep, value=mode)
 	
 	notify.wait(15)
 	if not state == STATE_RECEIVING:
@@ -90,7 +99,7 @@ def doSweep(mode = '\x01'):
 	
 	cv.acquire()
 	device.success = False
-	conn.GATT_ReadLongCharValue(handle='\x32\x00', offset='\x00\x00')
+	conn.GATT_ReadLongCharValue(handle=Handle_SweepData1, offset='\x00\x00')
 	cv.wait(4)
 	if not device.success:
 		raise Exception("Did not receive data")
@@ -98,7 +107,7 @@ def doSweep(mode = '\x01'):
 
 	cv.acquire()
 	device.success = False
-	conn.GATT_ReadLongCharValue(handle='\x35\x00', offset='\x00\x00')
+	conn.GATT_ReadLongCharValue(handle=Handle_SweepData2, offset='\x00\x00')
 	cv.wait(4)
 	if not device.success:
 		raise Exception("Did not receive data")
@@ -111,15 +120,20 @@ def calibrate(calibration_impedance, repeats = 1):
 		
 	raw_data = []
 	for i in range(0, repeats):
-		raw_data.append(1.0/abs(np.array(doSweep('\x02'))))
+		raw_data.append(abs(np.array(doSweep('\x02'))))
 
-	raw_avg = np.mean(raw_data ,0)
-	gains = calibration_impedance/raw_avg
-	device.gains = gains
+	f_axis = arange(startFreq, startFreq+incFreq*50, incFreq)
+	raw_avg = np.mean(raw_data, 0)
+	gains = 1/(calibration_impedance*raw_avg)
 
-def measure(showPlot=True, prefix="data"):
+	slope, intercept, r_value, p_value, std_err = stats.linregress(f_axis, gains)
+	device.gains = slope * f_axis + intercept
+	plot(f_axis, gains)
+	plot(f_axis, device.gains)
+
+def measure(showPlot=True, prefix=None):
 	global device, state
-	imps = 1.0/np.array(doSweep('\x02')) * np.mean(device.gains)
+	imps = 1.0/(np.array(doSweep('\x02')) * device.gains)
 
 	f_axis = arange(startFreq, startFreq+incFreq*50, incFreq)
 
@@ -138,7 +152,7 @@ def measure(showPlot=True, prefix="data"):
 
 	return(f_axis, imps)
 
-startFreq = 30000
+startFreq = 60000
 def setStart(freq):
 	if not 1000 <= freq <= 100000:
 		raise Exception("Start freq not valid")
@@ -146,7 +160,7 @@ def setStart(freq):
 	conn.GATT_WriteCharValue(handle=Handle_StartFreq, value=pack("<L", freq))
 	startFreq = freq
 
-incFreq = 1000
+incFreq = 100
 def setInc(freq):
 	global incFreq
 	conn.GATT_WriteCharValue(handle=Handle_IncFreq, value=pack("<L", freq))
@@ -158,7 +172,7 @@ RANGE_400 = 0x2
 RANGE_1000 = 0x3
 ranges = ["2000 Vpp", "200 Vpp", "400 Vpp", "1000 Vpp"]
 gains = ["X5", "X1"]
-outRange = RANGE_200
+outRange = RANGE_2000
 def setRange(val):
 	global outRange
 	if not 0 <= val <= 0x3:
@@ -217,6 +231,8 @@ def main():
 	conn = TIConnection(port=COM_port, baudrate=115200, callback=analyse_packet)
 	conn.connect("Edema_Band v0.1*V3*")
 	
+	conn.register_notification(Handle_SweepDone, Handle_SweepDone_Notify, callback=data_ready)
+
 	setStart(startFreq)
 	setInc(incFreq)
 	setRange(outRange)
