@@ -1,5 +1,5 @@
-#ifndef ROACHZSTACK_H
-#define ROACHZSTACK_H
+#ifndef STIMULATOR_H
+#define STIMULATOR_H
 
 #ifdef __cplusplus
 extern "C"
@@ -79,4 +79,4 @@ extern void Stimulator_SetCommand (stimCommand* data);
 }
 #endif
 
-#endif /* ROACHZSTACK_H */
+#endif /* STIMULATOR_H */

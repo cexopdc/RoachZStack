@@ -1,4 +1,4 @@
-#ifdef BIPHASIC
+#ifdef BIPHASIC_STIM
 
 #include "spi.h"
 #include "OnBoard.h"

@@ -1,4 +1,4 @@
-#ifdef BIPHASIC
+#ifdef BIPHASIC_STIM
 
 #ifndef SPI_H
 #define SPI_H

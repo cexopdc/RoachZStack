@@ -59,7 +59,10 @@
 #include "RoachZStack_ADC.h"
 #include "ZConfig.h"
 #include "commands.h"
+#include "stimulator.h"
+#ifdef BIPHASIC_STIM
 #include "spi.h"
+#endif
 
 /*********************************************************************
  * MACROS
@@ -68,8 +71,6 @@
 /*********************************************************************
  * CONSTANTS
  */
-
-#define MICROPHONE_ENABLED FALSE
 
 #define LEFT_PORT P1
 #define LEFT_PIN 4
@@ -203,9 +204,6 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg );
 static void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt );
 static void showMessage(afMSGCommandFormat_t data);
 
-static void stimulate(byte direction);
-static void stopStimulate(void);
-
 volatile uint8 allocCount = 0;
 volatile uint8 deallocCount = 0;
 
@@ -221,8 +219,9 @@ volatile uint8 deallocCount = 0;
  */
 void RoachZStack_Init( uint8 task_id )
 {
-  
+#ifdef BIPHASIC_STIM  
   SPI_Init();
+#endif
 
   RoachZStack_TaskID = task_id;
 
@@ -263,57 +262,6 @@ void RoachZStack_Init( uint8 task_id )
 UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
 {
   (void)task_id;  // Intentionally unreferenced parameter
-  
-  if ( events & ROACHZSTACK_STIM_START )
-  {
-    if (command != NULL)
-    {
-      BICLK_PORT &= ~(0x1 << BICLK_PIN);
-      stimulate(command->direction);
-      command->repeats--;
-      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_STIM_STOP, command->posOn); 
-    }
-    return ( events ^ ROACHZSTACK_STIM_START );
-  }
-  
-  if ( events & ROACHZSTACK_STIM_STOP )
-  {
-    stopStimulate();
-    if (command->negOn)
-    {
-      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_NSTIM_START, command->posOff);
-    }
-    else
-    {
-      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_NSTIM_STOP, command->posOff);
-    }
-    
-    return ( events ^ ROACHZSTACK_STIM_STOP );
-  }
-  
-  if ( events & ROACHZSTACK_NSTIM_START )
-  {
-    if (command != NULL)
-    {
-      BICLK_PORT |= (0x1 << BICLK_PIN);
-      stimulate(command->direction);
-      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_NSTIM_STOP, command->negOn); 
-    }
-    return ( events ^ ROACHZSTACK_NSTIM_START );
-  }
-  
-  if ( events & ROACHZSTACK_NSTIM_STOP )
-  {
-    BICLK_PORT &= ~(0x1 << BICLK_PIN);
-    stopStimulate();
-    if (command != NULL && command->repeats > 0)
-    {
-      osal_start_timerEx( RoachZStack_TaskID, ROACHZSTACK_STIM_START, command->negOff);   
-    }
-    
-    return ( events ^ ROACHZSTACK_NSTIM_STOP );
-  }
-
 
   if ( events & SYS_EVENT_MSG )
   {
@@ -383,49 +331,6 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
   return ( 0 );  // Discard unknown events.
 }
 
-static void stopStimulate(void)
-{
-  LED_PORT &= ~(0x1 << LED_PIN);
-  FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-  LEFT_PORT &= ~(0x1 << LEFT_PIN);
-  RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
-}
-
-static void stimulate(byte direction)
-{
-  switch (direction)
-  {
-    case FORWARD:
-      //forward
-      LED_PORT |= 0x1 << LED_PIN;
-      FORWARD_PORT |= 0x1 << FORWARD_PIN;
-      LEFT_PORT &= ~(0x1 << LEFT_PIN);
-      RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
-       break;
-    case BACK:
-       //back
-      LED_PORT |= 0x1 << LED_PIN;
-      LEFT_PORT |= 0x1 << LEFT_PIN;
-      RIGHT_PORT |= 0x1 << RIGHT_PIN;
-      FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-       break;
-    case RIGHT:
-      //right
-      LED_PORT |= 0x1 << LED_PIN;
-      RIGHT_PORT |= 0x1 << RIGHT_PIN;
-      LEFT_PORT &= ~(0x1 << LEFT_PIN);
-      FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-       break;
-    case LEFT:
-       //left
-      LED_PORT |= 0x1 << LED_PIN;
-      LEFT_PORT |= 0x1 << LEFT_PIN;
-      RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
-      FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
-       break;
-  }
-}
-
 /*********************************************************************
  * @fn      RoachZStack_ProcessZDOMsgs()
  *
@@ -455,8 +360,9 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
             // Light LED
             HalLedSet( HAL_LED_4, HAL_LED_MODE_ON );
             
-            if (MICROPHONE_ENABLED)
-              RegisterForADC( RoachZStack_TaskID );
+#ifdef AUDIO
+            RegisterForADC( RoachZStack_TaskID );
+#endif
           }
           osal_mem_free( pRsp );
         }
@@ -469,38 +375,29 @@ static void showMessage(afMSGCommandFormat_t data)
 {
 
   uint8 commandType  = data.Data[1];
+  
+#ifdef BIPHASIC_STIM
   uint16 r;
   uint8 val;
   uint8 buf[2];
+#endif
   switch (commandType)
   {
   case FORWARD:
   case RIGHT:
   case LEFT:
   case BACK:
-    if (command != NULL)
-    {
-      if (command->repeats > 0)
-      {
-        return;
-      }
-      else
-      {
-        osal_mem_free(command);
-        command = NULL;
-      }
-    }
     command = parseCommand(data.Data+1, data.DataLength-1);
-    HalLcdWriteValue ( command->direction, 10, HAL_LCD_LINE_1);
-    HalLcdWriteValue ( command->repeats, 10, HAL_LCD_LINE_2);
-    HalLcdWriteValue ( command->posOn, 10, HAL_LCD_LINE_3);
+    Stimulator_SetCommand(command);
     break;
   case DIGIPOT:
+#ifdef BIPHASIC_STIM
     r = data.Data[2] + (data.Data[3]<<8);
     val = (int8)(r*255.0/DIGIPOT_R);
     buf[0] = 0x13;
     buf[1] = 255-val;
     SPI_Write(2, buf);
+#endif
     break;
   }
 }

@@ -104,7 +104,8 @@ typedef enum
 
 // Must clear SI before setting STA and then STA must be manually cleared.
 #define I2C_STRT() st ( \
-  I2CCFG = (I2CCFG & ~I2C_SI) | I2C_STA; \
+  I2CCFG &= ~I2C_SI;                \
+  I2CCFG |= I2C_STA;                \
   while ((I2CCFG & I2C_SI) == 0); \
   I2CCFG &= ~I2C_STA; \
 )
@@ -151,7 +152,7 @@ static uint8 i2cAddr;  // Target Slave address pre-shifted up by one leaving RD/
 static uint8 i2cMstStrt(uint8 RD_WRn)
 {
   I2C_STRT();
-  if ( (I2CSTAT == mstStarted) || (I2CSTAT == mstRepStart) ) /* A (re)start condition has been transmitted */
+  if (I2CSTAT == mstStarted) /* A start condition has been transmitted */
   {
     I2C_WRITE(i2cAddr | RD_WRn);
   }

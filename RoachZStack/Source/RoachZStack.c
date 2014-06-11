@@ -56,7 +56,9 @@
 #include "hal_lcd.h"
 #include "hal_led.h"
 #include "hal_uart.h"
+#ifdef AUDIO
 #include "RoachZStack_ADC.h"
+#endif
 #include "ZConfig.h"
 #include "commands.h"
 

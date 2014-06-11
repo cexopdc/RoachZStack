@@ -1,3 +1,4 @@
+#ifdef AUDIO
 
 #include "RoachZStack_ADC.h"
 #include "hal_adc.h"
@@ -222,3 +223,5 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
   }
     return 0;
 }
+
+#endif

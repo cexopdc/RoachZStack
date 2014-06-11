@@ -2586,6 +2586,7 @@
           <name>Compiler Extra Options Edit</name>
           <state>-f $PROJ_DIR$\..\..\Tools\CC2530DB\f8wEndev.cfg</state>
           <state>-f $PROJ_DIR$\..\..\Tools\CC2530DB\f8wConfig.cfg</state>
+          <state>-f $PROJ_DIR$\settings.cfg</state>
         </option>
         <option>
           <name>CCIncludePath2</name>
@@ -3248,6 +3249,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\Source\spi.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\Stimulator.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Source\ZConfig.h</name>
