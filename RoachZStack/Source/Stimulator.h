@@ -41,10 +41,10 @@ extern "C"
 #define BICLK_SBIT                      P0_7
 #endif
   
-#if defined(IMPEDANCE) && (defined(BIPHASIC_STIM) || defined (VOLT_MONITOR))
+#if defined(IMPEDANCE) && (defined(BIPHASIC_STIM) || defined(VOLT_MONITOR))
 #define BI_IMP_DDR                      P1DIR
-#define BI_IMP_BV                       BV(0)
-#define BI_IMP_SBIT                     P1_0
+#define BI_IMP_BV                       BV(1)
+#define BI_IMP_SBIT                     P1_1            // Change back to P1_0 on new boards
 #endif
   
 #define BACK 1

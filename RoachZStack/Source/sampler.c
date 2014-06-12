@@ -13,7 +13,7 @@
 #include "hal_i2c.h"
 #include "AD5933.h"
 #include <math.h>
-#ifdef BIPHASIC_STIM
+#if defined BIPHASIC_STIM || defined VOLT_MONITOR
 #include "Stimulator.h"
 #endif
 
