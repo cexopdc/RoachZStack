@@ -114,8 +114,10 @@ def doSweep(mode = '\x01'):
 	cv.release()
 
 	return device.getData()
-	
-def calibrate(calibration_impedance, repeats = 1):
+
+OUTPUT_IMP = 1.0
+
+def calibrate(calibration_impedance, repeats = 1, file_name = None):
 	global device, state
 		
 	raw_data = []
@@ -124,16 +126,20 @@ def calibrate(calibration_impedance, repeats = 1):
 
 	f_axis = arange(startFreq, startFreq+incFreq*50, incFreq)
 	raw_avg = np.mean(raw_data, 0)
-	gains = 1/(calibration_impedance*raw_avg)
+	gains = 1/((calibration_impedance+OUTPUT_IMP)*raw_avg)
 
 	slope, intercept, r_value, p_value, std_err = stats.linregress(f_axis, gains)
 	device.gains = slope * f_axis + intercept
 	plot(f_axis, gains)
 	plot(f_axis, device.gains)
 
+	if not file_name is None:
+		data = transpose(raw_data)
+		savetxt(file_name, c_[f_axis, data, device.gains], delimiter=",")
+
 def measure(showPlot=True, prefix=None):
 	global device, state
-	imps = 1.0/(np.array(doSweep('\x02')) * device.gains)
+	imps = 1.0/(np.array(doSweep('\x02')) * device.gains) - OUTPUT_IMP
 
 	f_axis = arange(startFreq, startFreq+incFreq*50, incFreq)
 
@@ -190,7 +196,7 @@ def setGain(val):
 	conn.GATT_WriteCharValue(handle=Handle_Gain, value=pack("<B", val))
 	gain = val
 
-electrodes = 0x15;
+electrodes = 0x0;
 def setElectrodes(val):
 	global electrodes
 	conn.GATT_WriteCharValue(handle=Handle_Electrodes, value=pack("<B", val))
@@ -225,11 +231,27 @@ def voltage_ready(packet_dictionary):
 	voltages = [unpack("<H", x)[0] for x in dataList]
 	print(voltages)
 
+def make_calib_file_name(freq_start, prefix):
+	return "calibration/%s_%d.csv" % (prefix, freq_start)
+
+sweepStarts = range(10000, 100000, 5000)
+def doCalibration(calibration_impedance, repeats, prefix):
+	for start in sweepStarts:
+		setStart(start)
+		calibrate(calibration_impedance, repeats, make_calib_file_name(start, prefix))
+
+def doSweeps(calibration_prefix, data_prefix):
+	global device
+	for start in sweepStarts:
+		setStart(start)
+		data = loadtxt(make_calib_file_name(start, calibration_prefix),delimiter=",")
+		device.gains = data[:,-1]
+		measure(False, data_prefix)
 
 def main():
 	global conn
 	conn = TIConnection(port=COM_port, baudrate=115200, callback=analyse_packet)
-	conn.connect("Edema_Band v0.1*V3*")
+	conn.connect("Edema_Band v0.1*V3*") # Roach_Backpack_BTv1
 	
 	conn.register_notification(Handle_SweepDone, Handle_SweepDone_Notify, callback=data_ready)
 

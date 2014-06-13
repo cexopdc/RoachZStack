@@ -224,3 +224,4 @@ pip-log.txt
 *.dep
 *.hex
 *PC/*.csv
+*PC/*/*.csv
