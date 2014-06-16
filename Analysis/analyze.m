@@ -30,7 +30,6 @@ function mic_data=analyze(dataset)
     e = 98;
     mic_data(2,e) = (mic_data(2, e-1)+mic_data(2, e+1))/2;
     h2 = polar([0:points]*360/points*pi/180 - offset, mic_data(2,:),'r');
-    
     h3 = polar([0:points]*360/points*pi/180 - offset, mic_data(3,:),'g');
     
     set(h1, 'Color', [2, 105, 214] ./ 255);
