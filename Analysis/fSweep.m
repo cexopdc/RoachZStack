@@ -5,9 +5,9 @@ function fSweep()
     catch
     end
     close all;
-
+    pause(10);
     sampleSize = 1;
-    plotSamples = 100;
+    plotSamples = 2500;
     readSamples = 42;
     channels = 3;
     sampleRate = 1.25; % kHz
@@ -60,23 +60,26 @@ function fSweep()
     angles = [];
     
     INC = 1.8;
-    STEP_SIZE_FACTOR = 1;
+    STEP_SIZE_FACTOR = 2;
     STEP_SIZE = INC * STEP_SIZE_FACTOR;
     NUM_STEPS = 360 / STEP_SIZE;
     for i=1:NUM_STEPS
         for j=1:STEP_SIZE_FACTOR
             putvalue(dio,[1,1]); %[x,y] x is direction y is the step
             putvalue(dio,[1,0]);
+            
+            pause(0.01);
         end
-        disp('step')
+        pause(1.5);
+        disp('step');
         disp(i*STEP_SIZE);
         pause(plotSamples / sampleRate / 1000);
         angles = cat(3, angles, plotBuffer);
     end
     assignin('caller', 'angles', angles);
-    return
     
     fclose(port);
+    analyze(angles);
 end
 function serial_callback(obj,event)
     global port plotBuffer channels drawCounter readSamples sampleSize recording

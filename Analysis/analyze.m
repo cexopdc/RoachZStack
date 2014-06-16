@@ -21,10 +21,10 @@ function mic_data=analyze(dataset)
     end
     figure;
     
-    polar([0:points-1]*360/points*pi/180, mic_data(3,:));
+    polar([0:points-1]*360/points*pi/180, mic_data(2,:));
     hold on;
     
-    polar([0:points-1]*360/points*pi/180, mic_data(2,:),'r');
+    polar([0:points-1]*360/points*pi/180, mic_data(3,:),'r');
     
     polar([0:points-1]*360/points*pi/180, mic_data(1,:),'g');
 end
