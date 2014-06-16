@@ -1,0 +1,3 @@
+[submodule "PC/pyblehci"]
+	path = PC/pyblehci
+	url = git@github.com:ewhitmire/pyblehci.git

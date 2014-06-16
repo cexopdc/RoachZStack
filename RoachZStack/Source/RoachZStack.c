@@ -56,7 +56,9 @@
 #include "hal_lcd.h"
 #include "hal_led.h"
 #include "hal_uart.h"
+#ifdef AUDIO
 #include "RoachZStack_ADC.h"
+#endif
 #include "ZConfig.h"
 #include "commands.h"
 
@@ -491,7 +493,7 @@ static void showMessage(void)
   stimCommand* cmd = parseCommand(RoachZStack_TxBuf+1, RoachZStack_TxLen);
   HalLcdWriteValue ( cmd->direction, 10, HAL_LCD_LINE_1);
   HalLcdWriteValue ( cmd->repeats, 10, HAL_LCD_LINE_2);
-  HalLcdWriteValue ( cmd->duration, 10, HAL_LCD_LINE_3);
+  HalLcdWriteValue ( cmd->posOn, 10, HAL_LCD_LINE_3);
   osal_mem_free(cmd);
 }
 

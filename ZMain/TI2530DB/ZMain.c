@@ -83,7 +83,7 @@ int main( void )
 
   // Initialization for board related stuff such as LEDs
   HAL_BOARD_INIT();
-
+  
   // Make sure supply voltage is high enough to run
   zmain_vdd_check();
 

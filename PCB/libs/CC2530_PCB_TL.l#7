@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE eagle SYSTEM "eagle.dtd">
+<eagle version="6.5.0">
+<drawing>
+<settings>
+<setting alwaysvectorfont="no"/>
+<setting verticaltext="up"/>
+</settings>
+<grid distance="0.5" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<layers>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
+<layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
+<layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
+<layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
+<layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
+<layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="93" name="Pins" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="94" name="Symbols" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="95" name="Names" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="96" name="Values" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
+</layers>
+<library>
+<description>Generated from &lt;b&gt;CC2530_PreAmp_PCB_FMN_New.sch&lt;/b&gt;&lt;p&gt;
+by exp-lbrs.ulp</description>
+<packages>
+<package name="0201">
+<description>Package / Case 0201 (0603 Metric):
+15pF/20pF/0.1uF/0.47uF Cer Cap,
+56k/499k Thick Film Res</description>
+<smd name="1" x="-0.3" y="-0.0008" dx="0.3" dy="0.2032" layer="1" rot="R90"/>
+<smd name="2" x="0.3" y="-0.0008" dx="0.3" dy="0.2032" layer="1" rot="R90"/>
+<text x="0" y="0.254" size="0.254" layer="27" font="vector" align="center">&gt;VALUE</text>
+<text x="0" y="0.635" size="0.254" layer="25" font="vector" align="center">&gt;NAME</text>
+</package>
+<package name="0402">
+<description>Package / Case 0402 (1005 Metric):
+10uF Cer Cap,
+0k/1k Thick Film Res,
+2k/75k/100k Thin Film Res</description>
+<smd name="1" x="-0.45" y="0.0008" dx="0.5" dy="0.3" layer="1" rot="R90"/>
+<smd name="2" x="0.45" y="0.0008" dx="0.5" dy="0.3" layer="1" rot="R90"/>
+<text x="0" y="0.381" size="0.254" layer="27" font="vector" align="center">&gt;VALUE</text>
+<text x="0" y="0.762" size="0.254" layer="25" font="vector" align="center">&gt;NAME</text>
+</package>
+<package name="0402_CAP">
+<smd name="1" x="-0.4754" y="0.0008" dx="0.5334" dy="0.3302" layer="1" rot="R90"/>
+<smd name="2" x="0.5008" y="0.0008" dx="0.5334" dy="0.3302" layer="1" rot="R90"/>
+<text x="0" y="0.762" size="0.254" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="0.508" size="0.254" layer="27" font="vector" align="center">&gt;VALUE</text>
+</package>
+<package name="0603">
+<description>Package / Case 0603 (1608 Metric): Needs revision
+LED,
+1uF/2.2uF/10uF Tant Cap,
+0k Thick Film Res
+174k Thin Film Res</description>
+<smd name="1" x="-0.7508" y="0" dx="0.6" dy="0.8" layer="1" rot="R90"/>
+<smd name="2" x="0.7492" y="0" dx="0.6" dy="0.8" layer="1" rot="R90"/>
+</package>
+<package name="FFC4POS">
+<description>FFC Connector 4POS</description>
+<wire x1="-3.41" y1="1.99" x2="-0.41" y2="1.99" width="0.127" layer="21"/>
+<wire x1="-0.41" y1="1.99" x2="-0.41" y2="-2.01" width="0.127" layer="21"/>
+<wire x1="-0.41" y1="-2.01" x2="-3.41" y2="-2.01" width="0.127" layer="21"/>
+<wire x1="-3.41" y1="-2.01" x2="-3.41" y2="1.99" width="0.127" layer="21"/>
+<smd name="1" x="0.039859375" y="0.7418" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="2" x="0.039859375" y="0.2418" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="3" x="0.039859375" y="-0.2582" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="4" x="0.039859375" y="-0.7582" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="P$5" x="-2.46" y="1.94" dx="0.8" dy="0.8" layer="1"/>
+<smd name="P$6" x="-2.46" y="-1.96" dx="0.8" dy="0.8" layer="1"/>
+</package>
+<package name="FFC10POS">
+<description>FFC Connector 10POS</description>
+<wire x1="-3.45" y1="3.5" x2="-0.45" y2="3.5" width="0.127" layer="21"/>
+<wire x1="-0.45" y1="3.5" x2="-0.45" y2="-3.5" width="0.127" layer="21"/>
+<wire x1="-0.45" y1="-3.5" x2="-3.45" y2="-3.5" width="0.127" layer="21"/>
+<wire x1="-3.45" y1="-3.5" x2="-3.45" y2="3.5" width="0.127" layer="21"/>
+<smd name="1" x="-0.015090625" y="2.2707" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="2" x="-0.015090625" y="1.7707" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="3" x="-0.015090625" y="1.2707" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="4" x="-0.015090625" y="0.7707" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="5" x="-0.015090625" y="0.2707" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="6" x="-0.015090625" y="-0.2293" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="7" x="-0.015090625" y="-0.7293" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="8" x="-0.015090625" y="-1.2293" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="9" x="-0.015090625" y="-1.7293" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="10" x="-0.015090625" y="-2.2293" dx="0.254" dy="0.762" layer="1" rot="R90"/>
+<smd name="P$11" x="-2.52" y="3.47" dx="0.8" dy="0.8" layer="1"/>
+<smd name="P$12" x="-2.52" y="-3.43" dx="0.8" dy="0.8" layer="1"/>
+</package>
+<package name="FMN4POS">
+<wire x1="-3" y1="1.6" x2="3" y2="1.6" width="0.127" layer="21"/>
+<wire x1="3" y1="1.6" x2="3" y2="-1.4" width="0.127" layer="21"/>
+<wire x1="3" y1="-1.4" x2="-3" y2="-1.4" width="0.127" layer="21"/>
+<wire x1="-3" y1="-1.4" x2="-3" y2="1.6" width="0.127" layer="21"/>
+<rectangle x1="-3.3" y1="0.9" x2="-2.3" y2="1.9" layer="1"/>
+<rectangle x1="2.3" y1="0.9" x2="3.3" y2="1.9" layer="1"/>
+<smd name="1" x="-1.5" y="-1.975" dx="0.4" dy="1" layer="1"/>
+<smd name="2" x="-0.5" y="-1.975" dx="0.4" dy="1" layer="1"/>
+<smd name="3" x="0.5" y="-1.975" dx="0.4" dy="1" layer="1"/>
+<smd name="4" x="1.5" y="-1.975" dx="0.4" dy="1" layer="1"/>
+</package>
+<package name="REGULATOR">
+<description>IC REG LDO 3V 50MA SOT23-5
+TPS76030DBVT</description>
+<wire x1="-1.51" y1="-0.88" x2="1.54" y2="-0.88" width="0.127" layer="21"/>
+<wire x1="1.54" y1="-0.88" x2="1.54" y2="0.87" width="0.127" layer="21"/>
+<wire x1="1.54" y1="0.87" x2="-1.51" y2="0.87" width="0.127" layer="21"/>
+<wire x1="-1.51" y1="0.87" x2="-1.51" y2="-0.88" width="0.127" layer="21"/>
+<smd name="1" x="0.94" y="1.275" dx="0.5" dy="0.8" layer="1"/>
+<smd name="2" x="0" y="1.275" dx="0.5" dy="0.8" layer="1"/>
+<smd name="3" x="-0.95" y="1.275" dx="0.5" dy="0.8" layer="1"/>
+<smd name="4" x="-0.95" y="-1.275" dx="0.5" dy="0.8" layer="1"/>
+<smd name="5" x="0.95" y="-1.275" dx="0.5" dy="0.8" layer="1"/>
+</package>
+<package name="SSM2167">
+<description>Audio PreAmp SSM2167-1RMZ-R7</description>
+<circle x="-1.2" y="1" radius="0.05" width="0.1" layer="21"/>
+<smd name="AVG_CAP" x="2" y="-1" dx="0.2" dy="1" layer="1" rot="R90"/>
+<smd name="BUF_OUT" x="-2" y="-0.5" dx="0.2" dy="1" layer="1" rot="R90"/>
+<smd name="COMP_RATIO" x="2" y="0" dx="0.2" dy="1" layer="1" rot="R90"/>
+<smd name="GATE_THRS" x="2" y="-0.5" dx="0.2" dy="1" layer="1" rot="R90"/>
+<smd name="GND" x="-2" y="1" dx="0.2" dy="1" layer="1" rot="R90"/>
+<smd name="INPUT" x="-2" y="-1" dx="0.2" dy="1" layer="1" rot="R90"/>
+<smd name="OUTPUT" x="2" y="0.5" dx="0.2" dy="1" layer="1" rot="R90"/>
+<smd name="SHUTDOWN_BAR" x="-2" y="0" dx="0.2" dy="1" layer="1" rot="R90"/>
+<smd name="VCA_IN" x="-2" y="0.5" dx="0.2" dy="1" layer="1" rot="R90"/>
+<smd name="VDD" x="2" y="1" dx="0.2" dy="1" layer="1" rot="R90"/>
+<wire x1="-1.5" y1="1" x2="-1.5" y2="-1" width="0.127" layer="21"/>
+<wire x1="-1.5" y1="-1" x2="1.5" y2="-1" width="0.127" layer="21"/>
+<wire x1="1.5" y1="-1" x2="1.5" y2="1" width="0.127" layer="21"/>
+<wire x1="1.5" y1="1" x2="-1.5" y2="1" width="0.127" layer="21"/>
+</package>
+<package name="SWITCH_MANUAL">
+<smd name="1" x="-4.130040625" y="0" dx="1.524" dy="1.016" layer="1"/>
+<smd name="2" x="3.81" y="0" dx="1.524" dy="1.016" layer="1"/>
+</package>
+<package name="TLV2764">
+<circle x="-1.1" y="3.83" radius="0.1" width="0.2" layer="21"/>
+<smd name="1IN+" x="-2" y="1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="1IN-" x="-2" y="2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="1OUT" x="-2" y="3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="2IN+" x="-2" y="-1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="2IN-" x="-2" y="-2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="2OUT" x="-2" y="-3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="3IN+" x="2" y="-1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="3IN-" x="2" y="-2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="3OUT" x="2" y="-3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="4IN+" x="2" y="1.27" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="4IN-" x="2" y="2.54" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="4OUT" x="2" y="3.81" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="GND" x="2" y="0" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+<smd name="VDD" x="-2" y="0" dx="0.5" dy="1.25" layer="1" rot="R90"/>
+</package>
+</packages>
+<symbols>
+<symbol name="C">
+<wire x1="-1.27" y1="2.54" x2="-1.27" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="1.27" y1="2.54" x2="1.27" y2="-2.54" width="0.254" layer="94"/>
+<pin name="1" x="-6.35" y="0" length="middle"/>
+<pin name="2" x="6.35" y="0" length="middle" rot="R180"/>
+<text x="0" y="3.81" size="1.778" layer="95" align="center">&gt;NAME</text>
+<text x="0" y="-3.556" size="1.778" layer="96" align="center">&gt;VALUE</text>
+</symbol>
+<symbol name="FFC4POS">
+<description>FFC Connector 4POS</description>
+<rectangle x1="-10.16" y1="7.62" x2="-7.62" y2="10.16" layer="94"/>
+<rectangle x1="-10.16" y1="-10.16" x2="-7.62" y2="-7.62" layer="94"/>
+<pin name="1" x="2.54" y="-7.62" length="middle" rot="R180"/>
+<pin name="2" x="2.54" y="-2.54" length="middle" rot="R180"/>
+<pin name="3" x="2.54" y="2.54" length="middle" rot="R180"/>
+<pin name="4" x="2.54" y="7.62" length="middle" rot="R180"/>
+</symbol>
+<symbol name="FFC10POS">
+<description>FFC Connector 10POS</description>
+<pin name="1" x="-2.54" y="22.86" length="middle"/>
+<pin name="2" x="-2.54" y="17.78" length="middle"/>
+<pin name="3" x="-2.54" y="12.7" length="middle"/>
+<pin name="4" x="-2.54" y="7.62" length="middle"/>
+<pin name="5" x="-2.54" y="2.54" length="middle"/>
+<pin name="6" x="-2.54" y="-2.54" length="middle"/>
+<pin name="7" x="-2.54" y="-7.62" length="middle"/>
+<pin name="8" x="-2.54" y="-12.7" length="middle"/>
+<pin name="9" x="-2.54" y="-17.78" length="middle"/>
+<pin name="10" x="-2.54" y="-22.86" length="middle"/>
+</symbol>
+<symbol name="R">
+<description>Package / Case 0402 (1005 Metric)</description>
+<wire x1="-3.048" y1="-1.016" x2="-3.556" y2="0" width="0.1524" layer="94"/>
+<wire x1="-3.048" y1="-1.016" x2="-2.032" y2="1.016" width="0.1524" layer="94"/>
+<wire x1="-2.032" y1="1.016" x2="-1.016" y2="-1.016" width="0.1524" layer="94"/>
+<wire x1="-1.016" y1="-1.016" x2="0" y2="1.016" width="0.1524" layer="94"/>
+<wire x1="0" y1="1.016" x2="1.016" y2="-1.016" width="0.1524" layer="94"/>
+<wire x1="1.016" y1="-1.016" x2="2.032" y2="1.016" width="0.1524" layer="94"/>
+<wire x1="3.048" y1="-1.016" x2="2.032" y2="1.016" width="0.1524" layer="94"/>
+<wire x1="3.048" y1="-1.016" x2="3.556" y2="0" width="0.1524" layer="94"/>
+<wire x1="-5.08" y1="0" x2="-3.556" y2="0" width="0.1524" layer="94"/>
+<wire x1="5.08" y1="0" x2="3.556" y2="0" width="0.1524" layer="94"/>
+<pin name="1" x="-10.16" y="0" length="middle"/>
+<pin name="2" x="10.16" y="0" length="middle" rot="R180"/>
+<text x="0" y="-2.032" size="1.778" layer="96" align="center">&gt;VALUE</text>
+<text x="0" y="2.032" size="1.778" layer="95" align="center">&gt;NAME</text>
+</symbol>
+<symbol name="REGULATOR">
+<description>IC REG LDO 3V 50MA SOT23-5
+TPS76030DBVT</description>
+<wire x1="-7.62" y1="10.16" x2="7.62" y2="10.16" width="0.254" layer="94"/>
+<wire x1="7.62" y1="10.16" x2="7.62" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-10.16" x2="-7.62" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="-10.16" x2="-7.62" y2="10.16" width="0.254" layer="94"/>
+<pin name="1_IN" x="5.08" y="15.24" length="middle" rot="R270"/>
+<pin name="2_GND" x="0" y="15.24" length="middle" direction="pwr" rot="R270"/>
+<pin name="3_EN" x="-5.08" y="15.24" length="middle" rot="R270"/>
+<pin name="4_NC" x="-5.08" y="-15.24" length="middle" direction="nc" rot="R90"/>
+<pin name="5_OUT" x="5.08" y="-15.24" length="middle" rot="R90"/>
+</symbol>
+<symbol name="SSM2167">
+<description>Audio PreAmp SSM2167-1RMZ-R7</description>
+<wire x1="-20.32" y1="7.62" x2="-20.32" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="-20.32" y1="-7.62" x2="20.32" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="20.32" y1="-7.62" x2="20.32" y2="7.62" width="0.254" layer="94"/>
+<wire x1="20.32" y1="7.62" x2="-20.32" y2="7.62" width="0.254" layer="94"/>
+<pin name="AVG_CAP" x="25.4" y="-5.08" length="middle" rot="R180"/>
+<pin name="BUF_OUT" x="-25.4" y="-2.54" length="middle"/>
+<pin name="COMP_RATIO" x="25.4" y="0" length="middle" rot="R180"/>
+<pin name="GATE_THRS" x="25.4" y="-2.54" length="middle" rot="R180"/>
+<pin name="GND" x="-25.4" y="5.08" length="middle" direction="pwr"/>
+<pin name="INPUT" x="-25.4" y="-5.08" length="middle"/>
+<pin name="OUTPUT" x="25.4" y="2.54" length="middle" rot="R180"/>
+<pin name="SHUTDOWN_BAR" x="-25.4" y="0" length="middle"/>
+<pin name="VCA_IN" x="-25.4" y="2.54" length="middle"/>
+<pin name="VDD" x="25.4" y="5.08" length="middle" direction="pwr" rot="R180"/>
+</symbol>
+<symbol name="SWITCH_MANUAL">
+<circle x="0" y="7.62" radius="0.567959375" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="-2.54" x2="5.08" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="5.08" y1="-2.54" x2="5.08" y2="2.54" width="0.254" layer="94"/>
+<wire x1="5.08" y1="2.54" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="-5.08" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="2.54" x2="-5.08" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="0" y2="7.62" width="0.254" layer="94"/>
+<pin name="1" x="-10.16" y="0" length="middle"/>
+<pin name="2" x="10.16" y="0" length="middle" rot="R180"/>
+</symbol>
+<symbol name="TLV2764">
+<wire x1="-10.16" y1="10.16" x2="-10.16" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-10.16" x2="10.16" y2="10.16" width="0.254" layer="94"/>
+<wire x1="10.16" y1="10.16" x2="-10.16" y2="10.16" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-10.16" x2="10.16" y2="-10.16" width="0.254" layer="94"/>
+<pin name="1IN+" x="-15.24" y="2.54" length="middle" direction="in"/>
+<pin name="1IN-" x="-15.24" y="5.08" length="middle" direction="in"/>
+<pin name="1OUT" x="-15.24" y="7.62" length="middle" direction="out"/>
+<pin name="2IN+" x="-15.24" y="-2.54" length="middle" direction="in"/>
+<pin name="2IN-" x="-15.24" y="-5.08" length="middle" direction="in"/>
+<pin name="2OUT" x="-15.24" y="-7.62" length="middle" direction="out"/>
+<pin name="3IN+" x="15.24" y="-2.54" length="middle" direction="in" rot="R180"/>
+<pin name="3IN-" x="15.24" y="-5.08" length="middle" direction="in" rot="R180"/>
+<pin name="3OUT" x="15.24" y="-7.62" length="middle" direction="out" rot="R180"/>
+<pin name="4IN+" x="15.24" y="2.54" length="middle" direction="in" rot="R180"/>
+<pin name="4IN-" x="15.24" y="5.08" length="middle" direction="in" rot="R180"/>
+<pin name="4OUT" x="15.24" y="7.62" length="middle" direction="out" rot="R180"/>
+<pin name="GND" x="15.24" y="0" length="middle" direction="pwr" rot="R180"/>
+<pin name="VDD" x="-15.24" y="0" length="middle" direction="pwr"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="C" prefix="C" uservalue="yes">
+<gates>
+<gate name="C" symbol="C" x="0" y="0"/>
+</gates>
+<devices>
+<device name="0201" package="0201">
+<connects>
+<connect gate="C" pin="1" pad="1"/>
+<connect gate="C" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="0402" package="0402">
+<connects>
+<connect gate="C" pin="1" pad="1"/>
+<connect gate="C" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="0402_CAP" package="0402_CAP">
+<connects>
+<connect gate="C" pin="1" pad="1"/>
+<connect gate="C" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="0603" package="0603">
+<connects>
+<connect gate="C" pin="1" pad="1"/>
+<connect gate="C" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="FFC4POS">
+<description>FFC COnnector 4POS</description>
+<gates>
+<gate name="G$1" symbol="FFC4POS" x="10.16" y="-10.16"/>
+</gates>
+<devices>
+<device name="" package="FFC4POS">
+<connects>
+<connect gate="G$1" pin="1" pad="4"/>
+<connect gate="G$1" pin="2" pad="3"/>
+<connect gate="G$1" pin="3" pad="2"/>
+<connect gate="G$1" pin="4" pad="1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="FFC10POS">
+<description>FFC Connector 10POS</description>
+<gates>
+<gate name="G$1" symbol="FFC10POS" x="12.7" y="-2.54"/>
+</gates>
+<devices>
+<device name="" package="FFC10POS">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="10" pad="10"/>
+<connect gate="G$1" pin="2" pad="2"/>
+<connect gate="G$1" pin="3" pad="3"/>
+<connect gate="G$1" pin="4" pad="4"/>
+<connect gate="G$1" pin="5" pad="5"/>
+<connect gate="G$1" pin="6" pad="6"/>
+<connect gate="G$1" pin="7" pad="7"/>
+<connect gate="G$1" pin="8" pad="8"/>
+<connect gate="G$1" pin="9" pad="9"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="FMN4POS">
+<gates>
+<gate name="G$1" symbol="FFC4POS" x="10.16" y="-10.16"/>
+</gates>
+<devices>
+<device name="" package="FMN4POS">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+<connect gate="G$1" pin="3" pad="3"/>
+<connect gate="G$1" pin="4" pad="4"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="R" prefix="R" uservalue="yes">
+<description>Package / Case 0402 (1005 Metric)</description>
+<gates>
+<gate name="R" symbol="R" x="0" y="0"/>
+</gates>
+<devices>
+<device name="0201" package="0201">
+<connects>
+<connect gate="R" pin="1" pad="1"/>
+<connect gate="R" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="0402" package="0402">
+<connects>
+<connect gate="R" pin="1" pad="1"/>
+<connect gate="R" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="VALUE" value="" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="REGULATOR">
+<description>IC REG LDO 3V 50MA SOT23-5
+TPS76030DBVT</description>
+<gates>
+<gate name="G$1" symbol="REGULATOR" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="REGULATOR">
+<connects>
+<connect gate="G$1" pin="1_IN" pad="1"/>
+<connect gate="G$1" pin="2_GND" pad="2"/>
+<connect gate="G$1" pin="3_EN" pad="3"/>
+<connect gate="G$1" pin="4_NC" pad="4"/>
+<connect gate="G$1" pin="5_OUT" pad="5"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="SSM2167">
+<gates>
+<gate name="G$1" symbol="SSM2167" x="-20.32" y="0"/>
+</gates>
+<devices>
+<device name="" package="SSM2167">
+<connects>
+<connect gate="G$1" pin="AVG_CAP" pad="AVG_CAP"/>
+<connect gate="G$1" pin="BUF_OUT" pad="BUF_OUT"/>
+<connect gate="G$1" pin="COMP_RATIO" pad="COMP_RATIO"/>
+<connect gate="G$1" pin="GATE_THRS" pad="GATE_THRS"/>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="INPUT" pad="INPUT"/>
+<connect gate="G$1" pin="OUTPUT" pad="OUTPUT"/>
+<connect gate="G$1" pin="SHUTDOWN_BAR" pad="SHUTDOWN_BAR"/>
+<connect gate="G$1" pin="VCA_IN" pad="VCA_IN"/>
+<connect gate="G$1" pin="VDD" pad="VDD"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="SWITCH_MANUAL">
+<gates>
+<gate name="G$1" symbol="SWITCH_MANUAL" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SWITCH_MANUAL">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="TLV2764">
+<gates>
+<gate name="G$1" symbol="TLV2764" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="TLV2764">
+<connects>
+<connect gate="G$1" pin="1IN+" pad="1IN+"/>
+<connect gate="G$1" pin="1IN-" pad="1IN-"/>
+<connect gate="G$1" pin="1OUT" pad="1OUT"/>
+<connect gate="G$1" pin="2IN+" pad="2IN+"/>
+<connect gate="G$1" pin="2IN-" pad="2IN-"/>
+<connect gate="G$1" pin="2OUT" pad="2OUT"/>
+<connect gate="G$1" pin="3IN+" pad="3IN+"/>
+<connect gate="G$1" pin="3IN-" pad="3IN-"/>
+<connect gate="G$1" pin="3OUT" pad="3OUT"/>
+<connect gate="G$1" pin="4IN+" pad="4IN+"/>
+<connect gate="G$1" pin="4IN-" pad="4IN-"/>
+<connect gate="G$1" pin="4OUT" pad="4OUT"/>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="VDD" pad="VDD"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+</drawing>
+</eagle>

@@ -37,6 +37,8 @@
   contact Texas Instruments Incorporated at www.TI.com. 
 **************************************************************************************************/
 
+#ifdef AUDIO
+
 #ifndef ROACHZSTACK_ADC_H
 #define ROACHZSTACK_ADC_H
 
@@ -93,3 +95,5 @@ extern UINT16 RoachZStack_ADC( byte task_id, UINT16 events );
 #endif
 
 #endif /* ROACHZSTACK_H */
+
+#endif

@@ -2423,6 +2423,7 @@
           <state>HAL_LCD=FALSE</state>
           <state>HAL_AES=FALSE</state>
           <state>HAL_KEY=FALSE</state>
+          <state>OSC32K_CRYSTAL_INSTALLED=FALSE</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -2585,6 +2586,7 @@
           <name>Compiler Extra Options Edit</name>
           <state>-f $PROJ_DIR$\..\..\Tools\CC2530DB\f8wEndev.cfg</state>
           <state>-f $PROJ_DIR$\..\..\Tools\CC2530DB\f8wConfig.cfg</state>
+          <state>-f $PROJ_DIR$\settings.cfg</state>
         </option>
         <option>
           <name>CCIncludePath2</name>
@@ -3241,6 +3243,15 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\Source\RoachZStack_Endpoint.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\spi.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\spi.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\Stimulator.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Source\ZConfig.h</name>

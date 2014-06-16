@@ -64,6 +64,7 @@
 
 #include "RoachZStack.h"
 #include "RoachZStack_ADC.h"
+#include "Stimulator.h"
 
 
 /*********************************************************************
@@ -87,7 +88,10 @@ const pTaskEventHandlerFn tasksArr[] = {
   ZDNwkMgr_event_loop,
 #endif
   RoachZStack_ProcessEvent,
-  RoachZStack_ADC
+#ifdef AUDIO
+  RoachZStack_ADC,
+#endif
+  Stimulator_ProcessEvent,
 };
 
 const uint8 tasksCnt = sizeof( tasksArr ) / sizeof( tasksArr[0] );
@@ -128,7 +132,10 @@ void osalInitTasks( void )
   ZDNwkMgr_Init( taskID++ );
 #endif
   RoachZStack_Init( taskID++ );
-  RoachZStack_ADC_Init( taskID );
+#ifdef AUDIO
+  RoachZStack_ADC_Init( taskID++ );
+#endif
+  Stimulator_Init(taskID);
 }
 
 /*********************************************************************
