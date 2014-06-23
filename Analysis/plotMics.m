@@ -85,12 +85,12 @@ function plotMics(portString, handles)
             break;
         end
         if calib_flag==1
-            dc_calib = min(plotBuffer, [], 2);
+            dc_calib = prctile(plotBuffer, 5, 2);
             plotBuffer_zero = plotBuffer;
             for channel = 1:channels
                plotBuffer_zero(channel,:) =  plotBuffer_zero(channel,:) - dc_calib(channel);
             end
-            maxes = max(plotBuffer_zero, [], 2);
+            maxes = prctile(plotBuffer_zero, 95, 2);
             max_max = max(maxes);
             scale_calib = max_max ./ maxes;
             calib_flag = 0;
