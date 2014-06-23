@@ -22,7 +22,7 @@ function varargout = streamer(varargin)
 
 % Edit the above text to modify the response to help streamer
 
-% Last Modified by GUIDE v2.5 23-Jun-2014 12:03:29
+% Last Modified by GUIDE v2.5 23-Jun-2014 12:18:30
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -162,3 +162,12 @@ function streamer_ButtonDownFcn(hObject, eventdata, handles)
 % hObject    handle to streamer (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in calibrate.
+function calibrate_Callback(hObject, eventdata, handles)
+% hObject    handle to calibrate (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global calib_flag
+calib_flag = 1;

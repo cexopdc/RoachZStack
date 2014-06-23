@@ -1,8 +1,9 @@
 function plotMics(portString, handles)
      
-    global port output_socket plotBuffer readSamples channels drawCounter sampleSize recording avgData dir windowSize frames close_flag
+    global port output_socket plotBuffer readSamples channels drawCounter sampleSize recording avgData dir windowSize frames close_flag calib_flag dc_calib scale_calib
     %close all; 
     close_flag = 0;
+    calib_flag = 0;
     %cleanupObj = onCleanup(@cleanup);
     
     
@@ -16,7 +17,7 @@ function plotMics(portString, handles)
     readSamples = 42;
     channels = 3;
     sampleRate = 1.25; % kHz
-    scale = 1.4;
+    scale = 128;
     recording = zeros(channels, 0);
     avgData = zeros(channels, plotSamples);
     dir = zeros(1, plotSamples);
@@ -75,17 +76,29 @@ function plotMics(portString, handles)
     fwrite(port, '*')
     
  
+    dc_calib = zeros(channels, 1);
+    scale_calib = ones(channels, 1);
     
     while (1)
         pause(0.01);
         if close_flag==1
             break;
         end
-        close_flag
+        if calib_flag==1
+            dc_calib = min(plotBuffer, [], 2);
+            plotBuffer_zero = plotBuffer;
+            for channel = 1:channels
+               plotBuffer_zero(channel,:) =  plotBuffer_zero(channel,:) - dc_calib(channel);
+            end
+            maxes = max(plotBuffer_zero, [], 2);
+            max_max = max(maxes);
+            scale_calib = max_max ./ maxes;
+            calib_flag = 0;
+        end
         %if drawCounter >= plotSamples/20
             for channel = 1:channels
-                set(hAxes(channel),'YLim', [-scale, scale]);
-                set(hPlots(channel),'ydata',plotBuffer(channel,:).*scale ./ 2^(8*sampleSize-1) * 2);
+                set(hAxes(channel),'YLim', [0, scale]);
+                set(hPlots(channel),'ydata',(plotBuffer(channel,:) - dc_calib(channel)) * scale_calib(channel));
                 
                 set(hAxes2(channel),'YLim', [-scale, scale]);
                 set(hPlots2(channel),'ydata',avgData(channel,:).*scale ./ 2^(8*sampleSize-1) * 2);
@@ -142,13 +155,16 @@ function plotMics(portString, handles)
 end
 
 function fillFrame(newData)
-    global frames currentFrame windowSize
-    
+    global frames currentFrame windowSize channels dc_calib scale_calib
+    newData_calib = newData;
+    for channel = 1:channels
+       newData_calib(channel,:) =  (newData_calib(channel,:) - dc_calib(channel)) * scale_calib(channel);
+    end
     if (size(currentFrame, 2)<windowSize)
-        if (windowSize-size(currentFrame, 2) > size(newData, 2))
-            currentFrame = [currentFrame newData];
+        if (windowSize-size(currentFrame, 2) > size(newData_calib, 2))
+            currentFrame = [currentFrame newData_calib];
         else
-            currentFrame = [currentFrame newData(:, 1:windowSize-size(currentFrame, 2))];
+            currentFrame = [currentFrame newData_calib(:, 1:windowSize-size(currentFrame, 2))];
             frames = cat(3, frames, [currentFrame]);
             currentFrame = [];
         end
@@ -159,7 +175,7 @@ end
 
 function serial_callback(obj,event)
     global port plotBuffer channels drawCounter readSamples sampleSize recording avgData dir
-    newData = fread(port, readSamples/sampleSize, ['int',num2str(8*sampleSize)])'-64;
+    newData = fread(port, readSamples/sampleSize, ['int',num2str(8*sampleSize)])';
     length(newData);
     if (length(newData) > 0)
         newData = reshape(newData, channels, length(newData)/channels);
