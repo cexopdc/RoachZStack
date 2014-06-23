@@ -1,7 +1,8 @@
-function plotMics()
+function plotMics(portString, handles)
      
-    global port output_socket plotBuffer readSamples channels drawCounter sampleSize recording avgData dir windowSize frames
-    close all;    
+    global port output_socket plotBuffer readSamples channels drawCounter sampleSize recording avgData dir windowSize frames close_flag
+    %close all; 
+    close_flag = 0;
     %cleanupObj = onCleanup(@cleanup);
     
     
@@ -26,7 +27,7 @@ function plotMics()
 
     fRange = (0:windowSize-1)*sampleRate*1000/windowSize;%/(sampleRate * 1000);
 
-    port = serial('COM21','BaudRate',115200)%, 'FlowControl', 'hardware');
+    port = serial(portString,'BaudRate',115200)%, 'FlowControl', 'hardware');
     port.BytesAvailableFcnCount = readSamples;
     port.BytesAvailableFcnMode = 'byte';
     port.BytesAvailableFcn = @serial_callback;
@@ -34,16 +35,6 @@ function plotMics()
     closeFID = onCleanup(@() fclose(port));
 
 
-    % signal = [255, 255, 255, 255, 255, 255];
-    % buffer = zeros(1, length(signal));
-    % while (1)
-    %     data = fread(port, 1, 'uint8')';
-    %     buffer = [data(1), buffer(1:end-1)]
-    %     if signal==buffer
-    %         break;
-    %     end
-    % end
-    figure; hold on;
     dataSize = 93;
     data = zeros(channels,dataSize);
     hAxes = zeros(1, channels);
@@ -54,27 +45,25 @@ function plotMics()
     hPlots3 = zeros(1, channels);
     plotBuffer = zeros(channels,plotSamples);
     for channel = 1:channels
-        hAxes(channel) = subplot(channels,1,channel);
+        hAxes(channel) = subplot(channels,1,channel,'Parent',handles.tab1);
         axes(hAxes(channel));
         hPlots(channel) = plot(xRange(1:length(plotBuffer)), plotBuffer(channel,:).*scale ./ 2^(8*sampleSize-1));
     end
-    figure; hold on;
     
     for channel = 1:channels    
-        hAxes2(channel) = subplot(channels,1,channel);
+        hAxes2(channel) = subplot(channels,1,channel,'Parent',handles.tab2);
         axes(hAxes2(channel));
         hPlots2(channel) = plot(xRange(1:length(avgData)), avgData(channel,:).*scale ./ 2^(8*sampleSize-1));
     end
-    figure; hold on;
+    
     for channel = 1:channels    
-        hAxes3(channel) = subplot(channels,1,channel);
+        hAxes3(channel) = subplot(channels,1,channel,'Parent',handles.tab3);
         axes(hAxes3(channel));
         hPlots3(channel) = plot(fRange, zeros(1, windowSize));
     end
     
     
-    figure; hold on;
-    hAxisDir = gca;
+    hAxisDir = subplot(1,1,1, 'Parent', handles.tab4);
     hPlotDir = plot(dir);
 
     index = 1;
@@ -89,6 +78,10 @@ function plotMics()
     
     while (1)
         pause(0.01);
+        if close_flag==1
+            break;
+        end
+        close_flag
         %if drawCounter >= plotSamples/20
             for channel = 1:channels
                 set(hAxes(channel),'YLim', [-scale, scale]);
