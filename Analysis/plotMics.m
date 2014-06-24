@@ -1,4 +1,4 @@
-function plotMics(portString, handles)
+function plotMics(portString, handles, numMics)
      
     global port output_socket plotBuffer readSamples channels drawCounter sampleSize recording avgData dir windowSize frames close_flag calib_flag dc_calib scale_calib
     %close all; 
@@ -15,7 +15,7 @@ function plotMics(portString, handles)
     sampleSize = 1;
     plotSamples = 5000;
     readSamples = 42;
-    channels = 3;
+    channels = numMics;
     sampleRate = 1.25; % kHz
     scale = 128;
     recording = zeros(channels, 0);

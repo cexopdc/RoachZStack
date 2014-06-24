@@ -22,7 +22,7 @@ function varargout = streamer(varargin)
 
 % Edit the above text to modify the response to help streamer
 
-% Last Modified by GUIDE v2.5 23-Jun-2014 12:18:30
+% Last Modified by GUIDE v2.5 24-Jun-2014 12:51:56
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -127,7 +127,8 @@ if iscell(strings)
 else
   curstring = strings(curval, :);  %char array
 end
-plotMics(curstring, handles)
+numMics = str2num(get(handles.num, 'String'));
+plotMics(curstring, handles, numMics);
 
 
 % --- Executes on button press in stop.
@@ -171,3 +172,26 @@ function calibrate_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global calib_flag
 calib_flag = 1;
+
+
+
+function num_Callback(hObject, eventdata, handles)
+% hObject    handle to num (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of num as text
+%        str2double(get(hObject,'String')) returns contents of num as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function num_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to num (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
