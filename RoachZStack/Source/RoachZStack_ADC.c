@@ -102,7 +102,17 @@ void RoachZStack_ADC_Init( uint8 task_id )
   #ifndef ZDO_COORDINATOR
     PERCFG |= 0x40;
     RoachZStack_ADC_TaskID = task_id;   
-    APCFG = 0x00 | (1 << HAL_ADC_CHANNEL_1) | (1 << HAL_ADC_CHANNEL_3) |  (1 << HAL_ADC_CHANNEL_5);
+    uint8 micCfg = 1 << HAL_ADC_CHANNEL_1;
+    
+    if (MICS > 1){
+      micCfg |= 1 << HAL_ADC_CHANNEL_3;
+    }
+    
+    if (MICS > 2){
+      micCfg |= 1 << HAL_ADC_CHANNEL_5;
+    }
+    
+    APCFG = 0x00 | micCfg;
     ADCCON1 = HAL_ADC_STSEL_T1C0 | 0x03; // 0x03 reserved
     //HAL_ADC_REF_AVDD or HAL_ADC_REF_125V
     ADCCON2 = HAL_ADC_REF_AVDD | HAL_ADC_DEC_064 | 0x05; //stop at channel 5

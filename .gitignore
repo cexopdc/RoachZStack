@@ -226,3 +226,6 @@ pip-log.txt
 *PC/*.csv
 *PC/*/*.csv
 *.asv
+
+*.png
+*.mat

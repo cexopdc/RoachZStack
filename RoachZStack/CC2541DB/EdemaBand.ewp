@@ -6499,52 +6499,52 @@
     <group>
       <name>Common</name>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\common\hal_drivers.c</name>
+        <name>$_BLE_$\Components\hal\common\hal_drivers.c</name>
       </file>
     </group>
     <group>
       <name>Include</name>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_adc.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_adc.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_assert.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_assert.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_board.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_board.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_defs.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_defs.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_drivers.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_drivers.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_flash.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_flash.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_key.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_key.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_lcd.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_lcd.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_led.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_led.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_rpc.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_rpc.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_sleep.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_sleep.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_timer.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_timer.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_uart.h</name>
+        <name>$_BLE_$\Components\hal\include\hal_uart.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\services\saddr\saddr.h</name>
+        <name>$_BLE_$\Components\services\saddr\saddr.h</name>
       </file>
     </group>
     <group>
@@ -6554,67 +6554,67 @@
         <group>
           <name>Config</name>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_board_cfg.h</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_board_cfg.h</name>
           </file>
         </group>
         <group>
           <name>Drivers</name>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_adc.c</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_adc.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_aes.c</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_aes.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_crc.c</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_crc.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_dma.c</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_dma.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_flash.c</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_flash.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_key.c</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_key.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_lcd.c</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_lcd.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_led.c</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_led.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_sleep.c</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_sleep.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_startup.c</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_startup.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_timer.c</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_timer.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_uart.c</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_uart.c</name>
           </file>
         </group>
         <group>
           <name>Includes</name>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_aes.h</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_aes.h</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_ccm.h</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_ccm.h</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_crc.h</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_crc.h</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_dma.h</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_dma.h</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_mcu.h</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_mcu.h</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_types.h</name>
+            <name>$_BLE_$\Components\hal\target\CC2540EB\hal_types.h</name>
           </file>
         </group>
       </group>
@@ -6623,46 +6623,46 @@
   <group>
     <name>INCLUDE</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\att.h</name>
+      <name>$_BLE_$\Components\ble\include\att.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gap.h</name>
+      <name>$_BLE_$\Components\ble\include\gap.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gatt.h</name>
+      <name>$_BLE_$\Components\ble\include\gatt.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gatt_uuid.h</name>
+      <name>$_BLE_$\Components\ble\include\gatt_uuid.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\hci.h</name>
+      <name>$_BLE_$\Components\ble\include\hci.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\l2cap.h</name>
+      <name>$_BLE_$\Components\ble\include\l2cap.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\host\linkdb.h</name>
+      <name>$_BLE_$\Components\ble\host\linkdb.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll.h</name>
+      <name>$_BLE_$\Components\ble\controller\include\ll.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\common\npi\npi_np\npi.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\phy.h</name>
+      <name>$_BLE_$\Components\ble\controller\include\phy.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\sm.h</name>
+      <name>$_BLE_$\Components\ble\include\sm.h</name>
     </file>
   </group>
   <group>
     <name>LIB</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Libraries\CC2541DB\bin\CC2541_BLE_peri.lib</name>
+      <name>$_BLE_$\Projects\ble\Libraries\CC2541DB\bin\CC2541_BLE_peri.lib</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Libraries\Common\bin\CC254x_BLE_HCI_TL_None.lib</name>
+      <name>$_BLE_$\Projects\ble\Libraries\Common\bin\CC254x_BLE_HCI_TL_None.lib</name>
     </file>
   </group>
   <group>
@@ -6674,31 +6674,31 @@
   <group>
     <name>OSAL</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\bcomdef.h</name>
+      <name>$_BLE_$\Components\ble\include\bcomdef.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL.c</name>
+      <name>$_BLE_$\Components\osal\common\OSAL.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\osal_bufmgr.c</name>
+      <name>$_BLE_$\Components\osal\common\osal_bufmgr.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\osal_cbtimer.c</name>
+      <name>$_BLE_$\Components\osal\common\osal_cbtimer.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_ClockBLE.c</name>
+      <name>$_BLE_$\Components\osal\common\OSAL_ClockBLE.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_Memory.c</name>
+      <name>$_BLE_$\Components\osal\common\OSAL_Memory.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_PwrMgr.c</name>
+      <name>$_BLE_$\Components\osal\common\OSAL_PwrMgr.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\mcu\cc2540\osal_snv.c</name>
+      <name>$_BLE_$\Components\osal\mcu\cc2540\osal_snv.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_Timers.c</name>
+      <name>$_BLE_$\Components\osal\common\OSAL_Timers.c</name>
     </file>
   </group>
   <group>
@@ -6725,13 +6725,13 @@
       <name>$PROJ_DIR$\..\..\Profiles\Roles\gapbondmgr.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gapgattserver.h</name>
+      <name>$_BLE_$\Projects\ble\Include\gapgattserver.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\host\gatt_uuid.c</name>
+      <name>$_BLE_$\Components\ble\host\gatt_uuid.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gattservapp.h</name>
+      <name>$_BLE_$\Projects\ble\Include\gattservapp.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\Profiles\OAD\oad.h</name>
