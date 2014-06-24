@@ -76,7 +76,7 @@ char AD5933_Init(void)
     
     status = I2C_Init(AD5933_ADDRESS, 100000);
     
-    AD5933_SetRegisterValue(0x8A,15,2);  
+    AD5933_SetRegisterValue(0x8A,511,2);  
     
     return status;
 }
