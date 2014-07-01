@@ -22,13 +22,15 @@ function mic_data=analyze(dataset)
     end
     figure;
     mic_data = [mic_data, mic_data(:,1)];
+    mic_data = mic_data ./ (max(mic_data,[],2) * ones(1,41));
     offset = 36 * pi / 180;
     
-    h1 = polar([0:points]*360/points*pi/180 - offset, mic_data(1,:));
-
+    t = 0 : .01 : 2 * pi;
+    P = polar(t, max(max(mic_data)) * ones(size(t)));
+    set(P, 'Visible', 'off')
     hold on;
-    e = 98;
-    mic_data(2,e) = (mic_data(2, e-1)+mic_data(2, e+1))/2;
+    
+    h1 = polar([0:points]*360/points*pi/180 - offset, mic_data(1,:),'b');
     h2 = polar([0:points]*360/points*pi/180 - offset, mic_data(2,:),'r');
     h3 = polar([0:points]*360/points*pi/180 - offset, mic_data(3,:),'g');
     
@@ -38,7 +40,7 @@ function mic_data=analyze(dataset)
     
     set([h1, h2, h3], 'LineWidth', 2);
     hTitle = title('Polar Microphone Response');
-    hLegend = legend('Mic A', 'Mic B', 'Mic C');
+    hLegend = legend([h1, h2, h3], 'Mic A', 'Mic B', 'Mic C');
     set( gca                       , ...
     'FontName'   , 'Helvetica' );
     set([hTitle], ...

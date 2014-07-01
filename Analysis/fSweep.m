@@ -16,7 +16,7 @@ function fSweep()
     
     xRange = (0:plotSamples);%/(sampleRate * 1000);
 
-    port = serial('COM15','BaudRate',115200)%, 'FlowControl', 'hardware');
+    port = serial('COM4','BaudRate',115200)%, 'FlowControl', 'hardware');
     port.BytesAvailableFcnCount = readSamples;
     port.BytesAvailableFcnMode = 'byte';
     port.BytesAvailableFcn = @serial_callback;
@@ -50,13 +50,10 @@ function fSweep()
     fwrite(port, '*')
 
     % %% start the initialization of the DAQ for the motor
-    d = daqfind;
-    delete(d);
+    s = daq.createSession('ni');
     % Initialization daq
-    % global dio;
-    dio = digitalio('nidaq', 'Dev2'); %make sure your dac name is same to the one used here
-    addline (dio, 2:3,1,'Out')
-    
+    addDigitalChannel(s,'Dev3','Port0/Line0:1','OutputOnly')
+     
     angles = [];
     
     INC = 1.8;
@@ -65,9 +62,8 @@ function fSweep()
     NUM_STEPS = 360 / STEP_SIZE;
     for i=1:NUM_STEPS
         for j=1:STEP_SIZE_FACTOR
-            putvalue(dio,[1,1]); %[x,y] x is direction y is the step
-            putvalue(dio,[1,0]);
-            
+            outputSingleScan (s,[1,1])
+            outputSingleScan (s,[1,0])            
             pause(0.01);
         end
         pause(1.5);

@@ -22,7 +22,7 @@ function varargout = streamer(varargin)
 
 % Edit the above text to modify the response to help streamer
 
-% Last Modified by GUIDE v2.5 24-Jun-2014 12:51:56
+% Last Modified by GUIDE v2.5 30-Jun-2014 15:14:01
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -60,18 +60,29 @@ handles.output = hObject;
 % uiwait(handles.streamer);
 
 % Put a layout in the panel 
-g = uiextras.Grid( 'Parent', handles.layout_panel, ...
+if (exist('uitab'))
+
+    group = uitabgroup( 'Parent', handles.layout_panel);
+    tab1 = uitab('Parent', group, 'Title', 'Signal');
+    tab2 = uitab('Parent', group, 'Title', 'Avg');
+    tab3 = uitab('Parent', group, 'Title', 'Power');
+    tab4 = uitab('Parent', group, 'Title', 'Strongest');
+    tab1 = uipanel('Parent', tab1);
+    tab2 = uipanel('Parent', tab2);
+    tab3 = uipanel('Parent', tab3);
+    tab4 = uipanel('Parent', tab4);
+else
+    g = uiextras.Grid( 'Parent', handles.layout_panel, ...
     'Units', 'Normalized', 'Position', [0 0 1 1], ...
     'Spacing', 5 );
-panel = uiextras.TabPanel( 'Parent', g, 'Padding', 5 );
-tab1 = uipanel('Parent', panel);
-tab2 = uipanel('Parent', panel);
-tab3 = uipanel('Parent', panel);
-tab4 = uipanel('Parent', panel);
-panel.TabNames = {'Signal', 'Avg', 'Power','Strongest'};
-
-g.RowSizes = [-1];
-
+    panel = uiextras.TabPanel( 'Parent', g, 'Padding', 5 );
+    tab1 = uipanel('Parent', panel);
+    tab2 = uipanel('Parent', panel);
+    tab3 = uipanel('Parent', panel);
+    tab4 = uipanel('Parent', panel);
+    panel.TabNames = {'Signal', 'Avg', 'Power','Strongest'};
+    g.RowSizes = [-1];
+end
 handles.tab1 = tab1;
 handles.tab2 = tab2;
 handles.tab3 = tab3;
@@ -136,12 +147,7 @@ function stop_Callback(hObject, eventdata, handles)
 % hObject    handle to stop (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global port output_socket
-%output_socket.close();
-try
-    fclose(port)
-catch
-end
+
 
 
 % --- Executes when user attempts to close streamer.
@@ -150,10 +156,9 @@ function streamer_CloseRequestFcn(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+global status
+status.close_flag = 1;
 
-global port output_socket close_flag
-%output_socket.close();
-close_flag = 1;
 % Hint: delete(hObject) closes the figure
 delete(hObject);
 
@@ -170,8 +175,8 @@ function calibrate_Callback(hObject, eventdata, handles)
 % hObject    handle to calibrate (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global calib_flag
-calib_flag = 1;
+global status
+status.calib_flag = 1;
 
 
 
@@ -195,3 +200,12 @@ function num_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in sweep.
+function sweep_Callback(hObject, eventdata, handles)
+% hObject    handle to sweep (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global status
+status.motor_flag = 1;
