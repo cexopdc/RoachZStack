@@ -130,8 +130,8 @@ function plotMics(portString, handles, numMics)
         assignin('base', 'record', data.recording);
         
         if (size(data.frames, 3)>0)
-            data.currentFrame = data.frames(:,:,1);
-            f = abs(fft(data.currentFrame, [], 2)).*settings.scale ./ 2^(8*settings.sampleSize-1)/settings.windowSize*2;
+            currentFrame = data.frames(:,:,1);
+            f = abs(fft(currentFrame, [], 2)).*settings.scale ./ 2^(8*settings.sampleSize-1)/settings.windowSize*2;
             power = sqrt(mean(f(:,10:end) .^ 2, 2));
             data.avgData = [data.avgData(:, 2:end), power];
             data.frames = data.frames(:,:,2:end);
