@@ -64,7 +64,9 @@
 
 #include "RoachZStack.h"
 #include "RoachZStack_ADC.h"
+#ifndef ZDO_COORDINATOR
 #include "Stimulator.h"
+#endif
 
 
 /*********************************************************************
@@ -91,7 +93,9 @@ const pTaskEventHandlerFn tasksArr[] = {
 #ifdef AUDIO
   RoachZStack_ADC,
 #endif
+#ifndef ZDO_COORDINATOR
   Stimulator_ProcessEvent,
+#endif
 };
 
 const uint8 tasksCnt = sizeof( tasksArr ) / sizeof( tasksArr[0] );
@@ -135,7 +139,9 @@ void osalInitTasks( void )
 #ifdef AUDIO
   RoachZStack_ADC_Init( taskID++ );
 #endif
+#ifndef ZDO_COORDINATOR
   Stimulator_Init(taskID);
+#endif
 }
 
 /*********************************************************************

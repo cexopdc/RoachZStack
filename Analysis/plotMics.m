@@ -75,8 +75,6 @@ function plotMics(portString, handles, numMics)
 
     data.recording = [];
     
-    fwrite(settings.port, '*')
-    
     settings.INC = 1.8;
     settings.STEP_SIZE_FACTOR = 5;
     settings.STEP_SIZE = settings.INC * settings.STEP_SIZE_FACTOR;

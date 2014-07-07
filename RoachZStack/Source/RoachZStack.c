@@ -208,7 +208,7 @@ void RoachZStack_Init( uint8 task_id )
 {
   halUARTCfg_t uartConfig;
   
-  startStreaming = false;
+  startStreaming = true;
 
   RoachZStack_TaskID = task_id;
   RoachZStack_RxSeq = 0xC3;
@@ -324,30 +324,6 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
         HalLedSet ( HAL_LED_4, HAL_LED_MODE_FLASH );
       }
 #endif
-      break;
-      
-    case Match_Desc_rsp:
-      {
-        ZDO_ActiveEndpointRsp_t *pRsp = ZDO_ParseEPListRsp( inMsg );
-        if ( pRsp )
-        {
-          if ( pRsp->status == ZSuccess && pRsp->cnt )
-          {
-            RoachZStack_TxAddr.addrMode = (afAddrMode_t)Addr16Bit;
-            RoachZStack_TxAddr.addr.shortAddr = pRsp->nwkAddr;
-            // Take the first endpoint, Can be changed to search through endpoints
-            RoachZStack_TxAddr.endPoint = pRsp->epList[0];
-            
-            // Light LED
-            HalLedSet( HAL_LED_4, HAL_LED_MODE_ON );
-            
-            RegisterForADC( RoachZStack_TaskID );
-            
-            osal_stop_timerEx( RoachZStack_TaskID, RZS_DO_HANDSHAKE);
-          }
-          osal_mem_free( pRsp );
-        }
-      }
       break;
       
     case Match_Desc_req:
@@ -486,10 +462,6 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
 
 static void showMessage(void)
 {
-  if (*(RoachZStack_TxBuf+1) == '*')
-  {
-    startStreaming = true;
-  }
   stimCommand* cmd = parseCommand(RoachZStack_TxBuf+1, RoachZStack_TxLen);
   HalLcdWriteValue ( cmd->direction, 10, HAL_LCD_LINE_1);
   HalLcdWriteValue ( cmd->repeats, 10, HAL_LCD_LINE_2);
