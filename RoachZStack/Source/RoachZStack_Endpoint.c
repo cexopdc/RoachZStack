@@ -245,6 +245,8 @@ void RoachZStack_Init( uint8 task_id )
   
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, Match_Desc_rsp );
   
+  //ZMacSetTransmitPower(TX_PWR_MINUS_22);
+  
   osal_set_event(RoachZStack_TaskID, RZS_DO_HANDSHAKE );
   
 }

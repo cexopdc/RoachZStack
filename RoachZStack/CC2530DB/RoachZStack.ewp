@@ -12,7 +12,7 @@
       <name>General</name>
       <archiveVersion>1</archiveVersion>
       <data>
-        <version>5</version>
+        <version>6</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -249,6 +249,18 @@
           <name>GRuntimeLibSelectSlave2</name>
           <version>0</version>
           <state>3</state>
+        </option>
+        <option>
+          <name>Extended stack address</name>
+          <state>0x9B</state>
+        </option>
+        <option>
+          <name>Extended stack mask</name>
+          <state>0x03</state>
+        </option>
+        <option>
+          <name>Extended stack is offset</name>
+          <state>0</state>
         </option>
       </data>
     </settings>
@@ -1083,7 +1095,7 @@
       <name>General</name>
       <archiveVersion>1</archiveVersion>
       <data>
-        <version>5</version>
+        <version>6</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -1148,7 +1160,7 @@
         <option>
           <name>Workseg Size</name>
           <version>0</version>
-          <state>8</state>
+          <state>0</state>
         </option>
         <option>
           <name>Constant Placement</name>
@@ -1321,6 +1333,18 @@
           <version>0</version>
           <state>3</state>
         </option>
+        <option>
+          <name>Extended stack address</name>
+          <state>0x9B</state>
+        </option>
+        <option>
+          <name>Extended stack mask</name>
+          <state>0x03</state>
+        </option>
+        <option>
+          <name>Extended stack is offset</name>
+          <state>0</state>
+        </option>
       </data>
     </settings>
     <settings>
@@ -1345,11 +1369,12 @@
         </option>
         <option>
           <name>CCDefines</name>
-          <state>HAL_UART=TRUE</state>
-          <state>SERIAL_APP_PORT=0</state>
-          <state>LCD_SUPPORTED</state>
-          <state>HAL_LED=TRUE</state>
-          <state>ZIGBEE_FRAGMENTATION</state>
+          <state>HAL_UART=FALSE</state>
+          <state>HAL_LED=FALSE</state>
+          <state>HAL_LCD=FALSE</state>
+          <state>HAL_AES=FALSE</state>
+          <state>HAL_KEY=FALSE</state>
+          <state>OSC32K_CRYSTAL_INSTALLED=FALSE</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -1512,6 +1537,7 @@
           <name>Compiler Extra Options Edit</name>
           <state>-f $PROJ_DIR$\..\..\Tools\CC2530DB\f8wRouter.cfg</state>
           <state>-f $PROJ_DIR$\..\..\Tools\CC2530DB\f8wConfig.cfg</state>
+          <state>-f $PROJ_DIR$\settings.cfg</state>
         </option>
         <option>
           <name>CCIncludePath2</name>
@@ -2090,8 +2116,7 @@
         </option>
         <option>
           <name>Linker Extra Options Edit</name>
-          <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\Router-Pro.lib</state>
-          <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\Security.lib</state>
+          <state>-C $PROJ_DIR$\..\..\Libraries\TI2530DB\bin\Router.lib</state>
           <state>-C $PROJ_DIR$\..\..\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
         </option>
         <option>
@@ -2154,7 +2179,7 @@
       <name>General</name>
       <archiveVersion>1</archiveVersion>
       <data>
-        <version>5</version>
+        <version>6</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -2219,7 +2244,7 @@
         <option>
           <name>Workseg Size</name>
           <version>0</version>
-          <state>8</state>
+          <state>0</state>
         </option>
         <option>
           <name>Constant Placement</name>
@@ -2391,6 +2416,18 @@
           <name>GRuntimeLibSelectSlave2</name>
           <version>0</version>
           <state>3</state>
+        </option>
+        <option>
+          <name>Extended stack address</name>
+          <state>0x9B</state>
+        </option>
+        <option>
+          <name>Extended stack mask</name>
+          <state>0x03</state>
+        </option>
+        <option>
+          <name>Extended stack is offset</name>
+          <state>0</state>
         </option>
       </data>
     </settings>
