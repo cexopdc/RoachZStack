@@ -114,7 +114,8 @@ function plotMics(portString, handles, numMics)
         for channel = 1:settings.channels
             set(hAxes(channel),'YLim', [0, settings.scale]);
             set(hPlots(channel),'ydata',(data.plotBuffer(channel,:) - settings.dc_calib(channel)) * settings.scale_calib(channel));
-
+            set(hAxes(channel),'XLim', [xRange(1), xRange(length(xRange))]);
+            
             set(hAxes2(channel),'YLim', [-settings.scale, settings.scale]);
             set(hPlots2(channel),'ydata',data.avgData(channel,:).*settings.scale ./ 2^(8*settings.sampleSize-1) * 2);
 

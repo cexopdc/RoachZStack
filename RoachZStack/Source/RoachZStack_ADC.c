@@ -8,10 +8,9 @@
 #include "hal_sleep.h"
 #include "ZConfig.h"
 #include "OSAL.h"
+#include "AF.h"
+#include "RoachZStack.h"
 
-adcMsg_t* pBufferReading = NULL;
-adcMsg_t* pBufferDone = NULL;
-adcMsg_t* pBufferNext = NULL;
 
 // Task ID not initialized
 #define NO_TASK_ID 0xFF
@@ -50,39 +49,42 @@ adcMsg_t* pBufferNext = NULL;
 
 
 // Registered keys task ID, initialized to NOT USED.
-extern volatile uint8 allocCount;
+
 static uint8 registeredADCTaskID = NO_TASK_ID;
 uint8 RoachZStack_ADC_TaskID;    // Task ID for internal task/event processing.
+extern afAddrType_t RoachZStack_TxAddr;
+extern const endPointDesc_t RoachZStack_epDesc;
+extern uint8 RoachZStack_MsgID;
+static uint8 RoachZStack_TxSeq;
 
 uint16 data = 0;
 
 uint16 overflow = 0;
 
+int8 adc_buffer[90];
+union
+{
+  struct
+  {
+    uint8 seq_num;
+    uint8 buffer[BUFFER_SIZE];
+  } packet;
+  uint8 raw_data[BUFFER_SIZE+1];
+} data_buffer;
+  
+uint8 data_index;
+
+
   #ifndef ZDO_COORDINATOR
 HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
 {
-  
-  T1CTL = 0x00 | 0x0C | 0x00;
   //HAL_ENTER_ISR();
 
   DMAIF = 0;
 
-  if (pBufferDone != NULL)
-  {
-    osal_msg_deallocate((uint8*)pBufferDone);
-    overflow++;
-  }
-  pBufferDone = pBufferReading;
-  pBufferReading = pBufferNext;
-  pBufferNext = NULL;
-  if (pBufferReading != NULL)
-  {
-    HAL_DMA_SET_DEST(HAL_DMA_GET_DESC1234(1), pBufferReading->buffer);
-    HAL_DMA_ARM_CH(1);
-    T1CTL = 0x00 | 0x0C | 0x02;
-  }
+  HAL_DMA_ARM_CH(1);
 
-  osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
+  osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_PROCESS );
 
   CLEAR_SLEEP_MODE();
   //HAL_EXIT_ISR();
@@ -119,7 +121,7 @@ void RoachZStack_ADC_Init( uint8 task_id )
     //P2INP |= 0x20;
     T1CTL = 0x00 | 0x0C | 0x02;
     
-    uint16 counter = 200;//125;
+    uint16 counter = 100;//125;
     
     T1CC0H = counter >> 8;
     T1CC0L = (uint8)counter;
@@ -127,10 +129,13 @@ void RoachZStack_ADC_Init( uint8 task_id )
     T1CCTL0 = 0x00 | 0x00 | 0x18 | 0x04 | 0x00; // 5C;
     DMAIE = 1;
     
+    data_index = 0;
+    RoachZStack_TxSeq = 0;
+    
     HalDmaInit();
     HAL_DMA_SET_SOURCE(HAL_DMA_GET_DESC1234(1), &X_ADCH);
     HAL_DMA_SET_VLEN(HAL_DMA_GET_DESC1234(1), HAL_DMA_VLEN_USE_LEN);
-    HAL_DMA_SET_LEN(HAL_DMA_GET_DESC1234(1), sizeof(pBufferReading->buffer));
+    HAL_DMA_SET_LEN(HAL_DMA_GET_DESC1234(1), sizeof(adc_buffer));
     HAL_DMA_SET_WORD_SIZE(HAL_DMA_GET_DESC1234(1), HAL_DMA_WORDSIZE_BYTE);
     HAL_DMA_SET_TRIG_MODE(HAL_DMA_GET_DESC1234(1), HAL_DMA_TMODE_SINGLE);
     HAL_DMA_SET_TRIG_SRC(HAL_DMA_GET_DESC1234(1), HAL_DMA_TRIG_ADC_CHALL);
@@ -138,9 +143,12 @@ void RoachZStack_ADC_Init( uint8 task_id )
     HAL_DMA_SET_DST_INC(HAL_DMA_GET_DESC1234(1), HAL_DMA_DSTINC_1);
     HAL_DMA_SET_IRQ(HAL_DMA_GET_DESC1234(1), HAL_DMA_IRQMASK_ENABLE);
     HAL_DMA_SET_PRIORITY(HAL_DMA_GET_DESC1234(1), HAL_DMA_PRI_GUARANTEED);
+    HAL_DMA_SET_DEST(HAL_DMA_GET_DESC1234(1), adc_buffer);
+    HAL_DMA_ARM_CH(1);
     
   #endif
 }
+
 
 /*********************************************************************
  * ADC Register function
@@ -155,7 +163,6 @@ uint8 RegisterForADC( uint8 task_id )
   if ( registeredADCTaskID == NO_TASK_ID )
   {
     registeredADCTaskID = task_id;
-    osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
     return ( true );
   }
   else
@@ -176,62 +183,40 @@ uint8 RegisterForADC( uint8 task_id )
 UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
 {
   
-  if (events & RZS_ADC_READ)
+  if (events & RZS_ADC_PROCESS)
   {
     if (registeredADCTaskID == NO_TASK_ID)
     {
-      osal_start_timerEx( RoachZStack_ADC_TaskID, RZS_ADC_READ, 2); 
-      return events ^ RZS_ADC_READ;
+      return events;
     }
-    
-    halIntState_t intState;
-    HAL_ENTER_CRITICAL_SECTION( intState );  // Hold off interrupts.
-        
-    if (pBufferDone != NULL)
+    int8 max_values[3] = {0, 0, 0};
+    uint8 channel;
+    for (int i = 0; i < sizeof(adc_buffer); i++)
     {
-      // Send the address to the task
-      pBufferDone->hdr.event = RZS_ADC_VALUE;
-      for (int i = 0; i < (sizeof(pBufferDone->buffer)/sizeof(*(pBufferDone->buffer))); i++)
+      channel = i % 3;
+      if (adc_buffer[i] > max_values[channel])
       {
-        if (pBufferDone->buffer[i] > 127)
-        {
-          pBufferDone->buffer[i] = 0;
-        }
+        max_values[channel] = adc_buffer[i];
       }
-      osal_msg_send( registeredADCTaskID, (uint8 *)pBufferDone );
-      pBufferDone = NULL;
     }
-    
-    if (pBufferNext == NULL)
+    data_buffer.packet.buffer[data_index++] = max_values[0];
+    data_buffer.packet.buffer[data_index++] = max_values[1];
+    data_buffer.packet.buffer[data_index++] = max_values[2];
+    if (data_index >= sizeof(data_buffer.packet.buffer))
     {
-      pBufferNext = (adcMsg_t*) osal_msg_allocate( sizeof(adcMsg_t) );
-      allocCount++;
-      if (pBufferNext != NULL)
-      {  
-        pBufferNext->size = 0;
-      }
-      else
-      {
-        HalLedSet(HAL_LED_2, HAL_LED_MODE_TOGGLE);
-      }
+      data_buffer.packet.seq_num = ++RoachZStack_TxSeq;
+      //osal_memcpy( RoachZStack_TxBuf+1, adcMsg->buffer, sizeof(adcMsg->buffer) );
+      //osal_msg_send( registeredADCTaskID, (uint8 *)data_buffer );
+      afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
+        (endPointDesc_t *)&RoachZStack_epDesc,
+        ROACHZSTACK_CLUSTER_MIC,
+        sizeof(data_buffer), data_buffer.raw_data,
+        &RoachZStack_MsgID, AF_DISCV_ROUTE, AF_DEFAULT_RADIUS);
+      data_index = 0;
     }
-    if (pBufferReading == NULL)
-    {
-      pBufferReading = pBufferNext;
-      pBufferNext = (adcMsg_t*) osal_msg_allocate( sizeof(adcMsg_t) );
-      if (pBufferReading != NULL)
-      {  
-        HAL_DMA_SET_DEST(HAL_DMA_GET_DESC1234(1), pBufferReading->buffer);
-        HAL_DMA_ARM_CH(1);
-        T1CTL = 0x00 | 0x0C | 0x02;
-      }
-    }
-    
-    HAL_EXIT_CRITICAL_SECTION( intState );   // Re-enable interrupts.
-    
-    return events ^ RZS_ADC_READ;
+    return events ^ RZS_ADC_PROCESS;
   }
-    return 0;
+  return 0;
 }
 
 #endif
