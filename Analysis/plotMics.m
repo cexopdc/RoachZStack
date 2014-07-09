@@ -20,12 +20,12 @@ function plotMics(portString, handles, numMics)
     %settings.output_socket = MatlabOutputSocket(output_port);
     %assignin('base', 'output_socket', settings.output_socket);
     
-    settings.sampleSize = 1;
+    settings.sampleSize = 2;
     settings.plotSamples = 5000;
     settings.readSamples = 42;
     settings.channels = numMics;
     settings.sampleRate = 1.25; % kHz
-    settings.scale = 128;
+    settings.scale = 8192;
     data.recording = zeros(settings.channels, 0);
     data.avgData = zeros(settings.channels, settings.plotSamples);
     data.dir = zeros(1, settings.plotSamples);
@@ -42,7 +42,7 @@ function plotMics(portString, handles, numMics)
     fRange = (0:settings.windowSize-1)*settings.sampleRate*1000/settings.windowSize;%/(sampleRate * 1000);
 
     settings.port = serial(portString,'BaudRate',115200);%, 'FlowControl', 'hardware');
-    settings.port.BytesAvailableFcnCount = settings.readSamples;
+    settings.port.BytesAvailableFcnCount = settings.readSamples * settings.sampleSize;
     settings.port.BytesAvailableFcnMode = 'byte';
     settings.port.BytesAvailableFcn = @serial_callback;
     fopen(settings.port);
@@ -199,16 +199,16 @@ end
 
 function serial_callback(~, ~)
     global settings data
-    newData = fread(settings.port, settings.readSamples/settings.sampleSize, ['int',num2str(8*settings.sampleSize)])';
+    newData = fread(settings.port, settings.readSamples, ['int',num2str(8*settings.sampleSize)])';
     length(newData);
     if (~isempty(newData))
-        newData = reshape(newData, settings.channels, length(newData)/settings.channels);
+        newData = reshape(newData, settings.channels, length(newData)/settings.channels)
         fillFrame(newData);
         % recording = [recording, newData];
         %maxes = max(newData')';
         %avgData = [avgData(:, 2:end), maxes];
         
-        data.plotBuffer = [data.plotBuffer(:,settings.readSamples/settings.channels/settings.sampleSize+1:end), newData];
+        data.plotBuffer = [data.plotBuffer(:,settings.readSamples/settings.channels+1:end), newData];
     end
         
 end
