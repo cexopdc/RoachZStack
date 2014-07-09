@@ -21,7 +21,7 @@ function plotMics(portString, handles, numMics)
     %assignin('base', 'output_socket', settings.output_socket);
     
     settings.sampleSize = 1;
-    settings.plotSamples = 5000;
+    settings.plotSamples = 330;
     settings.readSamples = 42;
     settings.channels = numMics;
     settings.sampleRate = 1.25; % kHz
@@ -75,8 +75,8 @@ function plotMics(portString, handles, numMics)
 
     data.recording = [];
     
-    settings.INC = 1.8;
-    settings.STEP_SIZE_FACTOR = 5;
+    settings.INC = 1.8; % do not change
+    settings.STEP_SIZE_FACTOR = 5; % number of skips
     settings.STEP_SIZE = settings.INC * settings.STEP_SIZE_FACTOR;
     settings.NUM_STEPS = 360 / settings.STEP_SIZE;
     settings.START_DELAY = 10;
@@ -89,14 +89,14 @@ function plotMics(portString, handles, numMics)
             break;
         end
         if status.calib_flag==1
-            settings.dc_calib = prctile(data.plotBuffer, 5, 2);
+            settings.dc_calib = prctile(data.plotBuffer, 50, 2);
             plotBuffer_zero = data.plotBuffer;
             for channel = 1:settings.channels
                plotBuffer_zero(channel,:) =  plotBuffer_zero(channel,:) - settings.dc_calib(channel);
             end
             maxes = prctile(plotBuffer_zero, 95, 2);
             max_max = max(maxes);
-            settings.scale_calib = max_max ./ maxes;
+            % settings.scale_calib = max_max ./ maxes;
             status.calib_flag = 0;
         end
         if status.motor_flag==1
@@ -173,8 +173,9 @@ function turnMotor(t, ~)
         stop(t);
         delete(t);
        
-        analyze(data.angles);
+        analyze2(data.angles, settings.dc_calib);
         assignin('base', 'angles', data.angles);
+        assignin('base', 'dc_calib', settings.dc_calib);
     end
 end
 
