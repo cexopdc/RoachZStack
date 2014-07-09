@@ -2,7 +2,7 @@
 
 #define RZS_ADC_VALUE     0xE0
 #define RZS_ADC_PROCESS   0x01
-#define BUFFER_SIZE_BYTES 90
+#define BUFFER_SIZE_BYTES 45
 #define BUFFER_SIZE (BUFFER_SIZE_BYTES)
 typedef struct
 {
