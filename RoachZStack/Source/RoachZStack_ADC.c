@@ -60,15 +60,11 @@ uint16 data = 0;
 
 uint16 overflow = 0;
 
-struct
-{
-  uint8 seq;
-  int8 adc_buffer[90];
-}temp;
-int8* adc_buffer = temp.adc_buffer;
 #define SEND_SIZE 90
+#define BUFFER_LEN 1800
+int8 adc_buffer[BUFFER_LEN];
   
-uint8 send_index;
+uint16 send_index;
 
 
 #ifndef ZDO_COORDINATOR
@@ -77,7 +73,6 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
   //HAL_ENTER_ISR();
 
   DMAIF = 0;
-
   osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_PROCESS );
 
   CLEAR_SLEEP_MODE();
@@ -103,11 +98,11 @@ void RoachZStack_ADC_Init( uint8 task_id )
     APCFG = 0x00 | micCfg;
     ADCCON1 = HAL_ADC_STSEL_T1C0 | 0x03; // 0x03 reserved
     //HAL_ADC_REF_AVDD or HAL_ADC_REF_125V
-    ADCCON2 = HAL_ADC_REF_125V | HAL_ADC_DEC_512 | 0x05; //stop at channel 5
+    ADCCON2 = HAL_ADC_REF_125V | HAL_ADC_DEC_064 | 0x05; //stop at channel 5
     //P2INP |= 0x20;
     T1CTL = 0x00 | 0x0C | 0x02;
     
-    uint16 counter = 200;//125;
+    uint16 counter = 62;//125;
     
     T1CC0H = counter >> 8;
     T1CC0L = (uint8)counter;
@@ -116,13 +111,12 @@ void RoachZStack_ADC_Init( uint8 task_id )
     DMAIE = 1;
     
     send_index = 0;
-    RoachZStack_TxSeq = 0;
     HalDmaInit();
     
-    HAL_DMA_SET_SOURCE(HAL_DMA_GET_DESC1234(1), &X_ADCL);
+    HAL_DMA_SET_SOURCE(HAL_DMA_GET_DESC1234(1), &X_ADCH);
     HAL_DMA_SET_VLEN(HAL_DMA_GET_DESC1234(1), HAL_DMA_VLEN_USE_LEN);
     HAL_DMA_SET_LEN(HAL_DMA_GET_DESC1234(1), sizeof(adc_buffer)/sizeof(*adc_buffer));
-    HAL_DMA_SET_WORD_SIZE(HAL_DMA_GET_DESC1234(1), HAL_DMA_WORDSIZE_WORD);
+    HAL_DMA_SET_WORD_SIZE(HAL_DMA_GET_DESC1234(1), HAL_DMA_WORDSIZE_BYTE);
     HAL_DMA_SET_TRIG_MODE(HAL_DMA_GET_DESC1234(1), HAL_DMA_TMODE_SINGLE);
     HAL_DMA_SET_TRIG_SRC(HAL_DMA_GET_DESC1234(1), HAL_DMA_TRIG_ADC_CHALL);
     HAL_DMA_SET_SRC_INC(HAL_DMA_GET_DESC1234(1), HAL_DMA_SRCINC_0);
@@ -137,6 +131,8 @@ void RoachZStack_ADC_Init( uint8 task_id )
 void RecordBurst(void)
 {
   HAL_DMA_ARM_CH(1);
+  
+
 }
 
 /*********************************************************************
@@ -189,6 +185,8 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
         SEND_SIZE, (uint8 *)(adc_buffer + send_index),
         &RoachZStack_MsgID, AF_DISCV_ROUTE, AF_DEFAULT_RADIUS);
       send_index += SEND_SIZE;
+      
+      osal_start_timerEx(RoachZStack_ADC_TaskID, RZS_ADC_PROCESS, 10 );
     }
     return events ^ RZS_ADC_PROCESS;
   }
