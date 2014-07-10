@@ -170,7 +170,7 @@ static uint8 RoachZStack_MsgID;
 
 static afAddrType_t RoachZStack_TxAddr;
 static uint8 RoachZStack_TxSeq;
-static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX+1];
+static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX];
 static uint8 RoachZStack_TxLen;
 
 static afAddrType_t RoachZStack_RxAddr;
