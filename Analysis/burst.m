@@ -1,0 +1,57 @@
+function burst(portString)
+    global settings status data
+    if (~isempty(instrfind))
+        fclose(instrfind);
+    end
+    %close all; 
+    settings = {};
+    status = {};
+    data = {};
+    
+    cleanupObj = onCleanup(@cleanup);
+    
+    settings.sampleSize = 2;
+    settings.plotSamples = 330;
+    settings.readSamples = 42;
+    settings.sampleRate = 1.25; % kHz
+    settings.scale = 8192;
+    data.recording = zeros(1, 0);    
+    
+    settings.port = serial(portString,'BaudRate',115200);%, 'FlowControl', 'hardware');
+    settings.port.BytesAvailableFcnCount = settings.readSamples * settings.sampleSize;
+    settings.port.BytesAvailableFcnMode = 'byte';
+    settings.port.BytesAvailableFcn = @serial_callback;
+    fopen(settings.port);
+
+    data.recording = [];
+
+ 
+    pause(10);
+    assignin('base', 'recording', data.recording);
+
+    
+    fclose(settings.port);
+end
+
+function serial_callback(~, ~)
+    global settings data
+    newData = fread(settings.port, settings.readSamples, ['int',num2str(8*settings.sampleSize)])';
+    length(newData)
+    if (~isempty(newData))
+        newData = reshape(newData, settings.channels, length(newData)/settings.channels)
+        fillFrame(newData);
+        data.recording = [data.recording, newData];
+    end
+        
+end
+
+function cleanup()
+    global settings
+    %settings.output_socket.close();
+    try
+        fclose(settings.port);
+        settings = rmfield(settings, 'port');
+    catch
+    end
+    delete(timerfind)
+end

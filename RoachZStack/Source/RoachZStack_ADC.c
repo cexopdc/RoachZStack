@@ -61,21 +61,18 @@ uint16 data = 0;
 
 uint16 overflow = 0;
 
-int16 adc_buffer[90];
-union
+struct
 {
-  struct
-  {
-    uint8 seq_num;
-    uint16 buffer[BUFFER_SIZE];
-  } packet;
-  uint8 raw_data[BUFFER_SIZE*2+1];
-} data_buffer;
+  uint8 seq;
+  int8 adc_buffer[90];
+}temp;
+int8* adc_buffer = temp.adc_buffer;
+#define SEND_SIZE 90
   
-uint8 data_index;
+uint8 send_index;
 
 
-  #ifndef ZDO_COORDINATOR
+#ifndef ZDO_COORDINATOR
 HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
 {
   //HAL_ENTER_ISR();
@@ -89,8 +86,8 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
 }
 #endif
 /*********************************************************************
- * @fn      RoachZStack_Init
  *
+ * @fn      RoachZStack_Init
  * @brief   This is called during OSAL tasks' initialization.
  *
  * @param   task_id - the Task ID assigned by OSAL.
@@ -102,15 +99,7 @@ void RoachZStack_ADC_Init( uint8 task_id )
   #ifndef ZDO_COORDINATOR
     PERCFG |= 0x40;
     RoachZStack_ADC_TaskID = task_id;   
-    uint8 micCfg = 1 << HAL_ADC_CHANNEL_1;
-    
-    if (MICS > 1){
-      micCfg |= 1 << HAL_ADC_CHANNEL_3;
-    }
-    
-    if (MICS > 2){
-      micCfg |= 1 << HAL_ADC_CHANNEL_5;
-    }
+    uint8 micCfg = 1 << HAL_ADC_CHANNEL_5;
     
     APCFG = 0x00 | micCfg;
     ADCCON1 = HAL_ADC_STSEL_T1C0 | 0x03; // 0x03 reserved
@@ -127,7 +116,7 @@ void RoachZStack_ADC_Init( uint8 task_id )
     T1CCTL0 = 0x00 | 0x00 | 0x18 | 0x04 | 0x00; // 5C;
     DMAIE = 1;
     
-    data_index = 0;
+    send_index = 0;
     RoachZStack_TxSeq = 0;
     HalDmaInit();
     
@@ -135,18 +124,21 @@ void RoachZStack_ADC_Init( uint8 task_id )
     HAL_DMA_SET_VLEN(HAL_DMA_GET_DESC1234(1), HAL_DMA_VLEN_USE_LEN);
     HAL_DMA_SET_LEN(HAL_DMA_GET_DESC1234(1), sizeof(adc_buffer)/sizeof(*adc_buffer));
     HAL_DMA_SET_WORD_SIZE(HAL_DMA_GET_DESC1234(1), HAL_DMA_WORDSIZE_WORD);
-    HAL_DMA_SET_TRIG_MODE(HAL_DMA_GET_DESC1234(1), HAL_DMA_TMODE_SINGLE_REPEATED);
+    HAL_DMA_SET_TRIG_MODE(HAL_DMA_GET_DESC1234(1), HAL_DMA_TMODE_SINGLE);
     HAL_DMA_SET_TRIG_SRC(HAL_DMA_GET_DESC1234(1), HAL_DMA_TRIG_ADC_CHALL);
     HAL_DMA_SET_SRC_INC(HAL_DMA_GET_DESC1234(1), HAL_DMA_SRCINC_0);
     HAL_DMA_SET_DST_INC(HAL_DMA_GET_DESC1234(1), HAL_DMA_DSTINC_1);
     HAL_DMA_SET_IRQ(HAL_DMA_GET_DESC1234(1), HAL_DMA_IRQMASK_ENABLE);
     HAL_DMA_SET_PRIORITY(HAL_DMA_GET_DESC1234(1), HAL_DMA_PRI_GUARANTEED);
     HAL_DMA_SET_DEST(HAL_DMA_GET_DESC1234(1), adc_buffer);
-    HAL_DMA_ARM_CH(1);
     
   #endif
 }
 
+void RecordBurst(void)
+{
+  HAL_DMA_ARM_CH(1);
+}
 
 /*********************************************************************
  * ADC Register function
@@ -161,6 +153,7 @@ uint8 RegisterForADC( uint8 task_id )
   if ( registeredADCTaskID == NO_TASK_ID )
   {
     registeredADCTaskID = task_id;
+    RecordBurst();
     return ( true );
   }
   else
@@ -187,30 +180,17 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
     {
       return events;
     }
-    int16 max_values[3] = {0, 0, 0};
-    uint8 channel;
-    for (int i = 0; i < sizeof(adc_buffer)/sizeof(*adc_buffer); i++)
+    if (send_index < sizeof(adc_buffer)/sizeof(*adc_buffer))
     {
-      channel = i % 3;
-      if (adc_buffer[i] > max_values[channel])
-      {
-        max_values[channel] = adc_buffer[i];
-      }
-    }
-    data_buffer.packet.buffer[data_index++] = max_values[0] >> 2;
-    data_buffer.packet.buffer[data_index++] = max_values[1] >> 2;
-    data_buffer.packet.buffer[data_index++] = max_values[2] >> 2;
-    if (data_index >= sizeof(data_buffer.packet.buffer)/sizeof(*(data_buffer.packet.buffer)))
-    {
-      data_buffer.packet.seq_num = ++RoachZStack_TxSeq;
+      *(adc_buffer-1 + send_index) = ++RoachZStack_TxSeq;
       //osal_memcpy( RoachZStack_TxBuf+1, adcMsg->buffer, sizeof(adcMsg->buffer) );
       //osal_msg_send( registeredADCTaskID, (uint8 *)data_buffer );
       afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
         (endPointDesc_t *)&RoachZStack_epDesc,
         ROACHZSTACK_CLUSTER_MIC,
-        sizeof(data_buffer), data_buffer.raw_data,
+        SEND_SIZE, (uint8 *)(adc_buffer-1 + send_index),
         &RoachZStack_MsgID, AF_DISCV_ROUTE, AF_DEFAULT_RADIUS);
-      data_index = 0;
+      send_index += SEND_SIZE;
     }
     return events ^ RZS_ADC_PROCESS;
   }

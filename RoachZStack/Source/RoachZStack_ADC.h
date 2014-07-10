@@ -87,6 +87,8 @@ extern void RoachZStack_ADC_Init( byte task_id );
  */
 extern UINT16 RoachZStack_ADC( byte task_id, UINT16 events );
 
+extern void RecordBurst(void);
+
 /*********************************************************************
 *********************************************************************/
 
