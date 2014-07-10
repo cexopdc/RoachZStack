@@ -60,13 +60,13 @@ extern uint8 RoachZStack_MsgID;
 static uint8 RoachZStack_TxSeq;
 
 uint16 data = 0;
-uint8 adc_buffer[3];
+int8 adc_buffer[3];
 union
 {
   struct
   {
     uint8 seq_num;
-    uint8 buffer[BUFFER_SIZE];
+    int8 buffer[BUFFER_SIZE];
   } packet;
   uint8 raw_data[BUFFER_SIZE+1];
 } data_buffer;
@@ -82,7 +82,6 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
 
   DMAIF = 0;
 
-  T1CTL = 0x00 | 0x0C | 0x02;
   if ((flag == 0) && (adc_buffer[0]>40 || adc_buffer[1]>40 || adc_buffer[2]>40)){
       flag = 1; //set flag to start collection
   }
@@ -92,10 +91,12 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
       data_buffer.packet.buffer[counter++] = adc_buffer[1];
       data_buffer.packet.buffer[counter++] = adc_buffer[2];
       if (counter >= sizeof(data_buffer.packet.buffer)){
-        flag = 2; //collection done
+        flag = 0; //collection done
         osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
       }
   }
+  T1CTL = 0x00 | 0x0C | 0x02;
+    HAL_DMA_ARM_CH(1);
 
   CLEAR_SLEEP_MODE();
   //HAL_EXIT_ISR();
@@ -145,7 +146,7 @@ void RoachZStack_ADC_Init( uint8 task_id )
     HAL_DMA_SET_VLEN(HAL_DMA_GET_DESC1234(1), HAL_DMA_VLEN_USE_LEN);
     HAL_DMA_SET_LEN(HAL_DMA_GET_DESC1234(1), sizeof(adc_buffer));
     HAL_DMA_SET_WORD_SIZE(HAL_DMA_GET_DESC1234(1), HAL_DMA_WORDSIZE_BYTE);
-    HAL_DMA_SET_TRIG_MODE(HAL_DMA_GET_DESC1234(1), HAL_DMA_TMODE_SINGLE_REPEATED);
+    HAL_DMA_SET_TRIG_MODE(HAL_DMA_GET_DESC1234(1), HAL_DMA_TMODE_SINGLE);
     HAL_DMA_SET_TRIG_SRC(HAL_DMA_GET_DESC1234(1), HAL_DMA_TRIG_ADC_CHALL);
     HAL_DMA_SET_SRC_INC(HAL_DMA_GET_DESC1234(1), HAL_DMA_SRCINC_0);
     HAL_DMA_SET_DST_INC(HAL_DMA_GET_DESC1234(1), HAL_DMA_DSTINC_1);
