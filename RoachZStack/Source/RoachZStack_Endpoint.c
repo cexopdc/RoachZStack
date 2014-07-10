@@ -131,7 +131,7 @@
 
 unsigned char premic_signal[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-uint8 temp_buffer[3000]; // buffer to store the 3000 samples
+uint8 temp_buffer[90]; // buffer to store the 3000 samples
 uint16 i = 0; // buffer counter
 
 // This list should be filled with Application specific Cluster IDs.
@@ -189,12 +189,10 @@ uint8 RoachZStack_TaskID;    // Task ID for internal task/event processing.
  * LOCAL VARIABLES
  */
 
-static uint8 RoachZStack_MsgID;
+uint8 RoachZStack_MsgID;
 
-static afAddrType_t RoachZStack_TxAddr;
-static uint8 RoachZStack_TxSeq;
-static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX+1];
-static uint16 RoachZStack_TxLen; //changed to uint16 as length is 3000
+afAddrType_t RoachZStack_TxAddr;
+uint16 RoachZStack_TxLen; //changed to uint16 as length is 3000
 static stimCommand* command = NULL;
 
 /*********************************************************************
@@ -282,17 +280,17 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
         RoachZStack_ProcessMSGCmd( MSGpkt );
         break;
   
-      case RZS_ADC_VALUE:
+      /*case RZS_ADC_VALUE:
       {
         adcMsg_t* adcMsg = ((adcMsg_t*) MSGpkt);
-        if (i<3000) {
+        if (i<90) {
           temp_buffer[i] = adcMsg->buffer[0];
           temp_buffer[i+1] = adcMsg->buffer[1];
           temp_buffer[i+2] = adcMsg->buffer[2];
           i = i +3;
         }
         
-        if (i==3000)
+        if (i==90)
           RoachZStack_TxLen = sizeof(temp_buffer);
           if (RoachZStack_TxLen)
           {
@@ -308,7 +306,7 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
             deallocCount++;
           }
         break;
-      }
+      }*/
       default:
         break;
       }
