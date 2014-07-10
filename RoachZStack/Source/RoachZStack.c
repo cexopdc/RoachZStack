@@ -107,7 +107,6 @@
 #define SERIAL_APP_TX_MAX  99
 #endif
 
-#define SERIAL_APP_RSP_CNT  4
 
 unsigned char premic_signal[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 uint8 uart_buffer[SERIAL_APP_TX_MAX+2+6];
@@ -171,12 +170,10 @@ static uint8 RoachZStack_MsgID;
 
 static afAddrType_t RoachZStack_TxAddr;
 static uint8 RoachZStack_TxSeq;
-static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX+1];
+static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX];
 static uint8 RoachZStack_TxLen;
 
 static afAddrType_t RoachZStack_RxAddr;
-static uint8 RoachZStack_RxSeq;
-static uint8 RoachZStack_RspBuf[SERIAL_APP_RSP_CNT];
 static bool startStreaming;
 
 /*********************************************************************
@@ -184,10 +181,8 @@ static bool startStreaming;
  */
 
 static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg );
-static void RoachZStack_HandleKeys( uint8 shift, uint8 keys );
 static void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt );
 static void RoachZStack_Send(void);
-static void RoachZStack_Resp(void);
 static void RoachZStack_CallBack(uint8 port, uint8 event);
 static void showMessage(void);
 
@@ -211,7 +206,6 @@ void RoachZStack_Init( uint8 task_id )
   startStreaming = true;
 
   RoachZStack_TaskID = task_id;
-  RoachZStack_RxSeq = 0xC3;
 
   afRegister( (endPointDesc_t *)&RoachZStack_epDesc );
 
@@ -264,10 +258,6 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
       case ZDO_CB_MSG:
         RoachZStack_ProcessZDOMsgs( (zdoIncomingMsg_t *)MSGpkt );
         break;
-          
-      case KEY_CHANGE:
-        RoachZStack_HandleKeys( ((keyChange_t *)MSGpkt)->state, ((keyChange_t *)MSGpkt)->keys );
-        break;
 
       case AF_INCOMING_MSG_CMD:
         RoachZStack_ProcessMSGCmd( MSGpkt );
@@ -287,12 +277,6 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
   {
     RoachZStack_Send();
     return ( events ^ ROACHZSTACK_SEND_EVT );
-  }
-
-  if ( events & ROACHZSTACK_RESP_EVT )
-  {
-    RoachZStack_Resp();
-    return ( events ^ ROACHZSTACK_RESP_EVT );
   }
 
   return ( 0 );  // Discard unknown events.
@@ -336,54 +320,6 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
 }
 
 /*********************************************************************
- * @fn      RoachZStack_HandleKeys
- *
- * @brief   Handles all key events for this device.
- *
- * @param   shift - true if in shift/alt.
- * @param   keys  - bit field for key events.
- *
- * @return  none
- */
-void RoachZStack_HandleKeys( uint8 shift, uint8 keys )
-{
-  if ( shift )
-  {
-    if ( keys & HAL_KEY_SW_1 )
-    {
-    }
-    if ( keys & HAL_KEY_SW_2 )
-    {
-    }
-    if ( keys & HAL_KEY_SW_3 )
-    {
-    }
-    if ( keys & HAL_KEY_SW_4 )
-    {
-    }
-  }
-  else
-  {
-    if ( keys & HAL_KEY_SW_1 )
-    {
-    }
-
-    if ( keys & HAL_KEY_SW_2 )
-    {
-    }
-
-    if ( keys & HAL_KEY_SW_3 )
-    {
-    }
-
-    if ( keys & HAL_KEY_SW_4 )
-    {
-
-    }
-  }
-}
-
-/*********************************************************************
  * @fn      RoachZStack_ProcessMSGCmd
  *
  * @brief   Data message processor callback. This function processes
@@ -397,9 +333,6 @@ void RoachZStack_HandleKeys( uint8 shift, uint8 keys )
  */
 void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
 {
-  uint8 stat;
-  uint8 seqnb;
-  uint8 delay;
 
   switch ( pkt->clusterId )
   {
@@ -410,48 +343,13 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
       // Store the address for sending and retrying.
       osal_memcpy(&RoachZStack_RxAddr, &(pkt->srcAddr), sizeof( afAddrType_t ));
 
-      seqnb = pkt->cmd.Data[0];
   #ifdef LCD_SUPPORTED          
       HalLcdWriteValue ( pkt->nwkSeqNum, 16, HAL_LCD_LINE_3);
   #endif
-      // Keep message if not a repeat packet
-      if ( (seqnb > RoachZStack_RxSeq) ||                    // Normal
-          ((seqnb < 0x80 ) && ( RoachZStack_RxSeq > 0x80)) ) // Wrap-around
-      {
-         uint16 size = pkt->cmd.DataLength-1;
-        /*HalUARTWrite( SERIAL_APP_PORT, premic_signal, sizeof(premic_signal) );
-       
-        uart_buffer[0] = size & 0xff;
-        uart_buffer[1] = size >> 8;
-        osal_memcpy(uart_buffer+2, pkt->cmd.Data+1, size);*/
-        // Transmit the data on the serial port.
-        if ( HalUARTWrite( SERIAL_APP_PORT,  pkt->cmd.Data+1, size ) )
-        {
-          // Save for next incoming message
-          RoachZStack_RxSeq = seqnb;
-          stat = OTA_SUCCESS;
-        }
-        else
-        {
-          stat = OTA_SER_BUSY;
-        }
-      }
-      else
-      {
-        
-        stat = OTA_DUP_MSG;
-      }
-
-      // Select approproiate OTA flow-control delay.
-      delay = (stat == OTA_SER_BUSY) ? ROACHZSTACK_NAK_DELAY : ROACHZSTACK_ACK_DELAY;
-
-      // Build & send OTA response message.
-      RoachZStack_RspBuf[0] = stat;
-      RoachZStack_RspBuf[1] = seqnb;
-      RoachZStack_RspBuf[2] = LO_UINT16( delay );
-      RoachZStack_RspBuf[3] = HI_UINT16( delay );
-      osal_set_event( RoachZStack_TaskID, ROACHZSTACK_RESP_EVT );
-      osal_stop_timerEx(RoachZStack_TaskID, ROACHZSTACK_RESP_EVT);
+      
+      // Transmit the data on the serial port.
+      HalUARTWrite( SERIAL_APP_PORT,  pkt->cmd.Data, pkt->cmd.DataLength );
+      
     }
     break;
 
@@ -527,27 +425,6 @@ static void RoachZStack_Send(void)
     }
   }
 #endif
-}
-
-/*********************************************************************
- * @fn      RoachZStack_Resp
- *
- * @brief   Send data OTA.
- *
- * @param   none
- *
- * @return  none
- */
-static void RoachZStack_Resp(void)
-{
-  if (afStatus_SUCCESS != AF_DataRequest(&RoachZStack_RxAddr,
-                                         (endPointDesc_t *)&RoachZStack_epDesc,
-                                          ROACHZSTACK_CLUSTER_MIC,
-                                          SERIAL_APP_RSP_CNT, RoachZStack_RspBuf,
-                                         &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS))
-  {
-    osal_set_event(RoachZStack_TaskID, ROACHZSTACK_RESP_EVT);
-  }
 }
 
 /*********************************************************************
