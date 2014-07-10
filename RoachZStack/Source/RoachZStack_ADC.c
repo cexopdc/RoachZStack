@@ -83,7 +83,7 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
   DMAIF = 0;
 
   T1CTL = 0x00 | 0x0C | 0x02;
-  if ((flag == 0) && (adc_buffer[0]>30 || adc_buffer[1]>30 || adc_buffer[2]>30)){
+  if ((flag == 0) && (adc_buffer[0]>40 || adc_buffer[1]>40 || adc_buffer[2]>40)){
       flag = 1; //set flag to start collection
   }
   
