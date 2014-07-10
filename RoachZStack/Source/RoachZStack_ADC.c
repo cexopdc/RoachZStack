@@ -9,9 +9,9 @@
 #include "ZConfig.h"
 #include "OSAL.h"
 
-adcMsg_t* pBufferReading = NULL;
-adcMsg_t* pBufferDone = NULL;
-adcMsg_t* pBufferNext = NULL;
+adcMsg_t buffer; // 3 bytes static buffer 
+uint16 counter = 1000;// collect 1000 samples for each channel
+uint8 flag = 0; // flag of collection of data
 
 // Task ID not initialized
 #define NO_TASK_ID 0xFF
@@ -67,22 +67,20 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
 
   DMAIF = 0;
 
-  if (pBufferDone != NULL)
-  {
-    osal_msg_deallocate((uint8*)pBufferDone);
-    overflow++;
+  T1CTL = 0x00 | 0x0C | 0x02;
+  if ((flag == 0) && (buffer.buffer[0]>30 || buffer.buffer[1]>30 || buffer.buffer[2]>30)){
+      osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
+      flag = 1; //set flag to start collection
+      counter--;
   }
-  pBufferDone = pBufferReading;
-  pBufferReading = pBufferNext;
-  pBufferNext = NULL;
-  if (pBufferReading != NULL)
-  {
-    HAL_DMA_SET_DEST(HAL_DMA_GET_DESC1234(1), pBufferReading->buffer);
-    HAL_DMA_ARM_CH(1);
-    T1CTL = 0x00 | 0x0C | 0x02;
+  
+  else if (flag==1) {
+      osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
+      counter--;
+      if (counter == 0){
+        flag = 2; //collection done
+      }
   }
-
-  osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
 
   CLEAR_SLEEP_MODE();
   //HAL_EXIT_ISR();
@@ -130,14 +128,16 @@ void RoachZStack_ADC_Init( uint8 task_id )
     HalDmaInit();
     HAL_DMA_SET_SOURCE(HAL_DMA_GET_DESC1234(1), &X_ADCH);
     HAL_DMA_SET_VLEN(HAL_DMA_GET_DESC1234(1), HAL_DMA_VLEN_USE_LEN);
-    HAL_DMA_SET_LEN(HAL_DMA_GET_DESC1234(1), sizeof(pBufferReading->buffer));
+    HAL_DMA_SET_LEN(HAL_DMA_GET_DESC1234(1), sizeof(buffer.buffer));
     HAL_DMA_SET_WORD_SIZE(HAL_DMA_GET_DESC1234(1), HAL_DMA_WORDSIZE_BYTE);
     HAL_DMA_SET_TRIG_MODE(HAL_DMA_GET_DESC1234(1), HAL_DMA_TMODE_SINGLE);
     HAL_DMA_SET_TRIG_SRC(HAL_DMA_GET_DESC1234(1), HAL_DMA_TRIG_ADC_CHALL);
     HAL_DMA_SET_SRC_INC(HAL_DMA_GET_DESC1234(1), HAL_DMA_SRCINC_0);
     HAL_DMA_SET_DST_INC(HAL_DMA_GET_DESC1234(1), HAL_DMA_DSTINC_1);
     HAL_DMA_SET_IRQ(HAL_DMA_GET_DESC1234(1), HAL_DMA_IRQMASK_ENABLE);
-    HAL_DMA_SET_PRIORITY(HAL_DMA_GET_DESC1234(1), HAL_DMA_PRI_GUARANTEED);
+    HAL_DMA_SET_PRIORITY(HAL_DMA_GET_DESC1234(1), HAL_DMA_PRI_GUARANTEED); 
+    HAL_DMA_SET_DEST(HAL_DMA_GET_DESC1234(1), buffer.buffer); // change to STATIC MEMORY
+    HAL_DMA_ARM_CH(1);
     
   #endif
 }
@@ -186,7 +186,11 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
     
     halIntState_t intState;
     HAL_ENTER_CRITICAL_SECTION( intState );  // Hold off interrupts.
-        
+   
+    buffer.hdr.event = RZS_ADC_VALUE;
+    osal_msg_send( registeredADCTaskID,(uint8 *)&buffer );  // the second parameter needs to be a pointer.
+
+    /*
     if (pBufferDone != NULL)
     {
       // Send the address to the task
@@ -226,6 +230,7 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
         T1CTL = 0x00 | 0x0C | 0x02;
       }
     }
+    */
     
     HAL_EXIT_CRITICAL_SECTION( intState );   // Re-enable interrupts.
     
