@@ -82,7 +82,7 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
 
   DMAIF = 0;
 
-  if ((flag == 0) && (adc_buffer[0]>40 || adc_buffer[1]>40 || adc_buffer[2]>40)){
+  if ((flag == 0) && (adc_buffer[0]>90 || adc_buffer[1]>90 || adc_buffer[2]>90)){
       flag = 1; //set flag to start collection
       data_buffer.packet.buffer[counter] = adc_buffer[0];
       data_buffer.packet.buffer[counter++] = adc_buffer[1];
