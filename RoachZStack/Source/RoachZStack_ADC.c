@@ -84,15 +84,18 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
 
   if ((flag == 0) && (adc_buffer[0]>40 || adc_buffer[1]>40 || adc_buffer[2]>40)){
       flag = 1; //set flag to start collection
+      data_buffer.packet.buffer[counter] = adc_buffer[0];
+      data_buffer.packet.buffer[counter++] = adc_buffer[1];
+      data_buffer.packet.buffer[counter++] = adc_buffer[2];
   }
   
-  if (flag==1) {
+  else if (flag==1) {
       data_buffer.packet.buffer[counter++] = adc_buffer[0];
       data_buffer.packet.buffer[counter++] = adc_buffer[1];
       data_buffer.packet.buffer[counter++] = adc_buffer[2];
-      if (counter >= sizeof(data_buffer.packet.buffer)){
-        flag = 0; //collection done
+      if (counter>88){
         osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
+        flag = 2; //collection done
       }
   }
   T1CTL = 0x00 | 0x0C | 0x02;
