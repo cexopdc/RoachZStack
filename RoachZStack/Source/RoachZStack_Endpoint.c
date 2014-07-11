@@ -193,7 +193,8 @@ uint8 RoachZStack_MsgID;
 
 
 static afAddrType_t RoachZStack_TxAddr;
-static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX];
+static uint8 RoachZStack_TxSeq;
+static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX+1];
 static uint8 RoachZStack_TxLen;
 static stimCommand* command = NULL;
 
@@ -288,12 +289,14 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
         RoachZStack_TxLen = sizeof(adcMsg->buffer);
         if (RoachZStack_TxLen)
         {
-          osal_memcpy( RoachZStack_TxBuf, adcMsg->buffer, sizeof(adcMsg->buffer) );
+          // Pre-pend sequence number to the Tx message.
+          RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
+          osal_memcpy( RoachZStack_TxBuf+1, adcMsg->buffer, sizeof(adcMsg->buffer) );
           HalLedSet(HAL_LED_4, HAL_LED_MODE_TOGGLE);
           afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
                                                  (endPointDesc_t *)&RoachZStack_epDesc,
                                                   ROACHZSTACK_CLUSTER_MIC,
-                                                  RoachZStack_TxLen, RoachZStack_TxBuf,
+                                                  RoachZStack_TxLen+1, RoachZStack_TxBuf,
                                                   &RoachZStack_MsgID, AF_DISCV_ROUTE, AF_DEFAULT_RADIUS);
           deallocCount++;
         }
