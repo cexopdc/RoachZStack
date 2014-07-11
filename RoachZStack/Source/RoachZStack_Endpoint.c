@@ -191,8 +191,10 @@ uint8 RoachZStack_TaskID;    // Task ID for internal task/event processing.
 
 uint8 RoachZStack_MsgID;
 
-afAddrType_t RoachZStack_TxAddr;
-uint16 RoachZStack_TxLen; //changed to uint16 as length is 3000
+
+static afAddrType_t RoachZStack_TxAddr;
+static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX];
+static uint8 RoachZStack_TxLen;
 static stimCommand* command = NULL;
 
 /*********************************************************************
@@ -283,11 +285,17 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
       /*case RZS_ADC_VALUE:
       {
         adcMsg_t* adcMsg = ((adcMsg_t*) MSGpkt);
-        if (i<90) {
-          temp_buffer[i] = adcMsg->buffer[0];
-          temp_buffer[i+1] = adcMsg->buffer[1];
-          temp_buffer[i+2] = adcMsg->buffer[2];
-          i = i +3;
+        RoachZStack_TxLen = sizeof(adcMsg->buffer);
+        if (RoachZStack_TxLen)
+        {
+          osal_memcpy( RoachZStack_TxBuf, adcMsg->buffer, sizeof(adcMsg->buffer) );
+          HalLedSet(HAL_LED_4, HAL_LED_MODE_TOGGLE);
+          afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
+                                                 (endPointDesc_t *)&RoachZStack_epDesc,
+                                                  ROACHZSTACK_CLUSTER_MIC,
+                                                  RoachZStack_TxLen, RoachZStack_TxBuf,
+                                                  &RoachZStack_MsgID, AF_DISCV_ROUTE, AF_DEFAULT_RADIUS);
+          deallocCount++;
         }
         
         if (i==90)
