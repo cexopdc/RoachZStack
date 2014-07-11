@@ -203,7 +203,7 @@ function serial_callback(~, ~)
     newData = fread(settings.port, settings.readSamples, ['int',num2str(8*settings.sampleSize)])';
     length(newData);
     if (~isempty(newData))
-        newData = reshape(newData, settings.channels, length(newData)/settings.channels)
+        newData = reshape(newData, settings.channels, length(newData)/settings.channels);
         fillFrame(newData);
         % recording = [recording, newData];
         %maxes = max(newData')';

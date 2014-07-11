@@ -55,7 +55,6 @@ uint8 RoachZStack_ADC_TaskID;    // Task ID for internal task/event processing.
 extern afAddrType_t RoachZStack_TxAddr;
 extern const endPointDesc_t RoachZStack_epDesc;
 extern uint8 RoachZStack_MsgID;
-static uint8 RoachZStack_TxSeq;
 
 uint16 data = 0;
 
@@ -66,10 +65,9 @@ union
 {
   struct
   {
-    uint8 seq_num;
     uint16 buffer[BUFFER_SIZE];
   } packet;
-  uint8 raw_data[BUFFER_SIZE*2+1];
+  uint8 raw_data[BUFFER_SIZE*2];
 } data_buffer;
   
 uint8 data_index;
@@ -128,7 +126,6 @@ void RoachZStack_ADC_Init( uint8 task_id )
     DMAIE = 1;
     
     data_index = 0;
-    RoachZStack_TxSeq = 0;
     HalDmaInit();
     
     HAL_DMA_SET_SOURCE(HAL_DMA_GET_DESC1234(1), &X_ADCL);
@@ -202,7 +199,6 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
     data_buffer.packet.buffer[data_index++] = max_values[2] >> 2;
     if (data_index >= sizeof(data_buffer.packet.buffer)/sizeof(*(data_buffer.packet.buffer)))
     {
-      data_buffer.packet.seq_num = ++RoachZStack_TxSeq;
       //osal_memcpy( RoachZStack_TxBuf+1, adcMsg->buffer, sizeof(adcMsg->buffer) );
       //osal_msg_send( registeredADCTaskID, (uint8 *)data_buffer );
       afStatus_t s = AF_DataRequest(&RoachZStack_TxAddr,
