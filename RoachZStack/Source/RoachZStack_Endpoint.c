@@ -191,7 +191,6 @@ uint8 RoachZStack_MsgID;
  */
 
 
-
 static stimCommand* command = NULL;
 
 /*********************************************************************

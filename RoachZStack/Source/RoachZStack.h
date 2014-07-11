@@ -68,7 +68,6 @@ extern "C"
 #define ROACHZSTACK_CLUSTER_CMD         2
 
 #define ROACHZSTACK_SEND_EVT           0x0001
-#define ROACHZSTACK_RESP_EVT           0x0002
 #define ROACHZSTACK_STIM_START         0x0004
 #define ROACHZSTACK_STIM_STOP          0x0008
 #define RZS_DO_HANDSHAKE               0x0010
