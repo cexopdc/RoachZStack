@@ -3,6 +3,9 @@ function plotMics(portString, handles, numMics)
     if (~isempty(instrfind))
         fclose(instrfind);
     end
+    if (exist('fits', 'var'))
+        settings.predict = 1;
+    end
     %close all; 
     settings = {};
     status = {};
@@ -21,7 +24,7 @@ function plotMics(portString, handles, numMics)
     %assignin('base', 'output_socket', settings.output_socket);
     
     settings.sampleSize = 2;
-    settings.plotSamples = 330;
+    settings.plotSamples = 100;
     settings.readSamples = 42;
     settings.channels = numMics;
     settings.sampleRate = 1.25; % kHz
@@ -79,8 +82,8 @@ function plotMics(portString, handles, numMics)
     settings.STEP_SIZE_FACTOR = 5; % number of skips
     settings.STEP_SIZE = settings.INC * settings.STEP_SIZE_FACTOR;
     settings.NUM_STEPS = 360 / settings.STEP_SIZE;
-    settings.START_DELAY = 10;
-    settings.MOTOR_TIME = 6;
+    settings.START_DELAY = 6;
+    settings.MOTOR_TIME = 3.1;
     
  
     while (1)
@@ -130,27 +133,21 @@ function plotMics(portString, handles, numMics)
         
         if (size(data.frames, 3)>0)
             currentFrame = data.frames(:,:,1);
-            f = abs(fft(currentFrame, [], 2)).*settings.scale ./ 2^(8*settings.sampleSize-1)/settings.windowSize*2;
-            power = sqrt(mean(f(:,10:end) .^ 2, 2));
-            data.avgData = [data.avgData(:, 2:end), power];
+            med = median(currentFrame, 2);
+            data.avgData = [data.avgData(:, 2:end), med];
             data.frames = data.frames(:,:,2:end);
             if (size(data.frames, 3) > 5)
                 size(data.frames)
             end
-            for channel = 1:settings.channels
-                set(hAxes3(channel),'YLim', [0, 1.2]);
+            if (settings.predict)
+                [angle, dist] = fit_eval(fits, med);
+                disp(angle)
+                disp(dist)
+                set(hAxes3(channel),'YLim', [0, 360]);
                 set(hAxes3(channel),'XLim', [0, settings.sampleRate*1000/2]);
-                set(hPlots3(channel),'ydata',f(channel,:));
+                %set(hPlots3(channel),'ydata',f(channel,:));
             end
-            newDir = 0;
-            if (power(1) > power(2) && power(1) > power(3))
-                newDir = 1;
-            elseif (power(2) > power(3))
-                newDir = 2;
-            else
-                newDir = 3;
-            end
-            data.dir = [data.dir(:, 2:end), newDir];
+            data.dir = [data.dir(:, 2:end), angle];
             %output_socket.write(unicode2native(mat2str(power)));
         end
     end
