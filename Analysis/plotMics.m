@@ -3,13 +3,17 @@ function plotMics(portString, handles, numMics)
     if (~isempty(instrfind))
         fclose(instrfind);
     end
-    if (exist('fits', 'var'))
-        settings.predict = 1;
-    end
     %close all; 
     settings = {};
     status = {};
     data = {};
+    
+    
+    settings.predict = 0;
+    if evalin('base', 'exist(''fits'', ''var'')')
+        settings.fits = evalin('base', 'fits');
+        settings.predict = 1;
+    end
     
     status.close_flag = 0;
     status.calib_flag = 0;
@@ -32,7 +36,7 @@ function plotMics(portString, handles, numMics)
     data.recording = zeros(settings.channels, 0);
     data.avgData = zeros(settings.channels, settings.plotSamples);
     data.dir = zeros(1, settings.plotSamples);
-    settings.windowSize = .1 * settings.sampleRate * 1000; %s * Hz = samples
+    settings.windowSize = 50;
     data.frames = zeros(3,settings.windowSize,0);
     data.currentFrame = [];
     
@@ -140,7 +144,7 @@ function plotMics(portString, handles, numMics)
                 size(data.frames)
             end
             if (settings.predict)
-                [angle, dist] = fit_eval(fits, med);
+                [angle, dist] = fit_eval(settings.fits, med);
                 disp(angle)
                 disp(dist)
                 set(hAxes3(channel),'YLim', [0, 360]);
