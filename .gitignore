@@ -230,3 +230,4 @@ pip-log.txt
 *.png
 *.mat
 *.cspy.bat
+*.html

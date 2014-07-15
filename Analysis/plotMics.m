@@ -144,14 +144,14 @@ function plotMics(portString, handles, numMics)
                 size(data.frames)
             end
             if (settings.predict)
-                [angle, dist] = fit_eval(settings.fits, med);
-                disp(angle)
+                [pred_angle, dist] = fit_eval(settings.fits, med);
+                disp(pred_angle)
                 disp(dist)
                 set(hAxes3(channel),'YLim', [0, 360]);
                 set(hAxes3(channel),'XLim', [0, settings.sampleRate*1000/2]);
                 %set(hPlots3(channel),'ydata',f(channel,:));
+                data.dir = [data.dir(:, 2:end), pred_angle];
             end
-            data.dir = [data.dir(:, 2:end), angle];
             %output_socket.write(unicode2native(mat2str(power)));
         end
     end
