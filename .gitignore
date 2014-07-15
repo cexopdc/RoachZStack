@@ -230,3 +230,7 @@ pip-log.txt
 *.png
 *.mat
 *.cspy.bat
+RoachZStack/CC2530DB/settings/RoachZStack.cspy.bat
+RoachZStack/CC2530DB/RoachZStack.ewp
+RoachZStack/CC2530DB/RoachZStack.ewp
+RoachZStack/CC2530DB/settings/RoachZStack.cspy.bat
