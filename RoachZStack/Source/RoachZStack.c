@@ -173,7 +173,6 @@ static uint8 RoachZStack_TxSeq;
 static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX];
 static uint8 RoachZStack_TxLen;
 
-static afAddrType_t RoachZStack_RxAddr;
 static bool startStreaming;
 
 /*********************************************************************
@@ -340,15 +339,19 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
   case ROACHZSTACK_CLUSTER_MIC:
     if (startStreaming)
     {
-      // Store the address for sending and retrying.
-      osal_memcpy(&RoachZStack_RxAddr, &(pkt->srcAddr), sizeof( afAddrType_t ));
-
+            
   #ifdef LCD_SUPPORTED          
       HalLcdWriteValue ( pkt->nwkSeqNum, 16, HAL_LCD_LINE_3);
   #endif
       
+      
+      HalUARTWrite( SERIAL_APP_PORT,  (uint8*)&(pkt->srcAddr.addr.shortAddr), 2 );
+      
       // Transmit the data on the serial port.
       HalUARTWrite( SERIAL_APP_PORT,  pkt->cmd.Data, pkt->cmd.DataLength );
+      
+      uint16 terminator = 0xEEEE;
+      HalUARTWrite( SERIAL_APP_PORT,  (uint8*)&terminator, 2 );
       
     }
     break;

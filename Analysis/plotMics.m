@@ -8,6 +8,11 @@ function plotMics(portString, handles, numMics)
     status = {};
     data = {};
     
+    % 0 expecting addr
+    % 1 expecting data
+    % 2 expected terminator
+    settings.state = 2;
+    
     
     settings.predict = 0;
     if evalin('base', 'exist(''fits'', ''var'')')
@@ -30,6 +35,8 @@ function plotMics(portString, handles, numMics)
     settings.channels = numMics;
     settings.sampleRate = 1.25; % kHz
     settings.scale = 8192;
+    
+    data.leftover = [];
     data.recording = zeros(settings.channels, 0);
     data.avgData = zeros(settings.channels, settings.plotSamples);
     data.dir = zeros(1, settings.plotSamples);
@@ -48,6 +55,7 @@ function plotMics(portString, handles, numMics)
     settings.port = serial(portString,'BaudRate',115200);%, 'FlowControl', 'hardware');
     settings.port.BytesAvailableFcnCount = settings.readSamples * settings.sampleSize;
     settings.port.BytesAvailableFcnMode = 'byte';
+    %settings.port.Terminator = {char(13) char(10)};
     settings.port.BytesAvailableFcn = @serial_callback;
     fopen(settings.port);
 
@@ -197,20 +205,56 @@ function fillFrame(newData)
     end
 end
 
-function serial_callback(~, ~)
+function process(newData)
     global settings data
-    newData = fread(settings.port, settings.readSamples, ['int',num2str(8*settings.sampleSize)])';
-    length(newData);
-    if (~isempty(newData))
-        newData = reshape(newData, settings.channels, length(newData)/settings.channels);
-        fillFrame(newData);
+    newData = [data.leftover, newData];
+    newAudio = [];
+    data.leftover = [];
+    if settings.state == 0
+        % expecting addr
+        addr = newData(1);
+        newData = newData(2:end);
+        settings.state = 1;
+    end
+    if settings.state == 1
+        index = find(newData == -4370, 1);
+        if length(index) == 1
+            newAudio = newData(1:index-1);
+            newData = newData(index:end);
+            settings.state = 2;
+        else
+            newAudio = newData(1:length(newData) - mod(length(newData), settings.channels));
+            newData = newData(length(newData) - mod(length(newData), settings.channels)+1:end);
+        end
+    end
+    if settings.state == 2
+        index = find(newData == -4370, 1);
+        if length(index) == 1
+            newData = newData(index+1:end);
+            settings.state = 0;
+        else
+            newData = [];
+        end
+    end
+    data.leftover = newData;
+    if (~isempty(newAudio))
+        newAudio = reshape(newAudio, settings.channels, length(newAudio)/settings.channels);
+        fillFrame(newAudio);
         % recording = [recording, newData];
         %maxes = max(newData')';
         %avgData = [avgData(:, 2:end), maxes];
         
-        data.plotBuffer = [data.plotBuffer(:,settings.readSamples/settings.channels+1:end), newData];
+        data.plotBuffer = [data.plotBuffer(:,size(newAudio, 2)+1:end), newAudio];
     end
-        
+    if length(data.leftover) > settings.channels
+        process([]);
+    end
+end
+
+function serial_callback(~, ~)
+    global settings data
+    newData = fread(settings.port, settings.readSamples, ['int',num2str(8*settings.sampleSize)])';
+    process(newData);        
 end
 
 function cleanup()
