@@ -13,6 +13,8 @@ function plotMics(portString, handles, numMics)
     if evalin('base', 'exist(''fits'', ''var'')')
         settings.fits = evalin('base', 'fits');
         settings.predict = 1;
+        
+        [settings.meshes, settings.x, settings.y] = predict_mesh(settings.fits);
     end
     
     status.close_flag = 0;
@@ -123,7 +125,7 @@ function plotMics(portString, handles, numMics)
 
         end
 
-        set(hAxisDir,'YLim', [0, 4]);
+        set(hAxisDir,'YLim', [0, 360]);
         set(hPlotDir,'ydata',data.dir(:));
         drawnow;
         refresh;
@@ -139,9 +141,8 @@ function plotMics(portString, handles, numMics)
                 size(data.frames)
             end
             if (settings.predict)
-                [pred_angle, dist] = fit_eval(settings.fits, med);
+                [pred_angle, dist] = fit_eval(settings.x, settings.y, settings.meshes, med);
                 disp(pred_angle)
-                disp(dist)
                 set(hAxes3(channel),'YLim', [0, 360]);
                 set(hAxes3(channel),'XLim', [0, settings.sampleRate*1000/2]);
                 %set(hPlots3(channel),'ydata',f(channel,:));
@@ -170,7 +171,7 @@ function turnMotor(t, ~)
     if (data.motorAngle >= 360)
         stop(t);
         delete(t);
-       
+        figure;
         analyze2(data.angles, settings.dc_calib);
         assignin('base', 'angles', data.angles);
         assignin('base', 'dc_calib', settings.dc_calib);

@@ -18,10 +18,14 @@ function mic_data_original=analyze(dataset, dc_calib, opacity)
         end
         mic_data(:,i) = trial_results;
     end
-    %figure;
     mic_data = [mic_data, mic_data(:,1)]; % repeat first entry
     scales = max(mic_data,[],2);
     scales = scales / max(scales);
+    for i = 1:length(scales)
+        if scales(i) == 0
+            scales(i) = 1
+        end
+    end
     mic_data = mic_data ./ (scales * ones(1,size(mic_data, 2))); % normalize
 
     mic_data_original = mic_data(:,1:num_angles);

@@ -9,7 +9,7 @@ function shifted = shiftAngles(angles)
     end
     hold off;
     
-    offset = find(angles(1,:)==max(angles(1,:)))-1;
+    offset = find(angles(3,:)==max(angles(3,:)))-1;
     offset
     shifted = circshift(angles, [0, -offset]);
     

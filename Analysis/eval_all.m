@@ -1,31 +1,32 @@
-function err = eval_all(fits, data, speaker_distances)
+function err = eval_all(fits, data, angles, loudness)
 
     num_channels = size(data, 1);
     num_angles = size(data, 2);
     num_dist = size(data, 3);
 
-    angles = linspace(0, 360-360/num_angles, num_angles);
     pred_angles = zeros(num_angles, num_dist);
     errors = zeros(num_angles, num_dist);
 
+    [meshes, x, y] = predict_mesh(fits);
+
     for distance_index = 1:num_dist
+        distance_index
         for angle_index = 1:num_angles
-            angle = angles(angle_index);
-            distance = speaker_distances(distance_index);
-            [pred_angle, dist] = fit_eval(fits, squeeze(data(:,angle_index, distance_index)));
+            actual_angle = angles(angle_index);
+            [pred_angle, dist] = fit_eval(x, y, meshes, squeeze(data(:,angle_index, distance_index)));
             pred_angles(angle_index, distance_index) = pred_angle;
-            error = abs(angle - pred_angle);
+            error = abs(actual_angle - pred_angle);
             error = min(error, 360 - error);
             errors(angle_index, distance_index) = error;
 
         end
     end
 
-    figure; surf(angles,speaker_distances,errors');
+    figure; surf(angles, loudness,errors');
     xlabel('Angle');
     ylabel('Distance (in)');
     zlabel('Amplitude');
-    figure; surf(angles,speaker_distances,pred_angles');
+    figure; surf(angles, loudness,pred_angles');
     xlabel('Angle');
     ylabel('Distance (in)');
     zlabel('Amplitude');
