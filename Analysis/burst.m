@@ -10,7 +10,7 @@ function burst(portString)
     
     cleanupObj = onCleanup(@cleanup);
     
-    settings.sampleSize = 1;
+    settings.sampleSize = 2;
     settings.plotSamples = 330;
     settings.readSamples = 1;
     settings.sampleRate = 1.25; % kHz
@@ -37,10 +37,11 @@ end
 function serial_callback(obj, ~)
     global settings data
     if (obj.BytesAvailable > 0)
-        newData = fread(settings.port, obj.BytesAvailable, ['int',num2str(8*settings.sampleSize)])';
+        newData = fread(settings.port, obj.BytesAvailable / settings.sampleSize, ['int',num2str(8*settings.sampleSize)])';
         length(newData)
         if (~isempty(newData))
             data.recording = [data.recording, newData];
+            assignin('base', 'recording', data.recording);
         end
     end
 end

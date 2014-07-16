@@ -107,16 +107,16 @@ void RoachZStack_ADC_Init( uint8 task_id )
   #ifndef ZDO_COORDINATOR
     PERCFG |= 0x40;
     RoachZStack_ADC_TaskID = task_id;   
-    uint8 micCfg = 1 << HAL_ADC_CHANNEL_5;
+    uint8 micCfg = 1 << HAL_ADC_CHANNEL_1;
     
     APCFG = 0x00 | micCfg;
     ADCCON1 = HAL_ADC_STSEL_T1C0 | 0x03; // 0x03 reserved
     //HAL_ADC_REF_AVDD or HAL_ADC_REF_125V
-    ADCCON2 = HAL_ADC_REF_125V | HAL_ADC_DEC_064 | 0x05; //stop at channel 5
+    ADCCON2 = HAL_ADC_REF_125V | HAL_ADC_DEC_512 | 0x01; //stop at channel 5
     //P2INP |= 0x20;
     T1CTL = 0x00 | 0x0C | 0x02;
     
-    uint16 counter = 36;//125;
+    uint16 counter = 40;//125;
     
     T1CC0H = counter >> 8;
     T1CC0L = (uint8)counter;
@@ -129,10 +129,10 @@ void RoachZStack_ADC_Init( uint8 task_id )
     packets_ready = 0;
     HalDmaInit();
     
-    HAL_DMA_SET_SOURCE(HAL_DMA_GET_DESC1234(1), &X_ADCH);
+    HAL_DMA_SET_SOURCE(HAL_DMA_GET_DESC1234(1), &X_ADCL);
     HAL_DMA_SET_VLEN(HAL_DMA_GET_DESC1234(1), HAL_DMA_VLEN_USE_LEN);
-    HAL_DMA_SET_LEN(HAL_DMA_GET_DESC1234(1), SEND_SIZE);
-    HAL_DMA_SET_WORD_SIZE(HAL_DMA_GET_DESC1234(1), HAL_DMA_WORDSIZE_BYTE);
+    HAL_DMA_SET_LEN(HAL_DMA_GET_DESC1234(1), SEND_SIZE/2);
+    HAL_DMA_SET_WORD_SIZE(HAL_DMA_GET_DESC1234(1), HAL_DMA_WORDSIZE_WORD);
     HAL_DMA_SET_TRIG_MODE(HAL_DMA_GET_DESC1234(1), HAL_DMA_TMODE_SINGLE);
     HAL_DMA_SET_TRIG_SRC(HAL_DMA_GET_DESC1234(1), HAL_DMA_TRIG_ADC_CHALL);
     HAL_DMA_SET_SRC_INC(HAL_DMA_GET_DESC1234(1), HAL_DMA_SRCINC_0);
@@ -216,7 +216,7 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
       
       
     }
-    osal_start_timerEx(RoachZStack_ADC_TaskID, RZS_ADC_PROCESS, 10 );
+    osal_start_timerEx(RoachZStack_ADC_TaskID, RZS_ADC_PROCESS, 1 );
     return events ^ RZS_ADC_PROCESS;
   }
   return 0;
