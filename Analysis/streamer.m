@@ -22,7 +22,7 @@ function varargout = streamer(varargin)
 
 % Edit the above text to modify the response to help streamer
 
-% Last Modified by GUIDE v2.5 30-Jun-2014 15:14:01
+% Last Modified by GUIDE v2.5 16-Jul-2014 11:53:26
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -209,3 +209,17 @@ function sweep_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global status
 status.motor_flag = 1;
+
+
+% --- Executes on button press in socket.
+function socket_Callback(hObject, eventdata, handles)
+% hObject    handle to socket (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global settings
+try
+    fclose(settings.output_socket);
+catch
+end
+settings.output_socket = tcpip('localhost', 12345, 'NetworkRole', 'server');
+fopen(settings.output_socket)

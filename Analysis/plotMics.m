@@ -21,12 +21,7 @@ function plotMics(portString, handles, numMics)
     cleanupObj = onCleanup(@cleanup);
     
     data.motorAngle = 0;
-    
-    %javaaddpath(pwd, '-end')
-    settings.output_port = 1234; 
-    %settings.output_socket = MatlabOutputSocket(output_port);
-    %assignin('base', 'output_socket', settings.output_socket);
-    
+
     settings.sampleSize = 2;
     settings.plotSamples = 100;
     settings.readSamples = 42;
@@ -151,12 +146,14 @@ function plotMics(portString, handles, numMics)
                 set(hAxes3(channel),'XLim', [0, settings.sampleRate*1000/2]);
                 %set(hPlots3(channel),'ydata',f(channel,:));
                 data.dir = [data.dir(:, 2:end), pred_angle];
+                if isfield(settings, 'output_socket')
+                    fwrite(settings.output_socket,unicode2native(mat2str(pred_angle)));
+                end
             end
-            %output_socket.write(unicode2native(mat2str(power)));
         end
     end
     % close socket connection 
-    %output_socket.close();
+    fclose(settings.output_socket)
     fclose(settings.port);
 end
 
@@ -217,7 +214,12 @@ end
 
 function cleanup()
     global settings
-    %settings.output_socket.close();
+    try
+        fclose(settings.output_socket)
+        settings = rmfield(settings, 'output_socket');
+    catch
+    end
+    
     try
         fclose(settings.port);
         settings = rmfield(settings, 'port');
