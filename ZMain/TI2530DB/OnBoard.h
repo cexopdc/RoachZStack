@@ -213,9 +213,9 @@ extern uint8 aExtendedAddress[8];
  */
 #if !defined INT_HEAP_LEN
 #if defined RTR_NWK
-  #define INT_HEAP_LEN  1000 //changed from 3072 to increase XDATA size
+  #define INT_HEAP_LEN  3072
 #else
-  #define INT_HEAP_LEN  1000  //changed from 2048 to increase XDATA size
+  #define INT_HEAP_LEN  2048
 #endif
 #endif
 #define MAXMEMHEAP INT_HEAP_LEN
