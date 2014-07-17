@@ -8,18 +8,26 @@ function plotMics(portString, handles, numMics)
     status = {};
     data = {};
     
+    settings.nodes = [31087, 31088];%hex2dec('3751')];%, hex2dec('5110')];
+    settings.num_nodes = length(settings.nodes);
+    
     % 0 expecting addr
     % 1 expecting data
     % 2 expected terminator
     settings.state = 2;
+    settings.node = 0;
     
     
-    settings.predict = 0;
-    if evalin('base', 'exist(''fits'', ''var'')')
-        settings.fits = evalin('base', 'fits');
-        settings.predict = 1;
-        
-        [settings.meshes, settings.x, settings.y] = predict_mesh(settings.fits);
+    settings.predict = 1;
+    
+    if settings.predict
+        for node = 1:settings.num_nodes
+            fit_data = {};
+            load(num2str(settings.nodes(node)), 'fits');
+            settings.fits{node} = fits;
+            [fit_data.meshes, fit_data.x, fit_data.y] = predict_mesh(settings.fits{node});
+            settings.fit_data{node} = fit_data;
+        end
     end
     
     status.close_flag = 0;
@@ -37,15 +45,16 @@ function plotMics(portString, handles, numMics)
     settings.scale = 8192;
     
     data.leftover = [];
-    data.recording = zeros(settings.channels, 0);
-    data.avgData = zeros(settings.channels, settings.plotSamples);
-    data.dir = zeros(1, settings.plotSamples);
+    data.recording = zeros(settings.channels, settings.num_nodes, 0);
+    data.avgData = zeros(settings.channels, settings.num_nodes, settings.plotSamples);
+    data.dir = zeros(settings.num_nodes, settings.plotSamples);
     settings.windowSize = 50;
-    data.frames = zeros(3,settings.windowSize,0);
-    data.currentFrame = [];
+    data.frames = zeros(settings.channels, settings.num_nodes, settings.windowSize, 0);
+    data.frame_index = zeros(settings.num_nodes, 1);
+    data.currentFrame = zeros(settings.channels,settings.num_nodes, settings.windowSize);
     
-    settings.dc_calib = zeros(settings.channels, 1);
-    settings.scale_calib = ones(settings.channels, 1);
+    settings.dc_calib = zeros(settings.channels, settings.num_nodes, 1);
+    settings.scale_calib = ones(settings.channels, settings.num_nodes, 1);
     
     
     xRange = (0:settings.plotSamples);%/(sampleRate * 1000);
@@ -59,31 +68,40 @@ function plotMics(portString, handles, numMics)
     settings.port.BytesAvailableFcn = @serial_callback;
     fopen(settings.port);
 
-    hAxes = zeros(1, settings.channels);
-    hPlots = zeros(1, settings.channels);
-    hAxes2 = zeros(1, settings.channels);
-    hPlots2 = zeros(1, settings.channels);
-    hAxes3 = zeros(1, settings.channels);
-    hPlots3 = zeros(1, settings.channels);
-    data.plotBuffer = zeros(settings.channels, settings.plotSamples);
+    hAxes = zeros(settings.channels,settings.num_nodes);
+    hPlots = zeros(settings.channels,settings.num_nodes);
+    hAxes2 = zeros(settings.channels,settings.num_nodes);
+    hPlots2 = zeros(settings.channels,settings.num_nodes);
+    hAxes3 = zeros(settings.channels,settings.num_nodes);
+    hPlots3 = zeros(settings.channels,settings.num_nodes);
+    hAxesDir = zeros(settings.num_nodes, 1);
+    hPlotsDir = zeros(settings.num_nodes, 1);
+    data.plotBuffer = zeros(settings.channels, settings.num_nodes, settings.plotSamples);
     for channel = 1:settings.channels
-        hAxes(channel) = subplot(settings.channels,1,channel,'Parent',handles.tab1);
-        hPlots(channel) = plot(hAxes(channel), xRange(1:length(data.plotBuffer)), data.plotBuffer(channel,:).*settings.scale ./ 2^(8*settings.sampleSize-1));
+        for node = 1:settings.num_nodes
+            hAxes(channel, node) = subplot(settings.channels,settings.num_nodes,settings.num_nodes*(channel-1)+node,'Parent',handles.tab1);
+            hPlots(channel, node) = plot(hAxes(channel, node), xRange(1:size(data.plotBuffer, 3)), squeeze(data.plotBuffer(channel,node,:)).*settings.scale ./ 2^(8*settings.sampleSize-1));
+        end
     end
     
-    for channel = 1:settings.channels    
-        hAxes2(channel) = subplot(settings.channels,1,channel,'Parent',handles.tab2);
-        hPlots2(channel) = plot(hAxes2(channel), xRange(1:length(data.avgData)), data.avgData(channel,:).*settings.scale ./ 2^(8*settings.sampleSize-1));
+    for channel = 1:settings.channels
+        for node = 1:settings.num_nodes
+            hAxes2(channel, node) = subplot(settings.channels,settings.num_nodes,settings.num_nodes*(channel-1)+node,'Parent',handles.tab2);
+            hPlots2(channel, node) = plot(hAxes2(channel, node), xRange(1:size(data.avgData, 3)),squeeze(data.avgData(channel,node,:)).*settings.scale ./ 2^(8*settings.sampleSize-1));
+        end
     end
     
-    for channel = 1:settings.channels    
-        hAxes3(channel) = subplot(settings.channels,1,channel,'Parent',handles.tab3);
-        hPlots3(channel) = plot(hAxes3(channel), fRange, zeros(1, settings.windowSize));
+    for channel = 1:settings.channels
+        for node = 1:settings.num_nodes
+            hAxes3(channel, node) = subplot(settings.channels,settings.num_nodes,settings.num_nodes*(channel-1)+node,'Parent',handles.tab3);
+            hPlots3(channel, node) = plot(hAxes3(channel, node), fRange, zeros(1, settings.windowSize));
+        end
     end
     
-    
-    hAxisDir = subplot(1,1,1, 'Parent', handles.tab4);
-    hPlotDir = plot(data.dir);
+    for node = 1:settings.num_nodes
+        hAxesDir(node) = subplot(settings.num_nodes,1,node,'Parent',handles.tab4);
+        hPlotsDir(node) = plot(hAxesDir(node), data.dir(node,:));
+    end
 
     data.recording = [];
     
@@ -101,12 +119,14 @@ function plotMics(portString, handles, numMics)
             break;
         end
         if status.calib_flag==1
-            settings.dc_calib = prctile(data.plotBuffer, 50, 2);
+            settings.dc_calib = prctile(data.plotBuffer, 50, 3);
             plotBuffer_zero = data.plotBuffer;
             for channel = 1:settings.channels
-               plotBuffer_zero(channel,:) =  plotBuffer_zero(channel,:) - settings.dc_calib(channel);
+                for node = 1:settings.num_nodes
+                    plotBuffer_zero(channel,node,:) =  plotBuffer_zero(channel,node,:) - settings.dc_calib(channel, node);
+                end
             end
-            maxes = prctile(plotBuffer_zero, 95, 2);
+            maxes = prctile(plotBuffer_zero, 95, 3);
             max_max = max(maxes);
             % settings.scale_calib = max_max ./ maxes;
             status.calib_flag = 0;
@@ -124,46 +144,62 @@ function plotMics(portString, handles, numMics)
         end
         
         for channel = 1:settings.channels
-            set(hAxes(channel),'YLim', [0, settings.scale]);
-            set(hPlots(channel),'ydata',(data.plotBuffer(channel,:) - settings.dc_calib(channel)) * settings.scale_calib(channel));
-            set(hAxes(channel),'XLim', [xRange(1), xRange(length(xRange))]);
-            
-            set(hAxes2(channel),'YLim', [-settings.scale, settings.scale]);
-            set(hPlots2(channel),'ydata',data.avgData(channel,:).*settings.scale ./ 2^(8*settings.sampleSize-1) * 2);
+            for node = 1:settings.num_nodes
+                set(hAxes(channel, node),'YLim', [0, settings.scale]);
+                set(hPlots(channel, node),'ydata',(data.plotBuffer(channel, node,:) - settings.dc_calib(channel, node)) * settings.scale_calib(channel, node));
+                set(hAxes(channel, node),'XLim', [xRange(1), xRange(length(xRange))]);
 
+                set(hAxes2(channel, node),'YLim', [-settings.scale, settings.scale]);
+                set(hPlots2(channel, node),'ydata',data.avgData(channel,node,:).*settings.scale ./ 2^(8*settings.sampleSize-1) * 2);
+            end
         end
 
-        set(hAxisDir,'YLim', [0, 360]);
-        set(hPlotDir,'ydata',data.dir(:));
+        for node = 1:settings.num_nodes
+            set(hAxesDir(node),'YLim', [0, 360]);
+            set(hPlotsDir(node),'ydata',data.dir(node,:));
+        end
+        
         drawnow;
         refresh;
         
         assignin('base', 'record', data.recording);
         
-        if (size(data.frames, 3)>0)
-            currentFrame = data.frames(:,:,1);
-            med = median(currentFrame, 2);
-            data.avgData = [data.avgData(:, 2:end), med];
-            data.frames = data.frames(:,:,2:end);
-            if (size(data.frames, 3) > 5)
+        if (size(data.frames, 4)>0)
+            currentFrame = data.frames(:,:,:,1);
+            med = median(currentFrame, 3);
+            data.avgData = cat(3, data.avgData(:, :, 2:end), med);
+            data.frames = data.frames(:,:,:,2:end);
+            if (size(data.frames, 4) > 5)
                 size(data.frames)
             end
             if (settings.predict)
-                [pred_angle, dist] = fit_eval(settings.x, settings.y, settings.meshes, med);
-                disp(pred_angle)
-                set(hAxes3(channel),'YLim', [0, 360]);
-                set(hAxes3(channel),'XLim', [0, settings.sampleRate*1000/2]);
-                %set(hPlots3(channel),'ydata',f(channel,:));
-                data.dir = [data.dir(:, 2:end), pred_angle];
+                pred_angles = zeros(0, settings.num_nodes);
+                for node = 1:settings.num_nodes
+                    fit_data = settings.fit_data{node};
+                    node_data = med(:, node);
+                    [pred_angle, dist] = fit_eval(fit_data.x, fit_data.y, fit_data.meshes, node_data);
+                    disp(pred_angle)
+                    disp(dist)
+                    pred_angles(node) = pred_angle;
+                    %set(hAxes3(channel),'YLim', [0, 360]);
+                    %set(hAxes3(channel),'XLim', [0, settings.sampleRate*1000/2]);
+                    %set(hPlots3(channel),'ydata',f(channel,:));
+                    data.dir(node,:) = [data.dir(node, 2:end), pred_angle];
+                end
                 if isfield(settings, 'output_socket')
-                    fwrite(settings.output_socket,unicode2native(mat2str(pred_angle)));
+                    fwrite(settings.output_socket,unicode2native(mat2str(pred_angles)));
                 end
             end
         end
     end
-    % close socket connection 
-    fclose(settings.output_socket)
-    fclose(settings.port);
+    if isfield(settings, 'output_socket')
+        % close socket connection 
+        fclose(settings.output_socket);
+    end
+    
+    if isfield(settings, 'port')
+        fclose(settings.port);
+    end
 end
 
 function turnMotor(t, ~)
@@ -190,18 +226,20 @@ function fillFrame(newData)
     global settings data
     newData_calib = newData;
     for channel = 1:settings.channels
-       newData_calib(channel,:) =  (newData_calib(channel,:) - settings.dc_calib(channel)) * settings.scale_calib(channel);
+        newData_calib(channel,1,:) =  (newData_calib(channel,1,:) - settings.dc_calib(channel,settings.node)) * settings.scale_calib(channel,settings.node);
     end
-    if (size(data.currentFrame, 2)<settings.windowSize)
-        if (settings.windowSize-size(data.currentFrame, 2) > size(newData_calib, 2))
-            data.currentFrame = [data.currentFrame newData_calib];
+    if (data.frame_index(settings.node)<settings.windowSize)
+        if (settings.windowSize-data.frame_index(settings.node) > size(newData_calib, 3))
+            data.currentFrame(:,settings.node,data.frame_index(settings.node)+1:data.frame_index(settings.node)+size(newData_calib,3)) = newData_calib;
+            data.frame_index(settings.node) = data.frame_index(settings.node) + size(newData_calib,3);
         else
-            data.currentFrame = [data.currentFrame newData_calib(:, 1:settings.windowSize-size(data.currentFrame, 2))];
-            data.frames = cat(3, data.frames, [data.currentFrame]);
-            data.currentFrame = [];
+            data.currentFrame(:,settings.node,data.frame_index(settings.node)+1:end) = newData_calib(:, 1, 1:settings.windowSize-data.frame_index(settings.node));
+            data.frame_index(settings.node) = 0;
+            data.frames = cat(4, data.frames, [data.currentFrame]);
+            data.currentFrame = zeros(settings.channels,settings.num_nodes, settings.windowSize);
         end
     else
-        data.currentFrame = [];
+        data.currentFrame = zeros(settings.channels,settings.num_nodes, settings.windowSize);
     end
 end
 
@@ -213,6 +251,11 @@ function process(newData)
     if settings.state == 0
         % expecting addr
         addr = newData(1);
+        settings.node = find(settings.nodes == addr);
+        if isempty(settings.node)
+           settings.node = find(settings.nodes==0,1);
+           settings.nodes(settings.node) = addr
+        end
         newData = newData(2:end);
         settings.state = 1;
     end
@@ -237,14 +280,13 @@ function process(newData)
         end
     end
     data.leftover = newData;
-    if (~isempty(newAudio))
-        newAudio = reshape(newAudio, settings.channels, length(newAudio)/settings.channels);
+    if (~isempty(newAudio) && ~isempty(settings.node))
+        newAudio = reshape(newAudio, settings.channels, 1, length(newAudio)/settings.channels);
         fillFrame(newAudio);
         % recording = [recording, newData];
         %maxes = max(newData')';
         %avgData = [avgData(:, 2:end), maxes];
-        
-        data.plotBuffer = [data.plotBuffer(:,size(newAudio, 2)+1:end), newAudio];
+        data.plotBuffer(:,settings.node,:) = cat(3, data.plotBuffer(:,settings.node,size(newAudio,3)+1:end), newAudio);
     end
     if length(data.leftover) > settings.channels
         process([]);
