@@ -193,9 +193,9 @@ uint8 RoachZStack_MsgID;
 
 
 afAddrType_t RoachZStack_TxAddr;
-static uint8 RoachZStack_TxSeq;
-static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX+1];
-static uint8 RoachZStack_TxLen;
+//static uint8 RoachZStack_TxSeq;
+//static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX+1];
+//static uint8 RoachZStack_TxLen;
 static stimCommand* command = NULL;
 
 /*********************************************************************
