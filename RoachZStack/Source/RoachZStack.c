@@ -108,9 +108,6 @@
 #endif
 
 
-unsigned char premic_signal[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-uint8 uart_buffer[SERIAL_APP_TX_MAX+2+6];
-
 // This list should be filled with Application specific Cluster IDs.
 const cId_t RoachZStack_ClusterListIn[1] =
 {
@@ -169,7 +166,6 @@ uint8 RoachZStack_TaskID;    // Task ID for internal task/event processing.
 static uint8 RoachZStack_MsgID;
 
 static afAddrType_t RoachZStack_TxAddr;
-static uint8 RoachZStack_TxSeq;
 static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX];
 static uint8 RoachZStack_TxLen;
 
@@ -363,7 +359,7 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
 
 static void showMessage(void)
 {
-  stimCommand* cmd = parseCommand(RoachZStack_TxBuf+1, RoachZStack_TxLen);
+  stimCommand* cmd = parseCommand(RoachZStack_TxBuf+2, RoachZStack_TxLen);
   HalLcdWriteValue ( cmd->direction, 10, HAL_LCD_LINE_1);
   HalLcdWriteValue ( cmd->repeats, 10, HAL_LCD_LINE_2);
   HalLcdWriteValue ( cmd->posOn, 10, HAL_LCD_LINE_3);
@@ -401,20 +397,20 @@ static void RoachZStack_Send(void)
     }
   }
 #else
-  if (!RoachZStack_TxLen && 
-      (RoachZStack_TxLen = HalUARTRead(SERIAL_APP_PORT, RoachZStack_TxBuf+1, SERIAL_APP_TX_MAX-1)))
+  if (!RoachZStack_TxLen)
   {
-    // Pre-pend sequence number to the Tx message.
-    RoachZStack_TxBuf[0] = ++RoachZStack_TxSeq;
+    RoachZStack_TxLen = HalUARTRead(SERIAL_APP_PORT, RoachZStack_TxBuf, SERIAL_APP_TX_MAX);
   }
   
   if (RoachZStack_TxLen)
   {
     showMessage();
+    uint16 addr = *((uint16*)RoachZStack_TxBuf);
+    RoachZStack_TxAddr.addr.shortAddr = addr;
     afStatus_t status = AF_DataRequest(&RoachZStack_TxAddr,
                                            (endPointDesc_t *)&RoachZStack_epDesc,
                                             ROACHZSTACK_CLUSTER_CMD,
-                                            RoachZStack_TxLen+1, RoachZStack_TxBuf,
+                                            RoachZStack_TxLen-2, RoachZStack_TxBuf+2,
                                             &RoachZStack_MsgID, 0, AF_DEFAULT_RADIUS);
     if (afStatus_SUCCESS != status)
     {
