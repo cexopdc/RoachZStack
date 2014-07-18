@@ -48,8 +48,8 @@ function plotMics(portString, handles, numMics)
     data.recording = zeros(settings.channels, settings.num_nodes, 0);
     data.avgData = zeros(settings.channels, settings.num_nodes, settings.plotSamples);
     data.dir = zeros(settings.num_nodes, settings.plotSamples);
-    settings.windowSize = 50;
-    data.frames = zeros(settings.channels, settings.num_nodes, settings.windowSize, 0);
+    settings.windowSize = 10;
+    data.frames = cell(settings.num_nodes,1); %zeros(settings.channels, settings.num_nodes, settings.windowSize, 0);
     data.frame_index = zeros(settings.num_nodes, 1);
     data.currentFrame = zeros(settings.channels,settings.num_nodes, settings.windowSize);
     
@@ -164,34 +164,38 @@ function plotMics(portString, handles, numMics)
         
         assignin('base', 'record', data.recording);
         
-        if (size(data.frames, 4)>0)
-            currentFrame = data.frames(:,:,:,1);
-            med = median(currentFrame, 3);
-            data.avgData = cat(3, data.avgData(:, :, 2:end), med);
-            data.frames = data.frames(:,:,:,2:end);
-            if (size(data.frames, 4) > 5)
-                size(data.frames)
-            end
-            if (settings.predict)
-                pred_angles = zeros(0, settings.num_nodes);
-                for node = 1:settings.num_nodes
+        if (settings.predict)
+            pred_angles = zeros(0, settings.num_nodes);
+            for node = 1:settings.num_nodes
+                frames = data.frames{node};
+                if ~isempty(frames)
+                    currentFrame = squeeze(frames(:,:,1));
+                    med = median(currentFrame, 2);
+                    %data.avgData = cat(3, data.avgData(:, :, 2:end), med);
+                    data.frames{node} = frames(:,:,2:end);
+                    if (size(data.frames{node}, 3) > 5)
+                        size(data.frames{node}, 3)
+                    end
+                
                     fit_data = settings.fit_data{node};
-                    node_data = med(:, node);
+                    node_data = med;
                     [pred_angle, dist] = fit_eval(fit_data.x, fit_data.y, fit_data.meshes, node_data);
-                    disp(pred_angle)
-                    disp(dist)
+                    %disp(pred_angle)
+                    %disp(dist)
                     pred_angles(node) = pred_angle;
                     %set(hAxes3(channel),'YLim', [0, 360]);
                     %set(hAxes3(channel),'XLim', [0, settings.sampleRate*1000/2]);
                     %set(hPlots3(channel),'ydata',f(channel,:));
                     data.dir(node,:) = [data.dir(node, 2:end), pred_angle];
-                end
-                if isfield(settings, 'output_socket')
-                    fwrite(settings.output_socket,unicode2native(mat2str(pred_angles)));
+                    toSend = [settings.nodes(settings.node), pred_angle];
+                    if isfield(settings, 'output_socket')
+                        fwrite(settings.output_socket,unicode2native(mat2str(toSend)));
+                    end
                 end
             end
         end
     end
+    
     if isfield(settings, 'output_socket')
         % close socket connection 
         fclose(settings.output_socket);
@@ -235,11 +239,11 @@ function fillFrame(newData)
         else
             data.currentFrame(:,settings.node,data.frame_index(settings.node)+1:end) = newData_calib(:, 1, 1:settings.windowSize-data.frame_index(settings.node));
             data.frame_index(settings.node) = 0;
-            data.frames = cat(4, data.frames, [data.currentFrame]);
-            data.currentFrame = zeros(settings.channels,settings.num_nodes, settings.windowSize);
+            data.frames{settings.node} = cat(3, data.frames{settings.node}, squeeze(data.currentFrame(:,settings.node,:)));
+            data.currentFrame(:,settings.node,:) = zeros(settings.channels, 1, settings.windowSize);
         end
     else
-        data.currentFrame = zeros(settings.channels,settings.num_nodes, settings.windowSize);
+        data.currentFrame(:,settings.node,:) = zeros(settings.channels, 1, settings.windowSize);
     end
 end
 
