@@ -174,7 +174,7 @@ uint8 RegisterForADC( uint8 task_id )
   if ( registeredADCTaskID == NO_TASK_ID )
   {
     registeredADCTaskID = task_id;
-    osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
+    //osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
     return ( true );
   }
   else
@@ -199,7 +199,7 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
   {
     if (registeredADCTaskID == NO_TASK_ID)
     {
-      //osal_start_timerEx( RoachZStack_ADC_TaskID, RZS_ADC_READ, 2); 
+      osal_start_timerEx( RoachZStack_ADC_TaskID, RZS_ADC_READ, 10); 
       return events ^ RZS_ADC_READ;
     }
     
@@ -213,10 +213,10 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
       SEND_SIZE, (uint8 *)(data_buffer + send_index),
       &RoachZStack_MsgID, AF_DISCV_ROUTE, AF_DEFAULT_RADIUS);
     
-	send_index += SEND_SIZE;
+    send_index += SEND_SIZE;
     packet_counter++;
     if (packet_counter<PACKETS){
-    osal_start_timerEx(RoachZStack_ADC_TaskID, RZS_ADC_READ, 10 );
+      osal_start_timerEx(RoachZStack_ADC_TaskID, RZS_ADC_READ, 10 );
     }
     return events ^ RZS_ADC_READ;
   }
