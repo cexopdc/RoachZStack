@@ -8,7 +8,7 @@ function plotMics(portString, handles, numMics)
     status = {};
     data = {};
     
-    settings.nodes = [31087, 31088];%hex2dec('3751')];%, hex2dec('5110')];
+    settings.nodes = [31087];%hex2dec('3751')];%, hex2dec('5110')];
     settings.num_nodes = length(settings.nodes);
     
     % 0 expecting addr
@@ -33,6 +33,7 @@ function plotMics(portString, handles, numMics)
     status.close_flag = 0;
     status.calib_flag = 0;
     status.motor_flag = 0;
+    status.open_socket = 0;
     cleanupObj = onCleanup(@cleanup);
     
     data.motorAngle = 0;
@@ -143,6 +144,19 @@ function plotMics(portString, handles, numMics)
             status.motor_flag = 0;
         end
         
+        if status.open_socket==1
+            try
+                fclose(settings.output_socket);
+            catch
+            end
+            settings.output_socket = tcpip('localhost', 12345, 'NetworkRole', 'server');
+            settings.output_socket.BytesAvailableFcnCount = 1;
+            settings.output_socket.BytesAvailableFcnMode = 'byte';
+            settings.output_socket.BytesAvailableFcn = @socket_callback;
+            fopen(settings.output_socket)
+            status.open_socket = 0;
+        end
+        
         for channel = 1:settings.channels
             for node = 1:settings.num_nodes
                 set(hAxes(channel, node),'YLim', [0, settings.scale]);
@@ -180,7 +194,7 @@ function plotMics(portString, handles, numMics)
                     fit_data = settings.fit_data{node};
                     node_data = med;
                     [pred_angle, dist] = fit_eval(fit_data.x, fit_data.y, fit_data.meshes, node_data);
-                    %disp(pred_angle)
+                    disp(pred_angle)
                     %disp(dist)
                     pred_angles(node) = pred_angle;
                     %set(hAxes3(channel),'YLim', [0, 360]);
@@ -298,9 +312,19 @@ function process(newData)
 end
 
 function serial_callback(~, ~)
-    global settings data
+    global settings
     newData = fread(settings.port, settings.readSamples, ['int',num2str(8*settings.sampleSize)])';
     process(newData);        
+end
+
+function socket_callback(~, ~)
+    global settings
+    if (settings.output_socket.BytesAvailable > 0)
+        newData = fread(settings.output_socket, settings.output_socket.BytesAvailable, 'int8')';
+        disp(newData);
+        toSend = typecast(org.apache.commons.codec.binary.Base64.decodeBase64(newData), 'uint8')';
+        fwrite(settings.port, toSend);
+    end
 end
 
 function cleanup()

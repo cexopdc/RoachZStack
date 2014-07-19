@@ -406,7 +406,10 @@ static void RoachZStack_Send(void)
   {
     showMessage();
     uint16 addr = *((uint16*)RoachZStack_TxBuf);
-    RoachZStack_TxAddr.addr.shortAddr = addr;
+    if (addr != 0)
+    {
+      RoachZStack_TxAddr.addr.shortAddr = addr;
+    }
     afStatus_t status = AF_DataRequest(&RoachZStack_TxAddr,
                                            (endPointDesc_t *)&RoachZStack_epDesc,
                                             ROACHZSTACK_CLUSTER_CMD,

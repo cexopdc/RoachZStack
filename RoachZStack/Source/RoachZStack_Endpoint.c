@@ -350,7 +350,7 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
 static void showMessage(afMSGCommandFormat_t data)
 {
 
-  uint8 commandType  = data.Data[1];
+  uint8 commandType  = data.Data[0];
   
 #ifdef BIPHASIC_STIM
   uint16 r;
@@ -363,12 +363,12 @@ static void showMessage(afMSGCommandFormat_t data)
   case RIGHT:
   case LEFT:
   case BACK:
-    command = parseCommand(data.Data+1, data.DataLength-1);
+    command = parseCommand(data.Data, data.DataLength);
     Stimulator_SetCommand(command);
     break;
   case DIGIPOT:
 #ifdef BIPHASIC_STIM
-    r = data.Data[2] + (data.Data[3]<<8);
+    r = data.Data[1] + (data.Data[2]<<8);
     val = (int8)(r*255.0/DIGIPOT_R);
     buf[0] = 0x13;
     buf[1] = 255-val;

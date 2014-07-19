@@ -216,10 +216,5 @@ function socket_Callback(hObject, eventdata, handles)
 % hObject    handle to socket (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global settings
-try
-    fclose(settings.output_socket);
-catch
-end
-settings.output_socket = tcpip('localhost', 12345, 'NetworkRole', 'server');
-fopen(settings.output_socket)
+global status
+status.open_socket = 1;
