@@ -2461,7 +2461,8 @@
           <state>HAL_AES=FALSE</state>
           <state>HAL_KEY=FALSE</state>
           <state>OSC32K_CRYSTAL_INSTALLED=FALSE</state>
-          <state>INT_HEAP_LEN=1000</state>
+          <state>INT_HEAP_LEN=2000</state>
+          <state>OSALMEM_METRICS</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -3135,7 +3136,7 @@
         </option>
         <option>
           <name>ListOutputFormat</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>BufferedTermOutput</name>
