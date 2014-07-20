@@ -67,7 +67,7 @@ int8 adc_buffer[3];
 uint16 overflow = 0;
 
 #define SEND_SIZE 90
-#define BUFFER_LEN 1200
+#define BUFFER_LEN 3600
 #define PACKETS (BUFFER_LEN / SEND_SIZE)
 int8 data_buffer[BUFFER_LEN];
 uint16 send_index;
