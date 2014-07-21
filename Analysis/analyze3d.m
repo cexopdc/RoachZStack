@@ -1,7 +1,7 @@
 function [fits, thetas, loudness]=analyze3d()
 close all;
 
-[loudness, filenames]=textread('dataset.csv','%f,%s');
+[loudness, filenames]=textread('dataset3.csv','%f,%s');
 
 % get size
 load(filenames{1}, 'angles');

@@ -8,7 +8,7 @@ function plotMics(portString, handles, numMics)
     status = {};
     data = {};
     
-    settings.nodes = [31087];%hex2dec('3751')];%, hex2dec('5110')];
+    settings.nodes = [0];%31088, 31087];%hex2dec('3751')];%, hex2dec('5110')];
     settings.num_nodes = length(settings.nodes);
     
     % 0 expecting addr
@@ -39,7 +39,7 @@ function plotMics(portString, handles, numMics)
     data.motorAngle = 0;
 
     settings.sampleSize = 2;
-    settings.plotSamples = 100;
+    settings.plotSamples = 45;
     settings.readSamples = 42;
     settings.channels = numMics;
     settings.sampleRate = 1.25; % kHz
@@ -111,7 +111,7 @@ function plotMics(portString, handles, numMics)
     settings.STEP_SIZE = settings.INC * settings.STEP_SIZE_FACTOR;
     settings.NUM_STEPS = 360 / settings.STEP_SIZE;
     settings.START_DELAY = 6;
-    settings.MOTOR_TIME = 3.1;
+    settings.MOTOR_TIME = 1.5;
     
  
     while (1)
@@ -201,7 +201,7 @@ function plotMics(portString, handles, numMics)
                     %set(hAxes3(channel),'XLim', [0, settings.sampleRate*1000/2]);
                     %set(hPlots3(channel),'ydata',f(channel,:));
                     data.dir(node,:) = [data.dir(node, 2:end), pred_angle];
-                    toSend = [settings.nodes(settings.node), pred_angle];
+                    toSend = [settings.nodes(node), pred_angle];
                     if isfield(settings, 'output_socket')
                         fwrite(settings.output_socket,unicode2native(mat2str(toSend)));
                     end
@@ -222,7 +222,7 @@ end
 
 function turnMotor(t, ~)
     global data settings
-    data.angles = cat(3, data.angles, data.plotBuffer);
+    data.angles = cat(4, data.angles, data.plotBuffer);
     for j=1:settings.STEP_SIZE_FACTOR
         outputSingleScan (settings.s,[1,1]);
         outputSingleScan (settings.s,[1,0]);          
@@ -234,8 +234,8 @@ function turnMotor(t, ~)
         stop(t);
         delete(t);
         figure;
-        analyze2(data.angles, settings.dc_calib);
-        assignin('base', 'angles', data.angles);
+        analyze2(squeeze(data.angles), settings.dc_calib);
+        assignin('base', 'angles', squeeze(data.angles));
         assignin('base', 'dc_calib', settings.dc_calib);
     end
 end
@@ -268,7 +268,7 @@ function process(newData)
     data.leftover = [];
     if settings.state == 0
         % expecting addr
-        addr = newData(1);
+        addr = newData(1)
         settings.node = find(settings.nodes == addr);
         if isempty(settings.node)
            settings.node = find(settings.nodes==0,1);

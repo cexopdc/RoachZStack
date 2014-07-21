@@ -26,7 +26,7 @@ function mic_data_original=analyze(dataset, dc_calib, opacity)
             scales(i) = 1
         end
     end
-    mic_data = mic_data ./ (scales * ones(1,size(mic_data, 2))); % normalize
+    %mic_data = mic_data ./ (scales * ones(1,size(mic_data, 2))); % normalize
 
     mic_data_original = mic_data(:,1:num_angles);
     
