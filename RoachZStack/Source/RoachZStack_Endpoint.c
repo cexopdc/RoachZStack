@@ -240,10 +240,12 @@ void RoachZStack_Init( uint8 task_id )
   
   ZDO_RegisterForZDOMsg( RoachZStack_TaskID, Match_Desc_rsp );
   
-  //ZMacSetTransmitPower(TX_PWR_MINUS_22);
+  //ZMacSetTransmitPower(TX_PWR_PLUS_19);
   
+#ifndef RTR_NWK
   osal_set_event(RoachZStack_TaskID, RZS_DO_HANDSHAKE );
-  
+#endif
+
 }
 
 /*********************************************************************
@@ -330,7 +332,7 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
           if ( pRsp->status == ZSuccess && pRsp->cnt )
           {
             RoachZStack_TxAddr.addrMode = (afAddrMode_t)Addr16Bit;
-            RoachZStack_TxAddr.addr.shortAddr = pRsp->nwkAddr;
+            RoachZStack_TxAddr.addr.shortAddr = 0;// HACK pRsp->nwkAddr;
             // Take the first endpoint, Can be changed to search through endpoints
             RoachZStack_TxAddr.endPoint = pRsp->epList[0];
             

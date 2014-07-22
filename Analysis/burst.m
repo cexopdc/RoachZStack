@@ -27,7 +27,7 @@ function burst(portString)
     data.recording = [];
 
  
-    pause(10);
+    pause(30);
     assignin('base', 'recording', data.recording);
 
     
