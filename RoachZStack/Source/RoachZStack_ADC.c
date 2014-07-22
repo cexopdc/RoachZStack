@@ -81,11 +81,11 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
 
   DMAIF = 0;
 
-  if ((flag < 2) && (adc_buffer[0]>50 || adc_buffer[1]>50 || adc_buffer[2]>50)){
+  if ((flag < 8) && (adc_buffer[0]>60 || adc_buffer[1]>60 || adc_buffer[2]>60)){
       flag = flag + 1; //set flag to start collection
   }
   
-  if (flag == 2) {
+  if (flag == 8) {
     if (sample_counter == 0) {
       data_buffer[sample_counter] = adc_buffer[0];
       data_buffer[sample_counter++] = adc_buffer[1];
@@ -98,7 +98,7 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
     }  
     if (sample_counter>BUFFER_LEN-2){
       osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
-      flag = 3; //collection done
+      flag = 9; //collection done
     }
   }
   T1CTL = 0x00 | 0x0C | 0x02;
