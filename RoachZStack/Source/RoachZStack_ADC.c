@@ -57,17 +57,18 @@ extern afAddrType_t RoachZStack_TxAddr;
 extern const endPointDesc_t RoachZStack_epDesc;
 extern uint8 RoachZStack_MsgID;
 
-uint16 sample_counter = 0;// collect 1000 samples for each channel
+uint16 sample_counter = 0;
+uint16 data_counter = 0;// collect 1000 samples for each channel
 uint8 packet_counter = 0;// send PACKETS packets.
 uint8 flag = 0; // flag of collection of data
 uint16 data = 0;
 int8 adc_buffer[3];
-
+int8 tmp_buffer[18]={0};// for 15 samples before burst 
 
 uint16 overflow = 0;
 
 #define SEND_SIZE 90
-#define BUFFER_LEN 3600
+#define BUFFER_LEN 900
 #define PACKETS (BUFFER_LEN / SEND_SIZE)
 int8 data_buffer[BUFFER_LEN];
 uint16 send_index;
@@ -80,27 +81,55 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
   //HAL_ENTER_ISR();
 
   DMAIF = 0;
-
-  if ((flag < 8) && (adc_buffer[0]>60 || adc_buffer[1]>60 || adc_buffer[2]>60)){
-      flag = flag + 1; //set flag to start collection
-  }
   
-  if (flag == 8) {
-    if (sample_counter == 0) {
-      data_buffer[sample_counter] = adc_buffer[0];
-      data_buffer[sample_counter++] = adc_buffer[1];
-      data_buffer[sample_counter++] = adc_buffer[2];
-    }
-    else {
-      data_buffer[sample_counter++] = adc_buffer[0];
-      data_buffer[sample_counter++] = adc_buffer[1];
-      data_buffer[sample_counter++] = adc_buffer[2];
-    }  
-    if (sample_counter>BUFFER_LEN-2){
-      osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
-      flag = 9; //collection done
-    }
+  if (sample_counter < 900) {
+    sample_counter++;
   }
+  else {
+    if (flag == 0){
+      tmp_buffer[0] = tmp_buffer[3];
+      tmp_buffer[1] = tmp_buffer[4];
+      tmp_buffer[2] = tmp_buffer[5];
+      tmp_buffer[3] = tmp_buffer[6];
+      tmp_buffer[4] = tmp_buffer[7];
+      tmp_buffer[5] = tmp_buffer[8];
+      tmp_buffer[6] = tmp_buffer[9];
+      tmp_buffer[7] = tmp_buffer[10];
+      tmp_buffer[8] = tmp_buffer[11];
+      tmp_buffer[9] = tmp_buffer[12];
+      tmp_buffer[10] = tmp_buffer[13];
+      tmp_buffer[11] = tmp_buffer[14];
+      tmp_buffer[12] = tmp_buffer[15];
+      tmp_buffer[13] = tmp_buffer[16];
+      tmp_buffer[14] = tmp_buffer[17];
+      tmp_buffer[15] = adc_buffer[0];
+      tmp_buffer[16] = adc_buffer[1];
+      tmp_buffer[17] = adc_buffer[2];
+    }
+     
+    if ((flag == 0) && (adc_buffer[0]>60 || adc_buffer[1]>60 || adc_buffer[2]>60)){
+      flag = flag + 1; //set flag to start collection
+    }
+    
+    if (flag == 1) {
+      if (data_counter == 0) {
+        for (; data_counter < 18; data_counter++)
+        {
+          data_buffer[data_counter] = tmp_buffer[data_counter];
+        }
+      }
+      else {
+        data_buffer[data_counter++] = adc_buffer[0];
+        data_buffer[data_counter++] = adc_buffer[1];
+        data_buffer[data_counter++] = adc_buffer[2];
+      }  
+      if (data_counter>BUFFER_LEN-2){
+        osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ );
+        flag = 2; //collection done
+      }
+    }
+  } 
+  
   T1CTL = 0x00 | 0x0C | 0x02;
     HAL_DMA_ARM_CH(1);
 
@@ -139,7 +168,7 @@ void RoachZStack_ADC_Init( uint8 task_id )
     //P2INP |= 0x20;
     T1CTL = 0x00 | 0x0C | 0x02;
     
-    uint16 counter = 200;//200 for 1.25KHz, 16 for 15KHz;
+    uint16 counter = 16;//200 for 1.25KHz, 16 for 15KHz;
     
     T1CC0H = counter >> 8;
     T1CC0L = (uint8)counter;
