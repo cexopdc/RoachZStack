@@ -63,7 +63,7 @@ uint8 packet_counter = 0;// send PACKETS packets.
 uint8 flag = 0; // flag of collection of data
 uint16 data = 0;
 int8 adc_buffer[3];
-int8 tmp_buffer[18]={0};// for 15 samples before burst 
+int8 tmp_buffer[33]={0};// for 30 samples before burst 
 
 uint16 overflow = 0;
 
@@ -87,24 +87,13 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
   }
   else {
     if (flag == 0){
-      tmp_buffer[0] = tmp_buffer[3];
-      tmp_buffer[1] = tmp_buffer[4];
-      tmp_buffer[2] = tmp_buffer[5];
-      tmp_buffer[3] = tmp_buffer[6];
-      tmp_buffer[4] = tmp_buffer[7];
-      tmp_buffer[5] = tmp_buffer[8];
-      tmp_buffer[6] = tmp_buffer[9];
-      tmp_buffer[7] = tmp_buffer[10];
-      tmp_buffer[8] = tmp_buffer[11];
-      tmp_buffer[9] = tmp_buffer[12];
-      tmp_buffer[10] = tmp_buffer[13];
-      tmp_buffer[11] = tmp_buffer[14];
-      tmp_buffer[12] = tmp_buffer[15];
-      tmp_buffer[13] = tmp_buffer[16];
-      tmp_buffer[14] = tmp_buffer[17];
-      tmp_buffer[15] = adc_buffer[0];
-      tmp_buffer[16] = adc_buffer[1];
-      tmp_buffer[17] = adc_buffer[2];
+      uint16 i = 0;
+      for (i=0; i<30 ; i++) {
+        tmp_buffer[i] = tmp_buffer[i+3];
+      }
+      tmp_buffer[30] = adc_buffer[0];
+      tmp_buffer[31] = adc_buffer[1];
+      tmp_buffer[32] = adc_buffer[2];
     }
      
     if ((flag == 0) && (adc_buffer[0]>60 || adc_buffer[1]>60 || adc_buffer[2]>60)){
@@ -113,7 +102,7 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
     
     if (flag == 1) {
       if (data_counter == 0) {
-        for (; data_counter < 18; data_counter++)
+        for (; data_counter < 33; data_counter++)
         {
           data_buffer[data_counter] = tmp_buffer[data_counter];
         }
