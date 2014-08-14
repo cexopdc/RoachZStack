@@ -63,13 +63,15 @@ uint8 packet_counter = 0;// send PACKETS packets.
 uint8 flag = 0; // flag of collection of data
 uint16 data = 0;
 int8 adc_buffer[3];
-int8 tmp_buffer[33]={0};// for 30 samples before burst 
+
 
 uint16 overflow = 0;
 
 #define SEND_SIZE 90
 #define BUFFER_LEN 900
 #define PACKETS (BUFFER_LEN / SEND_SIZE)
+#define PRE_BUFFER_SIZE 50*3 // for 3 channels
+int8 tmp_buffer[PRE_BUFFER_SIZE + 3]={0};// for samples before burst 
 int8 data_buffer[BUFFER_LEN];
 uint16 send_index;
 
@@ -88,12 +90,12 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
   else {
     if (flag == 0){
       uint16 i = 0;
-      for (i=0; i<30 ; i++) {
+      for (i=0; i<PRE_BUFFER_SIZE ; i++) {
         tmp_buffer[i] = tmp_buffer[i+3];
       }
-      tmp_buffer[30] = adc_buffer[0];
-      tmp_buffer[31] = adc_buffer[1];
-      tmp_buffer[32] = adc_buffer[2];
+      tmp_buffer[PRE_BUFFER_SIZE] = adc_buffer[0];
+      tmp_buffer[PRE_BUFFER_SIZE + 1] = adc_buffer[1];
+      tmp_buffer[PRE_BUFFER_SIZE + 2] = adc_buffer[2];
     }
      
     if ((flag == 0) && (adc_buffer[0]>60 || adc_buffer[1]>60 || adc_buffer[2]>60)){
@@ -102,7 +104,7 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
     
     if (flag == 1) {
       if (data_counter == 0) {
-        for (; data_counter < 33; data_counter++)
+        for (; data_counter < PRE_BUFFER_SIZE + 3; data_counter++)
         {
           data_buffer[data_counter] = tmp_buffer[data_counter];
         }
