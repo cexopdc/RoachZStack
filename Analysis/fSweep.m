@@ -16,7 +16,7 @@ function fSweep()
     
     xRange = (0:plotSamples);%/(sampleRate * 1000);
 
-    port = serial('COM4','BaudRate',115200)%, 'FlowControl', 'hardware');
+    port = serial('COM5','BaudRate',115200)%, 'FlowControl', 'hardware');
     port.BytesAvailableFcnCount = readSamples;
     port.BytesAvailableFcnMode = 'byte';
     port.BytesAvailableFcn = @serial_callback;

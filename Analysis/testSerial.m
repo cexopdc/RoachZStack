@@ -1,7 +1,7 @@
 clear all;
 close all;
 
-port = serial('COM7','BaudRate',115200, 'FlowControl', 'hardware');
+port = serial('COM5','BaudRate',115200, 'FlowControl', 'hardware');
 fopen(port);
 
 signal = [255, 255, 255, 255, 255, 255];
