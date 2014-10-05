@@ -7,7 +7,7 @@ function fSweep()
     close all;
     pause(10);
     sampleSize = 1;
-    plotSamples = 2500;
+    plotSamples = 2500
     readSamples = 42;
     channels = 3;
     sampleRate = 1.25; % kHz

@@ -23,11 +23,11 @@ function plotMics(portString, handles, numMics)
     settings.sampleSize = 1;
     settings.plotSamples = 5000;
     settings.readSamples = 42;
-    settings.channels = numMics;
+    settings.channels = numMics
     settings.sampleRate = 1.25; % kHz
     settings.scale = 128;
-    data.recording = zeros(settings.channels, 0);
-    data.avgData = zeros(settings.channels, settings.plotSamples);
+    data.recording = zeros(settings.channels, 0)
+    data.avgData = zeros(settings.channels, settings.plotSamples)
     data.dir = zeros(1, settings.plotSamples);
     settings.windowSize = .1 * settings.sampleRate * 1000; %s * Hz = samples
     data.frames = zeros(3,settings.windowSize,0);
