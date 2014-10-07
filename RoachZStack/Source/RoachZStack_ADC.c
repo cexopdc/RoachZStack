@@ -19,6 +19,7 @@ adcMsg_t* pBufferNext = NULL;
 #define ADC_R 0x10  //P0_4->P18_13
 #define ADC_L 0x02  //P0_1->P18_7
 #define ADC_C 0x20  //P0_5->P18_15
+#define ADC_N 0x08 //P0_3->P18_11 in user guide // add pin P0_3 -- less noise
 
 
 #define HAL_ADC_EOC         0x80    /* End of Conversion bit */
@@ -112,17 +113,18 @@ void RoachZStack_ADC_Init( uint8 task_id )
       micCfg |= 1 << HAL_ADC_CHANNEL_5;
     }
     
-    APCFG = 0x00 | micCfg;
-    ADCCON1 = HAL_ADC_STSEL_T1C0 | 0x03; // 0x03 reserved
+    APCFG = 0x00 | micCfg;  // analog periferal config
+    // ADC control settings
+    ADCCON1 = HAL_ADC_STSEL_T1C0 | 0x03; // 0x03 reserved // timer1, channel 0 compare event
     //HAL_ADC_REF_AVDD or HAL_ADC_REF_125V
     ADCCON2 = HAL_ADC_REF_125V | HAL_ADC_DEC_064 | 0x05; //stop at channel 5
     //P2INP |= 0x20;
-    T1CTL = 0x00 | 0x0C | 0x02;
+    T1CTL = 0x00 | 0x0C | 0x02; // timer 1 control
     
     uint16 counter = 200;//125;
     
-    T1CC0H = counter >> 8;
-    T1CC0L = (uint8)counter;
+    T1CC0H = counter >> 8;  // timer 1 channel 0, capture and compare, high byte
+    T1CC0L = (uint8)counter; // low byte
     // no rf, no interrupt, set->clear, compare, no capture
     T1CCTL0 = 0x00 | 0x00 | 0x18 | 0x04 | 0x00; // 5C;
     DMAIE = 1;

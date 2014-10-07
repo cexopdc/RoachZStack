@@ -10,10 +10,10 @@ function plotMics(portString, handles, numMics)
     
     status.close_flag = 0;
     status.calib_flag = 0;
-    status.motor_flag = 0;
+%     status.motor_flag = 0;
     cleanupObj = onCleanup(@cleanup);
     
-    data.motorAngle = 0;
+%     data.motorAngle = 0;
     
     %javaaddpath(pwd, '-end')
     settings.output_port = 1234; 
@@ -45,7 +45,7 @@ function plotMics(portString, handles, numMics)
     settings.port.BytesAvailableFcnCount = settings.readSamples;
     settings.port.BytesAvailableFcnMode = 'byte';
     settings.port.BytesAvailableFcn = @serial_callback;
-    fopen(settings.port);
+    fopen(settings.port)
 
     hAxes = zeros(1, settings.channels);
     hPlots = zeros(1, settings.channels);
@@ -53,6 +53,8 @@ function plotMics(portString, handles, numMics)
     hPlots2 = zeros(1, settings.channels);
     hAxes3 = zeros(1, settings.channels);
     hPlots3 = zeros(1, settings.channels);
+    hAxes4 = zeros(1, settings.channels);
+    hPlots4 = zeros(1, settings.channels);
     data.plotBuffer = zeros(settings.channels, settings.plotSamples);
     for channel = 1:settings.channels
         hAxes(channel) = subplot(settings.channels,1,channel,'Parent',handles.tab1);
@@ -69,18 +71,23 @@ function plotMics(portString, handles, numMics)
         hPlots3(channel) = plot(hAxes3(channel), fRange, zeros(1, settings.windowSize));
     end
     
+    for channel = 1:settings.channels    
+        hAxes4(channel) = subplot(settings.channels,1,channel,'Parent',handles.tab4);
+        hPlots4(channel) = plot(hAxes4(channel), fRange, zeros(1, settings.windowSize));
+    end
+    
     
     hAxisDir = subplot(1,1,1, 'Parent', handles.tab4);
     hPlotDir = plot(data.dir);
 
     data.recording = [];
     
-    settings.INC = 1.8;
-    settings.STEP_SIZE_FACTOR = 5;
-    settings.STEP_SIZE = settings.INC * settings.STEP_SIZE_FACTOR;
-    settings.NUM_STEPS = 360 / settings.STEP_SIZE;
-    settings.START_DELAY = 10;
-    settings.MOTOR_TIME = 6;
+%     settings.INC = 1.8;
+%     settings.STEP_SIZE_FACTOR = 5;
+%     settings.STEP_SIZE = settings.INC * settings.STEP_SIZE_FACTOR;
+%     settings.NUM_STEPS = 360 / settings.STEP_SIZE;
+%     settings.START_DELAY = 10;
+%     settings.MOTOR_TIME = 6;
     
  
     while (1)
@@ -99,17 +106,17 @@ function plotMics(portString, handles, numMics)
             settings.scale_calib = max_max ./ maxes;
             status.calib_flag = 0;
         end
-        if status.motor_flag==1
-            settings.s = daq.createSession('ni');
-            % Initialization daq
-            data.angles = [];
-            addDigitalChannel(settings.s,'Dev3','Port1/Line2:3','OutputOnly')
-            t = timer('StartDelay', settings.START_DELAY, 'Period', settings.MOTOR_TIME);
-            t.TimerFcn = @turnMotor;
-            t.ExecutionMode = 'fixedRate';
-            start(t);
-            status.motor_flag = 0;
-        end
+%         if status.motor_flag==1
+%             settings.s = daq.createSession('ni');
+%             % Initialization daq
+%             data.angles = [];
+%             addDigitalChannel(settings.s,'Dev3','Port1/Line2:3','OutputOnly')
+%             t = timer('StartDelay', settings.START_DELAY, 'Period', settings.MOTOR_TIME);
+%             t.TimerFcn = @turnMotor;
+%             t.ExecutionMode = 'fixedRate';
+%             start(t);
+%             status.motor_flag = 0;
+%         end
         
         for channel = 1:settings.channels
             set(hAxes(channel),'YLim', [0, settings.scale]);
@@ -158,24 +165,24 @@ function plotMics(portString, handles, numMics)
     fclose(settings.port);
 end
 
-function turnMotor(t, ~)
-    global data settings
-    data.angles = cat(3, data.angles, data.plotBuffer);
-    for j=1:settings.STEP_SIZE_FACTOR
-        outputSingleScan (settings.s,[1,1]);
-        outputSingleScan (settings.s,[1,0]);          
-        pause(0.01);
-    end
-    data.motorAngle = data.motorAngle + settings.STEP_SIZE;
-    disp(data.motorAngle);
-    if (data.motorAngle >= 360)
-        stop(t);
-        delete(t);
-       
-        analyze(data.angles);
-        assignin('base', 'angles', data.angles);
-    end
-end
+% function turnMotor(t, ~)
+%     global data settings
+%     data.angles = cat(3, data.angles, data.plotBuffer);
+%     for j=1:settings.STEP_SIZE_FACTOR
+%         outputSingleScan (settings.s,[1,1]);
+%         outputSingleScan (settings.s,[1,0]);          
+%         pause(0.01);
+%     end
+%     data.motorAngle = data.motorAngle + settings.STEP_SIZE;
+%     disp(data.motorAngle);
+%     if (data.motorAngle >= 360)
+%         stop(t);
+%         delete(t);
+%        
+%         analyze(data.angles);
+%         assignin('base', 'angles', data.angles);
+%     end
+% end
 
 function fillFrame(newData)
     global settings data

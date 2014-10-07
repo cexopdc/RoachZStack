@@ -74,6 +74,8 @@
 
 #define LEFT_PORT P1
 #define LEFT_PIN 4
+#define LEFT_2_PORT P1
+#define LEFT_2_PIN 3
 #define RIGHT_PORT P1
 #define RIGHT_PIN 2
 #define FORWARD_PORT P1
@@ -82,7 +84,6 @@
 #define LED_PIN 5
 #define BICLK_PORT P1
 #define BICLK_PIN 7
-
 
 #define FORWARD 0
 #define BACK 1
@@ -229,11 +230,12 @@ void RoachZStack_Init( uint8 task_id )
   RegisterForKeys( task_id );
   
   P1DIR |= (0x1 << FORWARD_PIN) | (0x1 << LED_PIN) | 
-    (0x1 << LEFT_PIN) | (0x1 << RIGHT_PIN) | (0x1 << BICLK_PIN);
+    (0x1 << LEFT_PIN) | (0x1 << RIGHT_PIN) | (0x1 << BICLK_PIN) | (0x1 << LEFT_2_PIN);
   
   LED_PORT &= ~(0x1 << LED_PIN);
   FORWARD_PORT &= ~(0x1 << FORWARD_PIN);
   LEFT_PORT &= ~(0x1 << LEFT_PIN);
+  LEFT_2_PORT &= ~(0x1 << LEFT_2_PIN);
   RIGHT_PORT &= ~(0x1 << RIGHT_PIN);
   BICLK_PORT &= ~(0x1 << BICLK_PIN);
   
@@ -280,7 +282,7 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
         RoachZStack_ProcessMSGCmd( MSGpkt );
         break;
   
-      case RZS_ADC_VALUE:
+      case RZS_ADC_VALUE: // set ADC input value
       {
         adcMsg_t* adcMsg = ((adcMsg_t*) MSGpkt);
         

@@ -202,10 +202,10 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in sweep.
-function sweep_Callback(hObject, eventdata, handles)
-% hObject    handle to sweep (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global status
-status.motor_flag = 1;
+% % --- Executes on button press in sweep.
+% function sweep_Callback(hObject, eventdata, handles)
+% % hObject    handle to sweep (see GCBO)
+% % eventdata  reserved - to be defined in a future version of MATLAB
+% % handles    structure with handles and user data (see GUIDATA)
+% global status
+% status.motor_flag = 1;
