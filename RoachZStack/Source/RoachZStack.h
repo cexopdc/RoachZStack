@@ -71,6 +71,7 @@ extern "C"
 #define ROACHZSTACK_STIM_START         0x0004
 #define ROACHZSTACK_STIM_STOP          0x0008
 #define RZS_DO_HANDSHAKE               0x0010
+#define RZS_SEND_MSG_EVT               0x0009
 
 // OTA Flow Control Delays
 #define ROACHZSTACK_ACK_DELAY          1

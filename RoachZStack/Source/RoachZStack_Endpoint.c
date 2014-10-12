@@ -308,6 +308,34 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
     return ( events ^ SYS_EVENT_MSG );
   }
 
+  if ( events & RZS_SEND_MSG_EVT )
+  {
+    // Send "the" message
+    char theMessageData[] = "Hello World";
+
+  if ( AF_DataRequest( &RoachZStack_TxAddr, (endPointDesc_t *)&RoachZStack_epDesc,
+                       ROACHZSTACK_CLUSTER_MIC,
+                       (byte)osal_strlen( theMessageData ) + 1,
+                       (byte *)&theMessageData,
+                       &RoachZStack_MsgID,
+                       AF_DISCV_ROUTE, AF_DEFAULT_RADIUS ) == afStatus_SUCCESS )
+  {
+    // Successfully requested to be sent.
+  }
+  else
+  {
+    // Error occurred in request to send.
+  }
+    
+    // Setup to send message again
+    osal_start_timerEx( RoachZStack_TaskID,
+                        RZS_SEND_MSG_EVT,
+                        1000 );
+
+    // return unprocessed events
+    return (events ^ RZS_SEND_MSG_EVT);
+  }
+  
   if ( events & RZS_DO_HANDSHAKE )
   {
     zAddrType_t txAddr;
@@ -322,6 +350,10 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
     if (status != afStatus_SUCCESS)
     {
       osal_start_timerEx( RoachZStack_TaskID, RZS_DO_HANDSHAKE, 500); 
+    }
+    if (status == afStatus_SUCCESS)
+    {
+      osal_start_timerEx( RoachZStack_TaskID, RZS_SEND_MSG_EVT, 500);
     }
     return ( events ^ RZS_DO_HANDSHAKE );
   }
