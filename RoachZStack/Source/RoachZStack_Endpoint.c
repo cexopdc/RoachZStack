@@ -351,7 +351,7 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
     {
       osal_start_timerEx( RoachZStack_TaskID, RZS_DO_HANDSHAKE, 500); 
     }
-    if (status == afStatus_SUCCESS)
+    else
     {
       osal_start_timerEx( RoachZStack_TaskID, RZS_SEND_MSG_EVT, 500);
     }
