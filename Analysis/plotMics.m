@@ -16,7 +16,7 @@ function plotMics(portString, handles, numMics)
 %     data.motorAngle = 0;
     
     %javaaddpath(pwd, '-end')
-    settings.output_port = 1234; 
+    %settings.output_port = 1234; 
     %settings.output_socket = MatlabOutputSocket(output_port);
     %assignin('base', 'output_socket', settings.output_socket);
     
