@@ -1,28 +1,28 @@
 function plotMics(portString, handles, numMics)
-    global settings status data
+global settings status data
     if (~isempty(instrfind))
         fclose(instrfind);
     end
-    %close all; 
+    %close all;
     settings = {};
     status = {};
     data = {};
     
     status.close_flag = 0;
     status.calib_flag = 0;
-%     status.motor_flag = 0;
+    status.motor_flag = 0;
     cleanupObj = onCleanup(@cleanup);
     
-%     data.motorAngle = 0;
+    data.motorAngle = 0;
     
     %javaaddpath(pwd, '-end')
-    %settings.output_port = 1234; 
+    settings.output_port = 1234;
     %settings.output_socket = MatlabOutputSocket(output_port);
     %assignin('base', 'output_socket', settings.output_socket);
     
     settings.sampleSize = 1;
     settings.plotSamples = 5000;
-    settings.readSamples = 42;
+    settings.readSamples = 48;
     settings.channels = numMics;
     settings.sampleRate = 1.25; % kHz
     settings.scale = 128;
@@ -30,7 +30,7 @@ function plotMics(portString, handles, numMics)
     data.avgData = zeros(settings.channels, settings.plotSamples);
     data.dir = zeros(1, settings.plotSamples);
     settings.windowSize = .1 * settings.sampleRate * 1000; %s * Hz = samples
-    data.frames = zeros(3,settings.windowSize,0);
+    data.frames = zeros(settings.channels,settings.windowSize,0);
     data.currentFrame = [];
     
     settings.dc_calib = zeros(settings.channels, 1);
@@ -45,7 +45,7 @@ function plotMics(portString, handles, numMics)
     settings.port.BytesAvailableFcnCount = settings.readSamples;
     settings.port.BytesAvailableFcnMode = 'byte';
     settings.port.BytesAvailableFcn = @serial_callback;
-    fopen(settings.port)
+    fopen(settings.port);
 
     hAxes = zeros(1, settings.channels);
     hPlots = zeros(1, settings.channels);
@@ -53,27 +53,20 @@ function plotMics(portString, handles, numMics)
     hPlots2 = zeros(1, settings.channels);
     hAxes3 = zeros(1, settings.channels);
     hPlots3 = zeros(1, settings.channels);
-    hAxes4 = zeros(1, settings.channels);
-    hPlots4 = zeros(1, settings.channels);
     data.plotBuffer = zeros(settings.channels, settings.plotSamples);
     for channel = 1:settings.channels
         hAxes(channel) = subplot(settings.channels,1,channel,'Parent',handles.tab1);
         hPlots(channel) = plot(hAxes(channel), xRange(1:length(data.plotBuffer)), data.plotBuffer(channel,:).*settings.scale ./ 2^(8*settings.sampleSize-1));
     end
     
-    for channel = 1:settings.channels    
+    for channel = 1:settings.channels
         hAxes2(channel) = subplot(settings.channels,1,channel,'Parent',handles.tab2);
         hPlots2(channel) = plot(hAxes2(channel), xRange(1:length(data.avgData)), data.avgData(channel,:).*settings.scale ./ 2^(8*settings.sampleSize-1));
     end
     
-    for channel = 1:settings.channels    
+    for channel = 1:settings.channels
         hAxes3(channel) = subplot(settings.channels,1,channel,'Parent',handles.tab3);
         hPlots3(channel) = plot(hAxes3(channel), fRange, zeros(1, settings.windowSize));
-    end
-    
-    for channel = 1:settings.channels    
-        hAxes4(channel) = subplot(settings.channels,1,channel,'Parent',handles.tab4);
-        hPlots4(channel) = plot(hAxes4(channel), fRange, zeros(1, settings.windowSize));
     end
     
     
@@ -82,12 +75,12 @@ function plotMics(portString, handles, numMics)
 
     data.recording = [];
     
-%     settings.INC = 1.8;
-%     settings.STEP_SIZE_FACTOR = 5;
-%     settings.STEP_SIZE = settings.INC * settings.STEP_SIZE_FACTOR;
-%     settings.NUM_STEPS = 360 / settings.STEP_SIZE;
-%     settings.START_DELAY = 10;
-%     settings.MOTOR_TIME = 6;
+    settings.INC = 1.8;
+    settings.STEP_SIZE_FACTOR = 5;
+    settings.STEP_SIZE = settings.INC * settings.STEP_SIZE_FACTOR;
+    settings.NUM_STEPS = 360 / settings.STEP_SIZE;
+    settings.START_DELAY = 10;
+    settings.MOTOR_TIME = 6;
     
  
     while (1)
@@ -99,24 +92,24 @@ function plotMics(portString, handles, numMics)
             settings.dc_calib = prctile(data.plotBuffer, 5, 2);
             plotBuffer_zero = data.plotBuffer;
             for channel = 1:settings.channels
-               plotBuffer_zero(channel,:) =  plotBuffer_zero(channel,:) - settings.dc_calib(channel);
+               plotBuffer_zero(channel,:) = plotBuffer_zero(channel,:) - settings.dc_calib(channel);
             end
             maxes = prctile(plotBuffer_zero, 95, 2);
             max_max = max(maxes);
             settings.scale_calib = max_max ./ maxes;
             status.calib_flag = 0;
         end
-%         if status.motor_flag==1
-%             settings.s = daq.createSession('ni');
-%             % Initialization daq
-%             data.angles = [];
-%             addDigitalChannel(settings.s,'Dev3','Port1/Line2:3','OutputOnly')
-%             t = timer('StartDelay', settings.START_DELAY, 'Period', settings.MOTOR_TIME);
-%             t.TimerFcn = @turnMotor;
-%             t.ExecutionMode = 'fixedRate';
-%             start(t);
-%             status.motor_flag = 0;
-%         end
+        if status.motor_flag==1
+            settings.s = daq.createSession('ni');
+            % Initialization daq
+            data.angles = [];
+            addDigitalChannel(settings.s,'Dev3','Port1/Line2:3','OutputOnly')
+            t = timer('StartDelay', settings.START_DELAY, 'Period', settings.MOTOR_TIME);
+            t.TimerFcn = @turnMotor;
+            t.ExecutionMode = 'fixedRate';
+            start(t);
+            status.motor_flag = 0;
+        end
         
         for channel = 1:settings.channels
             set(hAxes(channel),'YLim', [0, settings.scale]);
@@ -160,35 +153,35 @@ function plotMics(portString, handles, numMics)
             %output_socket.write(unicode2native(mat2str(power)));
         end
     end
-    % close socket connection 
+    % close socket connection
     %output_socket.close();
     fclose(settings.port);
 end
 
-% function turnMotor(t, ~)
-%     global data settings
-%     data.angles = cat(3, data.angles, data.plotBuffer);
-%     for j=1:settings.STEP_SIZE_FACTOR
-%         outputSingleScan (settings.s,[1,1]);
-%         outputSingleScan (settings.s,[1,0]);          
-%         pause(0.01);
-%     end
-%     data.motorAngle = data.motorAngle + settings.STEP_SIZE;
-%     disp(data.motorAngle);
-%     if (data.motorAngle >= 360)
-%         stop(t);
-%         delete(t);
-%        
-%         analyze(data.angles);
-%         assignin('base', 'angles', data.angles);
-%     end
-% end
+function turnMotor(t, ~)
+global data settings
+    data.angles = cat(3, data.angles, data.plotBuffer);
+    for j=1:settings.STEP_SIZE_FACTOR
+        outputSingleScan (settings.s,[1,1]);
+        outputSingleScan (settings.s,[1,0]);
+        pause(0.01);
+    end
+    data.motorAngle = data.motorAngle + settings.STEP_SIZE;
+    disp(data.motorAngle);
+    if (data.motorAngle >= 360)
+        stop(t);
+        delete(t);
+       
+        analyze(data.angles);
+        assignin('base', 'angles', data.angles);
+    end
+end
 
 function fillFrame(newData)
-    global settings data
+global settings data
     newData_calib = newData;
     for channel = 1:settings.channels
-       newData_calib(channel,:) =  (newData_calib(channel,:) - settings.dc_calib(channel)) * settings.scale_calib(channel);
+       newData_calib(channel,:) = (newData_calib(channel,:) - settings.dc_calib(channel)) * settings.scale_calib(channel);
     end
     if (size(data.currentFrame, 2)<settings.windowSize)
         if (settings.windowSize-size(data.currentFrame, 2) > size(newData_calib, 2))
@@ -204,7 +197,7 @@ function fillFrame(newData)
 end
 
 function serial_callback(~, ~)
-    global settings data
+global settings data
     newData = fread(settings.port, settings.readSamples/settings.sampleSize, ['int',num2str(8*settings.sampleSize)])';
     length(newData);
     if (~isempty(newData))
@@ -220,7 +213,7 @@ function serial_callback(~, ~)
 end
 
 function cleanup()
-    global settings
+global settings
     %settings.output_socket.close();
     try
         fclose(settings.port);
