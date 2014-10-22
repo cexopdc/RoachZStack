@@ -21,7 +21,7 @@ global settings status data
     %assignin('base', 'output_socket', settings.output_socket);
     
     settings.sampleSize = 1;
-    settings.plotSamples = 5000;
+    settings.plotSamples = 10000;
     settings.readSamples = 48;
     settings.channels = numMics;
     settings.sampleRate = 1.25; % kHz
@@ -113,6 +113,8 @@ global settings status data
         
         for channel = 1:settings.channels
             set(hAxes(channel),'YLim', [0, settings.scale]);
+            %data.plotBuffer(channel,:)
+            assignin('base','plotbuffer',data.plotBuffer(channel,:))
             set(hPlots(channel),'ydata',(data.plotBuffer(channel,:) - settings.dc_calib(channel)) * settings.scale_calib(channel));
 
             set(hAxes2(channel),'YLim', [-settings.scale, settings.scale]);
@@ -201,13 +203,14 @@ global settings data
     newData = fread(settings.port, settings.readSamples/settings.sampleSize, ['int',num2str(8*settings.sampleSize)])';
     length(newData);
     if (~isempty(newData))
-        newData = reshape(newData, settings.channels, length(newData)/settings.channels);
-        fillFrame(newData);
+        newData = reshape(newData, settings.channels, length(newData)/settings.channels)
+        %fillFrame(newData);
         % recording = [recording, newData];
         %maxes = max(newData')';
         %avgData = [avgData(:, 2:end), maxes];
-        
-        data.plotBuffer = [data.plotBuffer(:,settings.readSamples/settings.channels/settings.sampleSize+1:end), newData];
+        %data.plotBuffer(:,settings.readSamples/settings.channels/settings.sampleSize+1:end)
+        % appends new data to plot buffer
+        data.plotBuffer = [data.plotBuffer(:,settings.readSamples/settings.channels/settings.sampleSize+1:end), newData]
     end
         
 end

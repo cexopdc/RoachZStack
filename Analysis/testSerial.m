@@ -5,9 +5,9 @@ fclose(instrfind)
 port = serial('COM4','BaudRate',115200, 'FlowControl', 'hardware');
 fopen(port);
 
-inputs = 42;
-size = 4;
-length_b = inputs;
+inputs = 4;
+size = 16;
+length_b = 42 ;%inputs*size;
 buffer = zeros(1, length_b);
 
 count = 0;
@@ -17,5 +17,5 @@ while (count < length_b)
     count = count + 1;
 end
 buffer
-%reshape(buffer, inputs, length(buffer)/size)
+%reshape(buffer, inputs, length_b/inputs)
 fclose(port)
