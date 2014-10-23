@@ -1,5 +1,5 @@
 function plotMics(portString, handles, numMics)
-global settings status data
+global settings status data savedDataBuffer
     if (~isempty(instrfind))
         fclose(instrfind);
     end
@@ -74,14 +74,8 @@ global settings status data
     hPlotDir = plot(data.dir);
 
     data.recording = [];
-    
-    settings.INC = 1.8;
-    settings.STEP_SIZE_FACTOR = 5;
-    settings.STEP_SIZE = settings.INC * settings.STEP_SIZE_FACTOR;
-    settings.NUM_STEPS = 360 / settings.STEP_SIZE;
-    settings.START_DELAY = 10;
-    settings.MOTOR_TIME = 6;
-    
+%     savedDataBuffer = [savedDataBuffer, data.plotBuffer]
+%     assignin('base', 'saved', savedDataBuffer)
  
     while (1)
         pause(0.01);
@@ -99,22 +93,12 @@ global settings status data
             settings.scale_calib = max_max ./ maxes;
             status.calib_flag = 0;
         end
-        if status.motor_flag==1
-            settings.s = daq.createSession('ni');
-            % Initialization daq
-            data.angles = [];
-            addDigitalChannel(settings.s,'Dev3','Port1/Line2:3','OutputOnly')
-            t = timer('StartDelay', settings.START_DELAY, 'Period', settings.MOTOR_TIME);
-            t.TimerFcn = @turnMotor;
-            t.ExecutionMode = 'fixedRate';
-            start(t);
-            status.motor_flag = 0;
-        end
+        
         
         for channel = 1:settings.channels
             set(hAxes(channel),'YLim', [0, settings.scale]);
             %data.plotBuffer(channel,:)
-            assignin('base','plotbuffer',data.plotBuffer(channel,:))
+            %assignin('base','plotbuffer',data.plotBuffer(channel,:))
             set(hPlots(channel),'ydata',(data.plotBuffer(channel,:) - settings.dc_calib(channel)) * settings.scale_calib(channel));
 
             set(hAxes2(channel),'YLim', [-settings.scale, settings.scale]);
@@ -128,6 +112,7 @@ global settings status data
         refresh;
         
         assignin('base', 'record', data.recording);
+        
         
         if (size(data.frames, 3)>0)
             currentFrame = data.frames(:,:,1);
@@ -160,25 +145,7 @@ global settings status data
     fclose(settings.port);
 end
 
-function turnMotor(t, ~)
-global data settings
-    data.angles = cat(3, data.angles, data.plotBuffer);
-    for j=1:settings.STEP_SIZE_FACTOR
-        outputSingleScan (settings.s,[1,1]);
-        outputSingleScan (settings.s,[1,0]);
-        pause(0.01);
-    end
-    data.motorAngle = data.motorAngle + settings.STEP_SIZE;
-    disp(data.motorAngle);
-    if (data.motorAngle >= 360)
-        stop(t);
-        delete(t);
-       
-        analyze(data.angles);
-        assignin('base', 'angles', data.angles);
-    end
-end
-
+% used on the other plots - power, etc. 
 function fillFrame(newData)
 global settings data
     newData_calib = newData;
@@ -199,18 +166,21 @@ global settings data
 end
 
 function serial_callback(~, ~)
-global settings data
+global settings data savedDataBuffer
     newData = fread(settings.port, settings.readSamples/settings.sampleSize, ['int',num2str(8*settings.sampleSize)])';
     length(newData);
     if (~isempty(newData))
         newData = reshape(newData, settings.channels, length(newData)/settings.channels)
         %fillFrame(newData);
-        % recording = [recording, newData];
-        %maxes = max(newData')';
-        %avgData = [avgData(:, 2:end), maxes];
-        %data.plotBuffer(:,settings.readSamples/settings.channels/settings.sampleSize+1:end)
         % appends new data to plot buffer
         data.plotBuffer = [data.plotBuffer(:,settings.readSamples/settings.channels/settings.sampleSize+1:end), newData]
+        %savedDataBuffer = [savedDataBuffer, data.plotBuffer]
+        %assignin('base', 'saved', savedDataBuffer)
+       
+%         fid = fopen('output_data.txt', 'at'); % opens file for appending
+%         dlmwrite('output_data.txt',newData','-append') %fprintf(fid, ' %3d ', dataBuffer);
+%         fclose('all');
+%         
     end
         
 end
