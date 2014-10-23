@@ -147,9 +147,9 @@ function stop_Callback(hObject, eventdata, handles)
 % hObject    handle to stop (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global status
+global status fullData
 status.close_flag = 1;
-
+assignin('base','data',fullData);
 
 
 % --- Executes when user attempts to close streamer.
