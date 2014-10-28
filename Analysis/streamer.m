@@ -150,7 +150,7 @@ function stop_Callback(hObject, eventdata, handles)
 global status fullData
 status.close_flag = 1;
 assignin('base','data',fullData);
-
+fullData = [];
 
 % --- Executes when user attempts to close streamer.
 function streamer_CloseRequestFcn(hObject, eventdata, handles)
@@ -172,13 +172,13 @@ function streamer_ButtonDownFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --- Executes on button press in calibrate.
-function calibrate_Callback(hObject, eventdata, handles)
-% hObject    handle to calibrate (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global status
-status.calib_flag = 1;
+% % --- Executes on button press in calibrate.
+% function calibrate_Callback(hObject, eventdata, handles)
+% % hObject    handle to calibrate (see GCBO)
+% % eventdata  reserved - to be defined in a future version of MATLAB
+% % handles    structure with handles and user data (see GUIDATA)
+% global status
+% status.calib_flag = 1;
 
 
 
