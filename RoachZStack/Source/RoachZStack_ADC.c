@@ -101,8 +101,10 @@ HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
 void RoachZStack_ADC_Init( uint8 task_id )
 {
   #ifndef ZDO_COORDINATOR
-    PERCFG |= 0x40;
+    PERCFG |= 0x40; // periphrial IO control
     RoachZStack_ADC_TaskID = task_id;   
+    
+    // based on DMICS compiler setting (settings.cfg), OR in desired ADC channels
     uint8 micCfg = 1 << HAL_ADC_CHANNEL_1;
     
     if (MICS > 1){
@@ -121,11 +123,11 @@ void RoachZStack_ADC_Init( uint8 task_id )
     // ADC control settings
     ADCCON1 = HAL_ADC_STSEL_T1C0 | 0x03; // 0x03 reserved // timer1, channel 0 compare event
     //HAL_ADC_REF_AVDD or HAL_ADC_REF_125V
-    ADCCON2 = HAL_ADC_REF_125V | HAL_ADC_DEC_064 | 0x07; //stop at channel 5
+    ADCCON2 = HAL_ADC_REF_125V | HAL_ADC_DEC_064 | HAL_ADC_CHANNEL_7; //stop at channel 7 on the conversion
     //P2INP |= 0x20;
     T1CTL = 0x00 | 0x0C | 0x02; // timer 1 control
     
-    uint16 counter = 200;//125;
+    uint16 counter = 200; // 1100_1000
     
     T1CC0H = counter >> 8;  // timer 1 channel 0, capture and compare, high byte
     T1CC0L = (uint8)counter; // low byte

@@ -375,8 +375,11 @@ static void RoachZStack_ProcessZDOMsgs( zdoIncomingMsg_t *inMsg )
 static void showMessage(afMSGCommandFormat_t data)
 {
 
-  uint8 commandType  = data.Data[1];
+  uint8 commandType  = data.Data[1]; // first transmitted char
+  // intially only testing one output pin per command
+  // final version will have 16 options for all stim possibilities
   
+/*  
 #ifdef BIPHASIC_STIM
   uint16 r;
   uint8 val;
@@ -400,7 +403,7 @@ static void showMessage(afMSGCommandFormat_t data)
     SPI_Write(2, buf);
 #endif
     break;
-  }
+  }*/
 }
 /*********************************************************************
  * @fn      RoachZStack_ProcessMSGCmd
@@ -421,7 +424,9 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
 
   // stimulation command
   case ROACHZSTACK_CLUSTER_CMD:
-    showMessage(pkt->cmd);
+    //showMessage(pkt->cmd); // parse received data
+    command = parseCommand(pkt->cmd.Data+1, pkt->cmd.DataLength-1);
+    Stimulator_SetCommand(command);
     if (command != NULL)
     {
       osal_set_event(RoachZStack_TaskID, ROACHZSTACK_STIM_START );
