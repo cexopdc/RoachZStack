@@ -15,34 +15,41 @@ extern "C"
 #define ROACHZSTACK_NSTIM_START        0x0010
 #define ROACHZSTACK_NSTIM_STOP         0x0020
  
-#define LEFT_1_DDR                   P1DIR
-#define LEFT_1_BV                    BV(4)
-#define LEFT_1_SBIT                  P1_4
-
-#define LEFT_2_DDR                   P1DIR
-#define LEFT_2_BV                    BV(3)
-#define LEFT_2_SBIT                  P1_3
+#define LEFT_DDR                        P1DIR
+#define LEFT_BV                         BV(4)
+#define LEFT_SBIT                       P1_4
   
-#define RIGHT_1_DDR                  P1DIR
-#define RIGHT_1_BV                   BV(2)
-#define RIGHT_1_SBIT                 P1_2
-   
-#define RIGHT_2_DDR                  P1DIR
-#define RIGHT_2_BV                   BV(1)
-#define RIGHT_2_SBIT                 P1_1
+#define RIGHT_DDR                       P1DIR
+#define RIGHT_BV                        BV(2)
+#define RIGHT_SBIT                      P1_2
 
+#ifdef FORWARD_STIM
+#define FORWARD_DDR                     P1DIR
+#define FORWARD_BV                      BV(3)
+#define FORWARD_SBIT                    P1_3
+  
+#define FORWARD 0
+#endif
+  
+#define LED_DDR                         P1DIR
+#define LED_BV                          BV(5)
+#define LED_SBIT                        P1_5
  
+#ifdef BIPHASIC_STIM
+#define BICLK_DDR                       P0DIR
+#define BICLK_BV                        BV(7)
+#define BICLK_SBIT                      P0_7
+#endif
+  
 #if defined(IMPEDANCE) && (defined(BIPHASIC_STIM) || defined(VOLT_MONITOR))
 #define BI_IMP_DDR                      P1DIR
 #define BI_IMP_BV                       BV(1)
 #define BI_IMP_SBIT                     P1_1            // Change back to P1_0 on new boards
 #endif
   
-#define A 'A'
-#define B 'B'
-#define C 'C'
-#define OFF 0
-#define ON 1
+#define BACK 1
+#define RIGHT 2
+#define LEFT 3
 
 /*********************************************************************
  * GLOBAL VARIABLES

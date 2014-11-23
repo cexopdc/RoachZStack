@@ -7,9 +7,12 @@
 
 typedef struct
 {
-  uint8 direction; // pin combo
-  uint16 repeats; // number of beats
-  uint16 posOn; // time of positive signal
+  uint8 direction;
+  uint16 repeats;
+  uint16 posOn;
+  uint16 posOff;
+  uint16 negOn; //for biphasic stimulation
+  uint16 negOff;
 } stimCommand;
 
 extern stimCommand* parseCommand(uint8* buf, uint8 len);
