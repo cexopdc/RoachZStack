@@ -1,8 +1,8 @@
 clear all;
 close all;
 
-fclose(instrfind)
-port = serial('COM6','BaudRate',115200, 'FlowControl', 'hardware');
+% fclose(instrfind)
+port = serial('COM4','BaudRate',115200, 'FlowControl', 'hardware');
 fopen(port);
 
 inputs = 4;
