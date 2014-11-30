@@ -148,7 +148,7 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
 #ifdef BIPHASIC_STIM
     if (command->negOn)
     {
-      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_NSTIM_START, command->posOff);
+      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_NSTIM_START, command->posOff);  
     }
     else
 #endif
