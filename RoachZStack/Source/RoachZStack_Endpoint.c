@@ -85,7 +85,7 @@
 #define BICLK_PORT P1
 #define BICLK_PIN 7
 
-#define FORWARD 0
+#define FORWARD 'A'
 #define BACK 1
 #define RIGHT 2
 #define LEFT 3

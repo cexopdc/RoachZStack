@@ -32,6 +32,7 @@ stimCommand* parseCommand(uint8* buf, uint8 len)
     cmd->silence = convert(buf,4,21);
     cmd->totalCount = convert(buf,4,25);
     cmd->stim = 1; // start stimulation cycles immediately
+    cmd->pulseCount = convert(buf,4,17);//cmd->repeats;
   } 
   return cmd;
   

@@ -124,7 +124,7 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
   
   if ( events & ROACHZSTACK_STIM_START )
   {
-    if (command != NULL && command->repeats > 0)
+    if (command != NULL && command->repeats > 0 && command->totalCount > 0 && command->stim == 1)
     {
 #ifdef BIPHASIC_STIM
       BICLK_SBIT = 0;
@@ -134,7 +134,20 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
       measureVoltage();
 #endif
       command->repeats--;
+      if (command->repeats == 0) {
+        command->stim = 0;
+      }
       osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_STOP, command->posOn); 
+    }
+    
+    // section deals with silence time and tracking total cycle count
+    if (command != NULL && command->totalCount > 0 && command->stim == 0)
+    {
+      command->totalCount--; 
+      command->stim = 1;
+      command->repeats = command->pulseCount; // resets repeat counter 
+      // do nothing for 'silence' ms and then return to STIM_START
+      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_START, command->silence); 
     }
     return ( events ^ ROACHZSTACK_STIM_START );
   }

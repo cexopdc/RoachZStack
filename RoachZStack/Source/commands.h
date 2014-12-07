@@ -16,6 +16,7 @@ typedef struct
   int16 silence; // time within cycle after stimulation to wait
   int16 totalCount; // total number of stim cycles + silence time
   int16 stim; // this is to set if silence timer should be used, or posOn/NegOn
+  int16 pulseCount; // hold number of pulses inside cycle constant to allow reset
 } stimCommand;
 
 extern stimCommand* parseCommand(uint8* buf, uint8 len);

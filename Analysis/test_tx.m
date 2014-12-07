@@ -7,7 +7,7 @@ fopen(port);
 
 % transmit values in as 4 character (decimal) strings (for parse code to func)
 % pad with 0s at front if shorter value is required
-pinCombo = 'B'; 
+pinCombo = 'A'; 
 posOnTime = '0010'; % time for positive stimulation
 negOnTime = posOnTime;
 negOffTime = '0000';
