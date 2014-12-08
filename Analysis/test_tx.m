@@ -12,8 +12,9 @@ posOnTime = '0100'; % time for positive stimulation
 negOnTime = posOnTime;
 negOffTime = '0050';
 posOffTime = negOffTime;
-stimCycleCount = '0005'; % numer of positive/neg stimulations
-silenceTime = '0500';
+stimCycleCount = '0002'; % numer of positive/neg stimulations
+% current max value of 999
+silenceTime = '1000';
 totalCycleCount = '0020';
 amplitude = 2; % will not be used for this iteration
 

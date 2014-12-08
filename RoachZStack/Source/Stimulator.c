@@ -122,15 +122,6 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
 {
   (void)task_id;  // Intentionally unreferenced parameter
     // section deals with silence time and tracking total cycle count
-    if (command != NULL && command->totalCount > 0 && command->stim == 0)
-    {
-      command->totalCount--; 
-      command->stim = 1;
-      command->repeats = command->pulseCount; // resets repeat counter 
-      stopStimulate();
-      // do nothing for 'silence' ms and then return to STIM_START
-      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_START, command->silence); 
-    }
   
   if ( events & ROACHZSTACK_STIM_START )
   {
@@ -193,11 +184,20 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
     BICLK_SBIT = 0;
 #endif
     stopStimulate();
-    if (command != NULL && command->repeats > 0)
+    if (command != NULL && command->repeats > 0 && command->stim == 1)
     {
       osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_START, command->negOff);   
     }
     
+    if (command != NULL && command->totalCount > 0 && command->stim == 0)
+    {
+      command->totalCount--; 
+      command->stim = 1;
+      command->repeats = command->pulseCount; // resets repeat counter 
+      stopStimulate();
+      // do nothing for 'silence' ms and then return to STIM_START
+      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_START, command->silence); 
+    }
     return ( events ^ ROACHZSTACK_NSTIM_STOP );
   }
 
