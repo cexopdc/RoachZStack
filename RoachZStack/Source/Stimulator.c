@@ -121,6 +121,16 @@ void Stimulator_Init( uint8 task_id )
 uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
 {
   (void)task_id;  // Intentionally unreferenced parameter
+    // section deals with silence time and tracking total cycle count
+    if (command != NULL && command->totalCount > 0 && command->stim == 0)
+    {
+      command->totalCount--; 
+      command->stim = 1;
+      command->repeats = command->pulseCount; // resets repeat counter 
+      stopStimulate();
+      // do nothing for 'silence' ms and then return to STIM_START
+      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_START, command->silence); 
+    }
   
   if ( events & ROACHZSTACK_STIM_START )
   {
@@ -140,15 +150,6 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
       osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_STOP, command->posOn); 
     }
     
-    // section deals with silence time and tracking total cycle count
-    if (command != NULL && command->totalCount > 0 && command->stim == 0)
-    {
-      command->totalCount--; 
-      command->stim = 1;
-      command->repeats = command->pulseCount; // resets repeat counter 
-      // do nothing for 'silence' ms and then return to STIM_START
-      osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_STIM_START, command->silence); 
-    }
     return ( events ^ ROACHZSTACK_STIM_START );
   }
   
@@ -219,7 +220,7 @@ static void stimulate(uint8 direction)
   switch (direction)
   {
 #ifdef FORWARD_STIM
-  case FORWARD:
+  case 'A':
       //forward
       LED_SBIT = 1;
       FORWARD_SBIT = 1;
