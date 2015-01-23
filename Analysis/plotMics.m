@@ -103,7 +103,7 @@ function plotMics(portString, handles, numMics)
             settings.s = daq.createSession('ni');
             % Initialization daq
             data.angles = [];
-            addDigitalChannel(settings.s,'Dev3','Port1/Line2:3','OutputOnly')
+            addDigitalChannel(settings.s,'Dev1','Port1/Line2:3','OutputOnly')
             t = timer('StartDelay', settings.START_DELAY, 'Period', settings.MOTOR_TIME);
             t.TimerFcn = @turnMotor;
             t.ExecutionMode = 'fixedRate';
@@ -203,6 +203,7 @@ function serial_callback(~, ~)
     if (~isempty(newData))
         newData = reshape(newData, settings.channels, length(newData)/settings.channels);
         fillFrame(newData);
+        newData = 128 - newData; % Uncomment on new microphone boards - Tristan Novak 1/20/2015
         % recording = [recording, newData];
         %maxes = max(newData')';
         %avgData = [avgData(:, 2:end), maxes];
