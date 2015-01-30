@@ -90,14 +90,12 @@ static void measureVoltage(void);
 void Stimulator_Init( uint8 task_id )
 {
   Stimulator_TaskID = task_id;
-  LEFT_DDR |= LEFT_BV;
-  RIGHT_DDR |= RIGHT_BV;
-  LED_DDR |= LED_BV;
+  LEFT_1_DDR |= LEFT_1_BV;
+  RIGHT_1_DDR |= RIGHT_1_BV;
+  LEFT_2_DDR |= LEFT_2_BV;
+  RIGHT_2_DDR |= RIGHT_2_BV;
 
-#ifdef FORWARD_STIM
-  FORWARD_DDR |= FORWARD_BV;
-#endif
-  
+// not used for our project  
 #if defined IMPEDANCE && (defined BIPHASIC_STIM || defined VOLT_MONITOR)
   BI_IMP_DDR |= BI_IMP_BV;
 #endif
@@ -105,6 +103,7 @@ void Stimulator_Init( uint8 task_id )
 #ifdef VOLT_MONITOR
   HalAdcInit();
 #endif
+  
   stopStimulate();
 }
 
@@ -207,53 +206,112 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
 
 static void stopStimulate(void)
 {
-  LED_SBIT = 0;
-#ifdef FORWARD_STIM
-  FORWARD_SBIT = 0;
-#endif
-  LEFT_SBIT = 0;
-  RIGHT_SBIT = 0;
+  LEFT_1_SBIT = 0;
+  RIGHT_1_SBIT = 0;
+  LEFT_2_SBIT = 0;
+  RIGHT_2_SBIT = 0;
+  BICLK_SBIT = 0;
 }
 
 static void stimulate(uint8 direction)
 {
   switch (direction)
   {
-#ifdef FORWARD_STIM
-  case 'A':
-      //forward
-      LED_SBIT = 1;
-      FORWARD_SBIT = 1;
-      LEFT_SBIT = 0;
-      RIGHT_SBIT = 0;
+    case 'A':
+      LEFT_1_SBIT = 0;
+      RIGHT_1_SBIT = 0;
+      LEFT_2_SBIT = 0;
+      RIGHT_2_SBIT = 0;
       break;
-#endif
-    case BACK:
-       //back
-      LED_SBIT = 1;
-      LEFT_SBIT = 1;
-      RIGHT_SBIT = 1;
-#ifdef FORWARD_STIM
-      FORWARD_SBIT = 0;
-#endif
+    case 'B':
+      LEFT_1_SBIT = 1;
+      RIGHT_1_SBIT = 0;
+      LEFT_2_SBIT = 0;
+      RIGHT_2_SBIT = 0;
       break;
-    case RIGHT:
-      //right
-      LED_SBIT = 1;
-      RIGHT_SBIT = 1;
-      LEFT_SBIT = 0;
-#ifdef FORWARD_STIM
-      FORWARD_SBIT = 0;
-#endif
+    case 'C':
+      LEFT_1_SBIT = 0;
+      RIGHT_1_SBIT = 1;
+      LEFT_2_SBIT = 0;
+      RIGHT_2_SBIT = 0;
       break;
-    case LEFT:
-       //left
-      LED_SBIT = 1;
-      LEFT_SBIT = 1;
-      RIGHT_SBIT = 0;
-#ifdef FORWARD_STIM
-      FORWARD_SBIT = 0;
-#endif
+     case 'D':
+      LEFT_1_SBIT = 1;
+      RIGHT_1_SBIT = 1;
+      LEFT_2_SBIT = 0;
+      RIGHT_2_SBIT = 0;
+      break;
+     case 'E':
+      LEFT_1_SBIT = 0;
+      RIGHT_1_SBIT = 0;
+      LEFT_2_SBIT = 1;
+      RIGHT_2_SBIT = 0;
+      break;
+    case 'F':
+      LEFT_1_SBIT = 1;
+      RIGHT_1_SBIT = 0;
+      LEFT_2_SBIT = 1;
+      RIGHT_2_SBIT = 0;
+      break;
+    case 'G':
+      LEFT_1_SBIT = 0;
+      RIGHT_1_SBIT = 1;
+      LEFT_2_SBIT = 1;
+      RIGHT_2_SBIT = 0;
+      break;
+     case 'H':
+      LEFT_1_SBIT = 1;
+      RIGHT_1_SBIT = 1;
+      LEFT_2_SBIT = 1;
+      RIGHT_2_SBIT = 0;
+      break;
+    case 'I':
+      LEFT_1_SBIT = 0;
+      RIGHT_1_SBIT = 0;
+      LEFT_2_SBIT = 0;
+      RIGHT_2_SBIT = 1;
+      break;
+    case 'J':
+      LEFT_1_SBIT = 1;
+      RIGHT_1_SBIT = 0;
+      LEFT_2_SBIT = 0;
+      RIGHT_2_SBIT = 1;
+      break;
+    case 'K':
+      LEFT_1_SBIT = 0;
+      RIGHT_1_SBIT = 1;
+      LEFT_2_SBIT = 0;
+      RIGHT_2_SBIT = 1;
+      break;
+     case 'L':
+      LEFT_1_SBIT = 1;
+      RIGHT_1_SBIT = 1;
+      LEFT_2_SBIT = 0;
+      RIGHT_2_SBIT = 1;
+      break;
+    case 'M':
+      LEFT_1_SBIT = 0;
+      RIGHT_1_SBIT = 0;
+      LEFT_2_SBIT = 1;
+      RIGHT_2_SBIT = 1;
+      break;
+    case 'N':
+      LEFT_1_SBIT = 1;
+      RIGHT_1_SBIT = 0;
+      LEFT_2_SBIT = 1;
+      RIGHT_2_SBIT = 1;
+      break;
+    case 'O':
+      LEFT_1_SBIT = 0;
+      RIGHT_1_SBIT = 1;
+      LEFT_2_SBIT = 1;
+      RIGHT_2_SBIT = 1;
+      break;
+     case 'P':
+      LEFT_1_SBIT = 1;
+      RIGHT_1_SBIT = 1;
+      LEFT_2_SBIT = 1;
+      RIGHT_2_SBIT = 1;
       break;
   }
 }

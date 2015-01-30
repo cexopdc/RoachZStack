@@ -12,6 +12,7 @@ int16 convert(uint8* buf, int16 size, int8 offset) {
     num[i] = buf[i+offset];
   }
   int value = atoi(num);
+  osal_mem_free(num);
   return value; 
 }
 
