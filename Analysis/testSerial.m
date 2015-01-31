@@ -24,5 +24,4 @@ M = reshape(buffer, inputs, length_b/inputs)
 %fclose('all');
 fclose(port);
 delete(port);
-clear(port);
 %delete(instrfindall)

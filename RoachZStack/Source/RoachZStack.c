@@ -75,8 +75,8 @@
 #endif
 
 #if !defined( SERIAL_APP_BAUD )
-#define SERIAL_APP_BAUD  HAL_UART_BR_38400
-//#define SERIAL_APP_BAUD  HAL_UART_BR_115200
+//#define SERIAL_APP_BAUD  HAL_UART_BR_38400
+#define SERIAL_APP_BAUD  HAL_UART_BR_115200
 #endif
 
 // When the Rx buf space is less than this threshold, invoke the Rx callback.
