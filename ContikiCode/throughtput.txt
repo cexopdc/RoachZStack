@@ -1,0 +1,6 @@
+/*fgong_DEBUG*/
+headerSize = 2(FCF)+1(data_sequence)+4(destRimeAddr)+4(srcRimeAddr)+2(CRC) = 13 bytes
+payloadSize < 128 bytes
+datarate = 250*10^3
+tx_turnover_time = 192*10^-6
+transmission_time = (headerSize+payloadSize)*8/datarate

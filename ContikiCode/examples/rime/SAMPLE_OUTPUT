@@ -1,0 +1,14 @@
+/*fgong_DEBUG*/
+1. Testing Throughput: broadcast
+timer interval = 0.1s, sending 250 beacons, receiving 243/242. (payload=38bytes,header=48bytes) 
+
+
+NOTE::: Now testing with interval of 4s, 2s, 1s, 1/4, 1/8, 1/16, 1/32, 1/64, 1/128, 1/256, 1/512.
+
+1.1 Both unicast and broadcast nullrdc transmitter 49mA and receiver 49.5mA;lpp transmitter 31mA and receiver 31mA with peripheral 24.6mA. 
+
+
+NOTE::: Broadcast:Low load experiment with interval of 0.1s; high load with interval of 0.003s, (229.33kbps but not not work)
+LPP can not work with very high load, so I choose 0.03125 as the interval to have a fair throughput.
+
+2.1 NOTE::: For unicast with lpp, when interval is 0.25s, the throughput is very low; so the high load factor is chosen as 0.125 and the low factor is chosen as 0.5
