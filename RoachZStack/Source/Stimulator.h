@@ -23,17 +23,17 @@ extern "C"
 #define RIGHT_2_BV                        BV(2)
 #define RIGHT_2_SBIT                      P1_2 // 20.18
 
-#define LEFT_1_DDR                     P1DIR
-#define LEFT_1_BV                      BV(1)
-#define LEFT_1_SBIT                    P1_1//P1_7//P1_6//P1_3 // not working (used as ground previously)
+#define LEFT_1_DDR                        P1DIR
+#define LEFT_1_BV                         BV(1)
+#define LEFT_1_SBIT                       P1_1  //18.06  //P1_7//P1_6//P1_3 // not working (used as ground previously)
   
-#define RIGHT_1_DDR                         P1DIR
-#define RIGHT_1_BV                          BV(0)  //BV(5)
-#define RIGHT_1_SBIT                        P1_0//20.04   //P1_5
+#define RIGHT_1_DDR                       P2DIR
+#define RIGHT_1_BV                        BV(2)  //BV(5)
+#define RIGHT_1_SBIT                      P2_2//   //P1_5
  
-#define BICLK_DDR                       P2DIR
-#define BICLK_BV                        BV(1)
-#define BICLK_SBIT                      P2_1//P2_2//P0_4//P0_2//P0_6//P0_0//P2_0
+#define BICLK_DDR                         P1DIR
+#define BICLK_BV                          BV(0)
+#define BICLK_SBIT                        P1_0//20.04 //P2_1//P2_2//P0_4//P0_2//P0_6//P0_0//P2_0
 
 // not needed for our project  
 #if defined(IMPEDANCE) && (defined(BIPHASIC_STIM) || defined(VOLT_MONITOR))
