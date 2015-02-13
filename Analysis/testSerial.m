@@ -2,7 +2,7 @@ clear all;
 close all;
 
 % fclose(instrfind)
-port = serial('COM4','BaudRate',115200, 'FlowControl', 'hardware');
+port = serial('COM13','BaudRate',115200, 'FlowControl', 'hardware');
 fopen(port);
 
 inputs = 4;
