@@ -85,7 +85,7 @@
 #define BICLK_PORT P1
 #define BICLK_PIN 7
 
-#define FORWARD 0
+#define FORWARD 'A'
 #define BACK 1
 #define RIGHT 2
 #define LEFT 3
@@ -282,7 +282,7 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
         RoachZStack_ProcessMSGCmd( MSGpkt );
         break;
   
-      case RZS_ADC_VALUE: // set ADC input value
+      case RZS_ADC_VALUE & NULL: // set ADC input value
       {
         adcMsg_t* adcMsg = ((adcMsg_t*) MSGpkt);
         
