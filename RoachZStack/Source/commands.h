@@ -18,7 +18,13 @@ typedef struct
   int16 pulseCount; // hold number of pulses inside cycle constant to allow reset
 } stimCommand;
 
+typedef struct
+{
+  uint16 time;
+} ADCCommand;
+
 extern stimCommand* parseCommand(uint8* buf, uint8 len);
+extern ADCCommand* parseADCCommand(uint8* buf, uint8 len);
 extern int16 convert(uint8* buf, int16 size, int8 offset);
 
 

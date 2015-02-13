@@ -52,10 +52,12 @@ extern "C"
  */
 #include "ZComDef.h"
 #include "osal.h"
+#include "commands.h"
 
 /*********************************************************************
  * CONSTANTS
  */
+ #define ROACHZSTACK_ADC_START          0x0005
 
 /*********************************************************************
  * MACROS
@@ -86,6 +88,8 @@ extern void RoachZStack_ADC_Init( byte task_id );
  * Task Event Processor for the Serial Transfer Application
  */
 extern UINT16 RoachZStack_ADC( byte task_id, UINT16 events );
+
+extern void ADC_SetCommand(ADCCommand* data);
 
 /*********************************************************************
 *********************************************************************/

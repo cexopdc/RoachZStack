@@ -8,10 +8,12 @@
 #include "hal_sleep.h"
 #include "ZConfig.h"
 #include "OSAL.h"
+#include "commands.h"
 
 adcMsg_t* pBufferReading = NULL;
 adcMsg_t* pBufferDone = NULL;
 adcMsg_t* pBufferNext = NULL;
+static ADCCommand* adc_command = NULL;
 
 // Task ID not initialized
 #define NO_TASK_ID 0xFF
@@ -198,11 +200,14 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
         
     if (pBufferDone != NULL)
     {
-      // Send the address to the task 
-      if (allowedADC ) 
+       
+      if (adc_command->time > 0 ) 
       { 
         pBufferDone->hdr.event = RZS_ADC_VALUE;
+        adc_command->time--;
+        osal_start_timerEx( RoachZStack_ADC_TaskID, RZS_ADC_READ, 1);
       }
+      
       for (int i = 0; i < (sizeof(pBufferDone->buffer)/sizeof(*(pBufferDone->buffer))); i++)
       {
         if (pBufferDone->buffer[i] > 127)
@@ -244,6 +249,16 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
     return events ^ RZS_ADC_READ;
   }
     return 0;
+}
+
+void ADC_SetCommand(ADCCommand* data)
+{
+  if (adc_command != NULL)
+  {
+    osal_mem_free(adc_command);
+  }
+  adc_command = data;
+  osal_set_event(RoachZStack_ADC_TaskID, RZS_ADC_READ);
 }
 
 #endif

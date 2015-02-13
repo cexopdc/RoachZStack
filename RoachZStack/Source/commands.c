@@ -37,5 +37,15 @@ stimCommand* parseCommand(uint8* buf, uint8 len)
     cmd->pulseCount = convert(buf,4,18);//cmd->repeats;
   } 
   return cmd;
+}
   
+ADCCommand* parseADCCommand(uint8* buf, uint8 len)
+{
+  ADCCommand* cmd = osal_mem_alloc(sizeof(ADCCommand));
+  if (cmd != NULL)
+  {
+    //cmd->direction = buf[1];
+    cmd->time = convert(buf,4,2);
+  } 
+  return cmd;
 }

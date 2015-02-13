@@ -195,6 +195,7 @@ static afAddrType_t RoachZStack_TxAddr;
 static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX];
 static uint8 RoachZStack_TxLen;
 static stimCommand* stim_command = NULL;
+static ADCCommand* ADC_command = NULL;
 
 /*********************************************************************
  * LOCAL FUNCTIONS
@@ -435,6 +436,17 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
           osal_set_event(RoachZStack_TaskID, ROACHZSTACK_STIM_START );
         }
     }
+    
+    if (pkt->cmd.Data[1] == 'Y') // X signifies stimulation
+    {
+        ADC_command = parseADCCommand(pkt->cmd.Data+1, pkt->cmd.DataLength-1);
+        ADC_SetCommand(ADC_command);
+        if (ADC_command != NULL)
+        {
+          osal_set_event(RoachZStack_TaskID, RZS_ADC_READ );
+        }
+    }
+    
     default:
       break;
   }
