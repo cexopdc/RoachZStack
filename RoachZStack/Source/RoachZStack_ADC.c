@@ -58,6 +58,7 @@ uint8 RoachZStack_ADC_TaskID;    // Task ID for internal task/event processing.
 uint16 data = 0;
 
 uint16 overflow = 0;
+uint16 allowedADC = 0;
 
   #ifndef ZDO_COORDINATOR
 HAL_ISR_FUNCTION( DMA_ISR, DMA_VECTOR )
@@ -197,8 +198,11 @@ UINT16 RoachZStack_ADC( uint8 task_id, UINT16 events )
         
     if (pBufferDone != NULL)
     {
-      // Send the address to the task
-      pBufferDone->hdr.event = RZS_ADC_VALUE;
+      // Send the address to the task 
+      if (allowedADC ) 
+      { 
+        pBufferDone->hdr.event = RZS_ADC_VALUE;
+      }
       for (int i = 0; i < (sizeof(pBufferDone->buffer)/sizeof(*(pBufferDone->buffer))); i++)
       {
         if (pBufferDone->buffer[i] > 127)

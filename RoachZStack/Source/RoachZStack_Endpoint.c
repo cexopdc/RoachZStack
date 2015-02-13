@@ -194,7 +194,7 @@ static uint8 RoachZStack_MsgID;
 static afAddrType_t RoachZStack_TxAddr;
 static uint8 RoachZStack_TxBuf[SERIAL_APP_TX_MAX];
 static uint8 RoachZStack_TxLen;
-static stimCommand* command = NULL;
+static stimCommand* stim_command = NULL;
 
 /*********************************************************************
  * LOCAL FUNCTIONS
@@ -282,7 +282,7 @@ UINT16 RoachZStack_ProcessEvent( uint8 task_id, UINT16 events )
         RoachZStack_ProcessMSGCmd( MSGpkt );
         break;
   
-      case RZS_ADC_VALUE & NULL: // set ADC input value
+      case RZS_ADC_VALUE: // set ADC input value
       {
         adcMsg_t* adcMsg = ((adcMsg_t*) MSGpkt);
         
@@ -425,11 +425,15 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
   // stimulation command
   case ROACHZSTACK_CLUSTER_CMD:
     //showMessage(pkt->cmd); // parse received data
-    command = parseCommand(pkt->cmd.Data+1, pkt->cmd.DataLength-1);
-    Stimulator_SetCommand(command);
-    if (command != NULL)
+    
+    if (pkt->cmd.Data[1] == 'X') // X signifies stimulation
     {
-      osal_set_event(RoachZStack_TaskID, ROACHZSTACK_STIM_START );
+        stim_command = parseCommand(pkt->cmd.Data+1, pkt->cmd.DataLength-1);
+        Stimulator_SetCommand(stim_command);
+        if (stim_command != NULL)
+        {
+          osal_set_event(RoachZStack_TaskID, ROACHZSTACK_STIM_START );
+        }
     }
     default:
       break;

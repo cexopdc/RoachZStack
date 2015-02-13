@@ -4,7 +4,6 @@
 
 #include "OnBoard.h"
 
-
 typedef struct
 {
   uint8 direction;
