@@ -46,6 +46,7 @@
  * RF Config
  *---------------------------------------------------------------------------*/
 #define CC2530_RF_TX_POWER_RECOMMENDED 0xD5
+#define CC2530_RF_CONF_TX_POWER 0x65 /* Set the Tx power to maximum: 4.5dBm by hxiong */
 #ifdef CC2530_RF_CONF_TX_POWER
 #define CC2530_RF_TX_POWER CC2530_RF_CONF_TX_POWER
 #else

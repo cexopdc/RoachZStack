@@ -129,8 +129,11 @@ cc2530_rf_channel_set(uint8_t channel)
 
   /* Changes to FREQCTRL take effect after the next recalibration */
   off();
-  FREQCTRL = (CC2530_RF_CHANNEL_MIN
-      + (channel - CC2530_RF_CHANNEL_MIN) * CC2530_RF_CHANNEL_SPACING);
+  /*manual set the channel to 100, frequency at 2.494GHz -hxiong*/
+  //FREQCTRL = (CC2530_RF_CHANNEL_MIN
+  //    + (channel - CC2530_RF_CHANNEL_MIN) * CC2530_RF_CHANNEL_SPACING);
+   channel = 100;
+   FREQCTRL = channel;
   on();
 
   return (int8_t) channel;
