@@ -50,11 +50,13 @@
 PROCESS(example_unicast_process, "Example unicast");
 AUTOSTART_PROCESSES(&example_unicast_process);
 /*---------------------------------------------------------------------------*/
+static int counter = 0;
 static void
 recv_uc(struct unicast_conn *c, const rimeaddr_t *from)
 {
-  printf("unicast message received from %d.%d: '%s', rssi=%d\n",
-         from->u8[0], from->u8[1], (char *)packetbuf_dataptr(), packetbuf_attr(PACKETBUF_ATTR_RSSI));
+  counter++;	
+  printf("Num:%d unicast message received from %d.%d: '%s', rssi=%d\n",
+         counter, from->u8[0], from->u8[1], (char *)packetbuf_dataptr(), packetbuf_attr(PACKETBUF_ATTR_RSSI));
 }
 static const struct unicast_callbacks unicast_callbacks = {recv_uc};
 static struct unicast_conn uc;
@@ -74,15 +76,15 @@ PROCESS_THREAD(example_unicast_process, ev, data)
     etimer_set(&et, 5*CLOCK_SECOND);
     
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-
+/*
     packetbuf_copyfrom("Hello", 5);
-    addr.u8[0] = 4; //Change RIME address
+    addr.u8[0] = 3; //Change RIME address
     addr.u8[1] = 0;
     if(!rimeaddr_cmp(&addr, &rimeaddr_node_addr)) {
       unicast_send(&uc, &addr);
       printf("Unicast message sent to %u.%u\n", addr.u8[0], addr.u8[1]);
     }
-
+*/
   }
 
   PROCESS_END();

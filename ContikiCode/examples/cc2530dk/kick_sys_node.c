@@ -32,59 +32,68 @@
 
 /**
  * \file
- *         Best-effort single-hop unicast example
+ *         Testing the broadcast layer in Rime
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
 #include "contiki.h"
 #include "net/rime.h"
+#include "random.h"
 
 #include "dev/button-sensor.h"
 
 #include "dev/leds.h"
 
 #include <stdio.h>
-
 /*---------------------------------------------------------------------------*/
-PROCESS(example_unicast_process, "Example unicast");
-AUTOSTART_PROCESSES(&example_unicast_process);
+PROCESS(example_broadcast_process, "Broadcast example");
+AUTOSTART_PROCESSES(&example_broadcast_process);
 /*---------------------------------------------------------------------------*/
+static int x=30;
+static int y=14;
+static int std=9;
+static char str[60];
+static uint16_t len=0;
+static float broadcast_interval;
 static void
-recv_uc(struct unicast_conn *c, const rimeaddr_t *from)
+broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)
 {
-  printf("unicast message received from %d.%d: '%s', rssi=%d\n",
-         from->u8[0], from->u8[1], (char *)packetbuf_dataptr(), packetbuf_attr(PACKETBUF_ATTR_RSSI));
+//  printf("broadcast message received from %d.%d: '%s', rssi=%d\n",
+//         from->u8[0], from->u8[1], (char *)packetbuf_dataptr(), packetbuf_attr(PACKETBUF_ATTR_RSSI));
+	printf("***************\n");
+	printf("Tx ID: %d.%d\nRx ID: %d.%d\n%s\nrssi: %d\n",
+			from->u8[0], from->u8[1],rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],(char *)packetbuf_dataptr(),packetbuf_attr(PACKETBUF_ATTR_RSSI));
 }
-static const struct unicast_callbacks unicast_callbacks = {recv_uc};
-static struct unicast_conn uc;
+static const struct broadcast_callbacks broadcast_call = {broadcast_recv};
+static struct broadcast_conn broadcast;
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(example_unicast_process, ev, data)
+PROCESS_THREAD(example_broadcast_process, ev, data)
 {
-  PROCESS_EXITHANDLER(unicast_close(&uc);)
-    
+  static struct etimer et;
+  PROCESS_EXITHANDLER(broadcast_close(&broadcast);)
+
   PROCESS_BEGIN();
 
-  unicast_open(&uc, 129, &unicast_callbacks);
+  broadcast_open(&broadcast, 129, &broadcast_call);
 
   while(1) {
-    static struct etimer et;
-    rimeaddr_t addr;
-    
-    etimer_set(&et, 5*CLOCK_SECOND);
-    
+
+	broadcast_interval = CLOCK_SECOND + ((float)random_rand()) / (RANDOM_RAND_MAX);
+//printf("time_interval: %f\n",broadcast_interval);
+    etimer_set(&et, broadcast_interval);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-
-    packetbuf_copyfrom("Hello", 5);
-    addr.u8[0] = 4; //Change RIME address
-    addr.u8[1] = 0;
-    if(!rimeaddr_cmp(&addr, &rimeaddr_node_addr)) {
-      unicast_send(&uc, &addr);
-      printf("Unicast message sent to %u.%u\n", addr.u8[0], addr.u8[1]);
-    }
-
+    len = sprintf(str,"Type: Unknown\nPos: %d,%d\nSTD: %d",x,y,std);
+	//printf("len: %d\n",len);
+	packetbuf_copyfrom(str,len);
+    //packetbuf_copyfrom("Type: Unknown\nPos: x,y\nSTD:sigma\n", 40);
+    //packetbuf_copyfrom("Hello",6);
+   // if (counter<200){
+          broadcast_send(&broadcast);
+    //	      counter++;
+	//	  printf("broadcast message sent\n");
+  //  }
   }
-
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/
