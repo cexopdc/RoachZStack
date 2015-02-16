@@ -45,7 +45,7 @@ ADCCommand* parseADCCommand(uint8* buf, uint8 len)
   if (cmd != NULL)
   {
     //cmd->direction = buf[1];
-    cmd->time = convert(buf,4,2);
+    cmd->time = convert(buf,4,1);
   } 
   return cmd;
 }
