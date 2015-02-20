@@ -1,0 +1,13 @@
+b0=[-42,1,1];
+fun=inline('b(1)+b(2).*log(x./b(3))','b','x');
+x1=0.2:0.2:3.0;
+y1=aggr_mean_rssi;
+[b,r,j]=nlinfit(x1,y1,fun,b0);
+b=real(b);
+y2=b(1)+b(2).*log(x./b(3));
+plot(x1,y1,'b*',x1,y2,'-or');
+xlabel('distance (m)');
+ylabel('RSSI');
+legend('original data','Nonlinear Regression');
+hold on;
+errorbar(x1,aggr_mean_rssi,aggr_std_rssi,'bo','markersize', 5);

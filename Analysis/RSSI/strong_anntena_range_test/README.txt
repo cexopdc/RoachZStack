@@ -1,0 +1,1 @@
+Used the Battery Board with the strong antenna. Also increased TX power to 4.5dbM, RF frequency 2.494GHz.Using broadcast instead of Unicast in previoous experiments for faster data collection.
