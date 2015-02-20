@@ -35,7 +35,7 @@ for i=1:NUM_NODE
         Node(i).std=0;
         Node(i).attri = 'beacon';
     else                            % unknown
-        Node(i).est_pos = [0;0];
+        Node(i).est_pos = [Width*0.5;Length*0.5]; % set initial est_pos at center.
         Node(i).cov=COV_INITIAL;
         Node(i).std=STD_INITIAL;
         Node(i).attri = 'unknown';

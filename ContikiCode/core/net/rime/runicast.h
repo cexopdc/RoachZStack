@@ -4,35 +4,29 @@
  */
 
 /**
- * \defgroup rimerunicast Single-hop reliable unicast
+ * \defgroup rimeRunicast_FGONG 
  * @{
  *
- * The reliable single-hop unicast primitive (runicast) reliably sends
- * a packet to a single-hop neighbor.  The runicast primitive uses
- * acknowledgements and retransmissions to ensure that the neighbor
- * successfully receives the packet.  When the receiver has
- * acknowledged the packet, the ruc module notifies the sending
- * application via a callback.  The ruc primitive uses the stubborn
- * single-hop unicast primitive to do retransmissions.  Thus, the ruc
- * primitive does not have to manage the details of setting up timers
- * and doing retransmissions, but can concentrate on dealing with
- * acknowledgements.
+ * The stubborn single-hop unicast primitive (stunicast) repeatedly
+ * sends a packet to a single-hop neighbor using the unicast
+ * primitive.  The stunicast primitive sends and resends the packet
+ * until an upper layer primitive or protocol cancels the
+ * transmission.  While it is possible for applications and protocols
+ * that use Rime to use the stubborn single-hop unicast primitive
+ * directly, the stunicast primitive is primarily used by the reliable
+ * single-hop unicast (runicast) primitive.
  *
- * The runicast primitive adds two packet attributes: the single-hop
- * packet type and the single-hop packet ID.  The runicast primitive
- * uses the packet ID attribute as a sequence number for matching
- * acknowledgement packets to the corresponding data packets.
- *
- * The application or protocol that uses the runicast primitive can
- * specify the maximum number of transmissions that the ruc module
- * should attempt before the packet times out.  If a packet times out,
- * the application or protocol that sent the packet is notified with a
- * callback.
- *
+ * Before the stunicast primitive sends a packet, it allocates a queue
+ * buffer, to which the application data and packet attributes is
+ * copied, and sets a timer.  When the timer expires, the stunicast
+ * primitive copies the queue buffer to the Rime buffer and sends the
+ * packet using the unicast primitive.  The stunicast primitive sets the
+ * number of retransmissions for a packet as a packet attribute on 
+ * outgoing packets.
  *
  * \section channels Channels
  *
- * The runicast module uses 1 channel.
+ * The stunicast module uses 1 channel.
  *
  */
 
@@ -70,48 +64,44 @@
 
 /**
  * \file
- *         Reliable unicast header file
+ *         Runicast header file
  * \author
- *         Adam Dunkels <adam@sics.se>
+ *         fgong
  */
 
-#ifndef __RUNICAST_H__
-#define __RUNICAST_H__
+#ifndef __RRUNICAST_H__
+#define __RRUNICAST_H__
 
-#include "net/rime/stunicast.h"
+#include "sys/ctimer.h"
+#include "net/rime/unicast.h"
+#include "net/queuebuf.h"
 
-struct runicast_conn;
+struct Runicast_conn;
 
+#define RRUNICAST_ATTRIBUTES  UNICAST_ATTRIBUTES
 
-#define RUNICAST_PACKET_ID_BITS 2
-
-#define RUNICAST_ATTRIBUTES  { PACKETBUF_ATTR_PACKET_TYPE, PACKETBUF_ATTR_BIT }, \
-                             { PACKETBUF_ATTR_PACKET_ID, PACKETBUF_ATTR_BIT * RUNICAST_PACKET_ID_BITS }, \
-                             STUNICAST_ATTRIBUTES
-struct runicast_callbacks {
-  void (* recv)(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno);
-  void (* sent)(struct runicast_conn *c, const rimeaddr_t *to, uint8_t retransmissions);
-  void (* timedout)(struct runicast_conn *c, const rimeaddr_t *to, uint8_t retransmissions);
+struct Runicast_callbacks {
+  void (* recv)(struct Runicast_conn *c, const rimeaddr_t *from);
+  void (* sent)(struct Runicast_conn *c, int status, uint8_t num_tx);
 };
 
-struct runicast_conn {
-  struct stunicast_conn c;
-  const struct runicast_callbacks *u;
-  uint8_t sndnxt;
-  uint8_t is_tx;
+struct Runicast_conn {
+  struct unicast_conn c;
+  struct queuebuf *buf;
+  const struct Runicast_callbacks *u;
+  rimeaddr_t receiver;
   uint8_t rxmit;
   uint8_t max_rxmit;
 };
 
-void runicast_open(struct runicast_conn *c, uint16_t channel,
-	       const struct runicast_callbacks *u);
-void runicast_close(struct runicast_conn *c);
+void Runicast_open(struct Runicast_conn *c, uint16_t channel,
+	       const struct Runicast_callbacks *u);
+void Runicast_close(struct Runicast_conn *c);
 
-int runicast_send(struct runicast_conn *c, const rimeaddr_t *receiver,
-		  uint8_t max_retransmissions);
+int Runicast_send(struct Runicast_conn *c, const rimeaddr_t *receiver, uint8_t max_retransmissions);
 
-uint8_t runicast_is_transmitting(struct runicast_conn *c);
+rimeaddr_t *Runicast_receiver(struct Runicast_conn *c);
 
-#endif /* __RUNICAST_H__ */
+#endif /* __RRUNICAST_H__ */
 /** @} */
 /** @} */
