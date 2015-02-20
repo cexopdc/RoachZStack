@@ -44,8 +44,11 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % sub-function, to generate the distance measurement between 
 % two nodes by adding WGN to real position
-function wgn_dist = WGN_DIST(A,B)
+function wgn_dist = WGN_DIST(A,B,seed)
 global DIS_STD_RATIO;
+% we want to set the distance measurement error to be fixed at the
+% beginning
+rng(seed);
 wgn_dist=DIST(A,B)+ DIS_STD_RATIO*DIST(A,B)*randn;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -65,9 +68,11 @@ neighbor_array = A.neighbor;
 for neighbor_index = neighbor_array
     %if the neighbor is an unknown, update; if a beacon, do nothing.
     if strcmp(Node(neighbor_index).attri,'unknown');
-        % generate the measurement distance with WGN
-        wgn_dist = WGN_DIST(A,Node(neighbor_index));
-        %wgn_dist = DIST(A,Node(neighbor_index));
+        % generate the measurement distance with WGN, which is fixed during
+        % multiple stages, by passing the same seed.
+        wgn_dist = WGN_DIST(A,Node(neighbor_index),DIST(A,Node(neighbor_index)));
+        %wgn_dist = WGN_DIST(A,Node(neighbor_index);
+        %wgn_dist = DIST(A,Node(neighbor_index)); 
         % choose kalman or intuitive update algorithm
         if strcmp(algorithm,'kalman')
             Node(neighbor_index) = kalman_update_loc(Node(neighbor_index),A,wgn_dist);

@@ -5,7 +5,7 @@ rng default;
 aggregate_error=[];
 aggregate_connectivity_counter=0;
 for i=1:10
-    [loc_error_intuitive,connectivity_counter] = main;
+    [loc_error_intuitive,connectivity_counter] = main(50,0.2,0.2);
     aggregate_error=[aggregate_error loc_error_intuitive];
     aggregate_connectivity_counter = aggregate_connectivity_counter + connectivity_counter;
 end
