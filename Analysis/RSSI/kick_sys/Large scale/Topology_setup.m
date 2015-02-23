@@ -15,7 +15,8 @@ global COV_INITIAL;
 COV_INITIAL = [STD_INITIAL^2 0; 0 STD_INITIAL^2];   % initial cov for unknown
 global DIS_STD_RATIO; 
 DIS_STD_RATIO = dis_std_ratio;  % the distance measurement error ratio
-
+global WGN_DIST; % the measurement distance with WGN, which is fixed during multiple stages.
+WGN_DIST = zeros(NUM_NODE);
 global Node;
 % set nodes coordinates, est coordinates, attribute,time scheduling and 
 % intial std
@@ -39,6 +40,13 @@ for i=1:NUM_NODE
         Node(i).cov=COV_INITIAL;
         Node(i).std=STD_INITIAL;
         Node(i).attri = 'unknown';
+    end
+end
+
+% set the measurement distance with WGN, which is fixed during multiple stages.
+for i=1:NUM_NODE
+    for j=1:NUM_NODE
+        WGN_DIST(i,j)=DIST(Node(i),Node(j)) + DIS_STD_RATIO*DIST(Node(i),Node(j))*randn;
     end
 end
 

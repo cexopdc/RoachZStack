@@ -44,12 +44,12 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % sub-function, to generate the distance measurement between 
 % two nodes by adding WGN to real position
-function wgn_dist = WGN_DIST(A,B,seed)
-global DIS_STD_RATIO;
+%function wgn_dist = WGN_DIST(A,B,seed)
+%global DIS_STD_RATIO;
 % we want to set the distance measurement error to be fixed at the
 % beginning
-rng(seed);
-wgn_dist=DIST(A,B)+ DIS_STD_RATIO*DIST(A,B)*randn;
+%rng(seed);
+%wgn_dist=DIST(A,B)+ DIS_STD_RATIO*DIST(A,B)*randn;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -64,13 +64,12 @@ est_dist=sqrt((A.est_pos(1)-B.est_pos(1))^2+(A.est_pos(2)-B.est_pos(2))^2);
 % and its neighbors will update accordingly.
 function broadcast(A,algorithm)
 global Node;
+global WGN_DIST;
 neighbor_array = A.neighbor;
 for neighbor_index = neighbor_array
     %if the neighbor is an unknown, update; if a beacon, do nothing.
     if strcmp(Node(neighbor_index).attri,'unknown');
-        % generate the measurement distance with WGN, which is fixed during
-        % multiple stages, by passing the same seed.
-        wgn_dist = WGN_DIST(A,Node(neighbor_index),DIST(A,Node(neighbor_index)));
+        wgn_dist = WGN_DIST(A.id,Node(neighbor_index).id);
         %wgn_dist = WGN_DIST(A,Node(neighbor_index);
         %wgn_dist = DIST(A,Node(neighbor_index)); 
         % choose kalman or intuitive update algorithm
@@ -98,7 +97,7 @@ if isequal(A.cov,COV_INITIAL)
     end
     
 % if A has an est already, it will add a kick factor to its current est.
-else?
+else
     if isequal(B.cov,COV_INITIAL) || isequal(A.est_pos,B.est_pos) 
         % if B also has no est, do nothing; if A and B have same est, do
         % nothing.

@@ -33,14 +33,15 @@ end
 function  A = broadcast(A,B)
     global DV_vector;
     global Node;
+    global WGN_DIST;
     % store B into A's beacon array if not already stored.
     if ~any(A.beacon_array==B.id)
         A.beacon_array = [A.beacon_array B.id];
     end
     neighbor_array = A.neighbor;
     for neighbor_index = neighbor_array
-        if DV_vector(B.id,neighbor_index) > (DV_vector(B.id,A.id) + DIST(A,Node(neighbor_index)))
-            DV_vector(B.id,neighbor_index) = DV_vector(B.id,A.id) + DIST(A,Node(neighbor_index));
+        if DV_vector(B.id,neighbor_index) > (DV_vector(B.id,A.id) + WGN_DIST(A.id,Node(neighbor_index).id))   
+            DV_vector(B.id,neighbor_index) = DV_vector(B.id,A.id) + WGN_DIST(A.id,Node(neighbor_index).id);
             Node(neighbor_index) = broadcast(Node(neighbor_index),B);
         end
     end

@@ -10,6 +10,7 @@ global TRANS_RANGE;
 TRANS_RANGE=30;       % transmission range 30 meters
 global DIS_STD_RATIO; 
 DIS_STD_RATIO = 0.2;  % the distance measurement error ratio
+global WGN_DIST; % the measurement distance with WGN, which is fixed during multiple stages.
 
 global Node;
 % set nodes coordinates, est coordinates, attribute,time scheduling and 
@@ -28,6 +29,14 @@ for i=1:NUM_NODE
         Node(i).attri = 'unknown';
     end
 end
+
+% set the measurement distance with WGN, which is fixed during multiple stages.
+for i=1:NUM_NODE
+    for j=1:NUM_NODE
+        WGN_DIST(i,j)=DIST(Node(i),Node(j)) + DIS_STD_RATIO*DIST(Node(i),Node(j))*randn;
+    end
+end
+
 
 
 
