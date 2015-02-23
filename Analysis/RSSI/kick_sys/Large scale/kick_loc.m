@@ -98,7 +98,7 @@ if isequal(A.cov,COV_INITIAL)
     end
     
 % if A has an est already, it will add a kick factor to its current est.
-else
+else?
     if isequal(B.cov,COV_INITIAL) || isequal(A.est_pos,B.est_pos) 
         % if B also has no est, do nothing; if A and B have same est, do
         % nothing.
