@@ -20,10 +20,9 @@ function DV_distance
     %the system runs 
     for time = 0:STAGE_NUMBER
         for index = sched_array
-            broadcast(Node(index));
+            Node(index) = broadcast(Node(index));
         end
     end
-    
 
     %Phase 2: Node position - lateration
     for i= round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
@@ -38,14 +37,27 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % sub-function, node A broadcasts to its neighbors its current distance
 % to all the beacons it can reach.
-function  broadcast(A)
+function  A = broadcast(A)
     global Node;
     global WGN_DIST;
+    % if beacon has no correction yet and has access to other beacon, then
+    % calculate a correction.
+    if A.correction == 0 && strcmp(A.attri,'beacon')  && size(A.dv_vector,1)>1
+        tmp_id = A.dv_vector(2,1);
+        A.correction = A.dv_vector(2,2)/DIST(A,Node(tmp_id)); 
+    end
+    
     % if A has beacon dv_vector to broadcast
     if ~isempty(A.dv_vector)
         beacon_list = A.dv_vector(:,1)';
         % iterate all neighbors
         for neighbor_index = A.neighbor
+            %  if A has correction, and the neighbor doesn't have it,
+            %  forward the correction.
+            if A.correction ~= 0 && Node(neighbor_index).correction == 0
+                Node(neighbor_index).correction = A.correction;
+            end
+            
             for beacon_index = beacon_list
                 % if beacon not in neighbor's talbe, add directly
                 if isempty(Node(neighbor_index).dv_vector) 
@@ -81,10 +93,19 @@ function U = lateration(U)
     b=[];
     beacon_list = U.dv_vector(:,1)';
     n= beacon_list(end); % the last beacon 
+    
+    tmp_dv_vector = U.dv_vector(:,2)';
+    %{
+    % use correction to correct the distance_vector
+    if U.correction ~= 0
+        tmp_dv_vector = tmp_dv_vector/U.correction;
+    end
+    %}
+    
     for beacon_index = beacon_list
         if beacon_index ~= n
             A=[A;2*(Node(beacon_index).pos(1)-Node(n).pos(1)) 2*(Node(beacon_index).pos(2)-Node(n).pos(2))];
-            b=[b;(Node(beacon_index).pos(1))^2 - (Node(n).pos(1))^2 + (Node(beacon_index).pos(2))^2 - (Node(n).pos(2))^2 + U.dv_vector(find(U.dv_vector(:,1)==n),2)^2 - U.dv_vector(find(U.dv_vector(:,1)==beacon_index),2)^2];
+            b=[b;(Node(beacon_index).pos(1))^2 - (Node(n).pos(1))^2 + (Node(beacon_index).pos(2))^2 - (Node(n).pos(2))^2 + tmp_dv_vector(n)^2 - tmp_dv_vector(beacon_index)^2];
         end
     end
     % solve the system using least-square

@@ -3,7 +3,7 @@
 Length=100; % area space, unit: meter
 Width=100;  % area space, unit: meter
 global NUM_NODE;
-NUM_NODE=50; % number of total nodes
+NUM_NODE=6; % number of total nodes
 global BEACON_RATIO;
 BEACON_RATIO=0.5; 
 global TRANS_RANGE;
@@ -21,6 +21,7 @@ for i=1:NUM_NODE
     Node(i).pos = [Width*rand;Length*rand]; % node i position, 2 by 1 matrix [x;y]
     Node(i).id = i;         % node ID
     Node(i).sched=rand;    % time scheduling of the system, set to random
+    Node(i).correction=0;   % intiailize the correction to be 0
     
     if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
         Node(i).est_pos = Node(i).pos;
@@ -33,7 +34,7 @@ for i=1:NUM_NODE
     end
 end
 
-%{
+%
 % Example topology
 Node(1).pos = [20;36.8];
 Node(1).est_pos = Node(1).pos;
