@@ -1,16 +1,18 @@
 % Localization initialization
-clear all;
+%clear all;
 Length=100; % area space, unit: meter
 Width=100;  % area space, unit: meter
 global NUM_NODE;
-NUM_NODE=200; % number of total nodes
+NUM_NODE=50; % number of total nodes
 global BEACON_RATIO;
-BEACON_RATIO=0.2; 
+BEACON_RATIO=0.5; 
 global TRANS_RANGE;
-TRANS_RANGE=20;       % transmission range 30 meters
+TRANS_RANGE=30;       % transmission range 30 meters
 global DIS_STD_RATIO; 
 DIS_STD_RATIO = 0.2;  % the distance measurement error ratio
 global WGN_DIST; % the measurement distance with WGN, which is fixed during multiple stages.
+global STAGE_NUMBER;
+STAGE_NUMBER=20;      % number of stages
 
 global Node;
 % set nodes coordinates, est coordinates, attribute,time scheduling and 
@@ -19,26 +21,17 @@ for i=1:NUM_NODE
     Node(i).pos = [Width*rand;Length*rand]; % node i position, 2 by 1 matrix [x;y]
     Node(i).id = i;         % node ID
     Node(i).sched=rand;    % time scheduling of the system, set to random
-    Node(i).beacon_array=[];  % initialize accessible beacon array to none
     
     if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
         Node(i).est_pos = Node(i).pos;
         Node(i).attri = 'beacon';
+        Node(i).dv_vector=[Node(i).id 0];  % initialize accessible dv vector, itself.
     else                            % unknown
         Node(i).est_pos = [Width*0.5;Length*0.5]; % set initial est_pos at center.
         Node(i).attri = 'unknown';
+        Node(i).dv_vector=[];  % initialize accessible dv vector to none
     end
 end
-
-% set the measurement distance with WGN, which is fixed during multiple stages.
-for i=1:NUM_NODE
-    for j=1:NUM_NODE
-        WGN_DIST(i,j)=DIST(Node(i),Node(j)) + DIS_STD_RATIO*DIST(Node(i),Node(j))*randn;
-    end
-end
-
-
-
 
 %{
 % Example topology
@@ -66,6 +59,13 @@ Node(5).pos = [9.57162424774182;23.1569396983637];
 Node(6).pos = [16.2710704086090;4.50460564100187];
 %}
 
+% set the measurement distance with WGN, which is fixed during multiple stages.
+for i=1:NUM_NODE
+    for j=1:NUM_NODE
+        WGN_DIST(i,j)=DIST(Node(i),Node(j)) + DIS_STD_RATIO*DIST(Node(i),Node(j))*randn;
+    end
+end
+
 %calculate neighbor array, and calculate connectivity
 %figure
 %hold on;box on;axis([0 Length 0 Width]); %the frame of the plot
@@ -84,8 +84,6 @@ for i=1:NUM_NODE
     end
 end
 avg_connectivity = connectivity_counter/NUM_NODE;
-
-DV_distance;
 
 %{
 % take a look at the generated topology

@@ -4,7 +4,7 @@
 %    disp('Please give num_node,dis_std_ratio,beacon_ratio');
 %    return;
 %end
-close all; clear all; clc;
+%close all; clear all; clc;
 rng default;
 rng (7);
 % Configure topology-related parameters
