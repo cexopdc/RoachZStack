@@ -102,10 +102,14 @@ function U = lateration(U)
     end
     %}
     
+    counter = 0; % counter for sequence to access dv_vector
+    
     for beacon_index = beacon_list
+        counter = counter + 1;
         if beacon_index ~= n
             A=[A;2*(Node(beacon_index).pos(1)-Node(n).pos(1)) 2*(Node(beacon_index).pos(2)-Node(n).pos(2))];
-            b=[b;(Node(beacon_index).pos(1))^2 - (Node(n).pos(1))^2 + (Node(beacon_index).pos(2))^2 - (Node(n).pos(2))^2 + tmp_dv_vector(n)^2 - tmp_dv_vector(beacon_index)^2];
+            b=[b;(Node(beacon_index).pos(1))^2 - (Node(n).pos(1))^2 + (Node(beacon_index).pos(2))^2 - (Node(n).pos(2))^2 + tmp_dv_vector(size(tmp_dv_vector,2))^2 - tmp_dv_vector(counter)^2
+];
         end
     end
     % solve the system using least-square
