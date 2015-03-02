@@ -5,13 +5,13 @@ Length=100; % area space, unit: meter
 global Width;
 Width=100;  % area space, unit: meter
 global NUM_NODE;
-NUM_NODE=50; % number of total nodes
+NUM_NODE=num_node; % number of total nodes
 global BEACON_RATIO;
-BEACON_RATIO=0.2; 
+BEACON_RATIO=beacon_ratio; 
 global TRANS_RANGE;
 TRANS_RANGE=20;       % transmission range 20 meters
 global DIS_STD_RATIO; 
-DIS_STD_RATIO = 0.2;  % the distance measurement error ratio
+DIS_STD_RATIO = dis_std_ratio;  % the distance measurement error ratio
 global WGN_DIST; % the measurement distance with WGN, which is fixed during multiple stages.
 global STAGE_NUMBER;
 STAGE_NUMBER=20;      % number of stages

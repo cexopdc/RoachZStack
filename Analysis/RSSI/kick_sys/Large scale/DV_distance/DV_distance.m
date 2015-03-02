@@ -3,7 +3,7 @@
 % 
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function DV_distance
+function [average_loc_error, coverage] = DV_distance
     global Length;
     global Width;
     global NUM_NODE;
@@ -62,9 +62,9 @@ function DV_distance
         end
     end
 
-    average_loc_error = mean(loc_error)/TRANS_RANGE
-    max_loc_error = max(loc_error)/TRANS_RANGE
-    coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO))
+    average_loc_error = mean(loc_error)/TRANS_RANGE;
+    max_loc_error = max(loc_error)/TRANS_RANGE;
+    coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO));
     
 end
 

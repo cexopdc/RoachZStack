@@ -3,7 +3,7 @@
 % 
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function kick_loc
+function [average_loc_error]=kick_loc
 
     global Length;
     global Width;
@@ -53,9 +53,9 @@ function kick_loc
         %end
     end
 
-    average_loc_error = mean(loc_error)/TRANS_RANGE
-    max_loc_error = max(loc_error)/TRANS_RANGE
-    coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO))
+    average_loc_error = mean(loc_error)/TRANS_RANGE;
+    max_loc_error = max(loc_error)/TRANS_RANGE;
+    coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO));
     
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

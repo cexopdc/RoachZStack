@@ -1,18 +1,19 @@
 %function [loc_error_intuitive,loc_error_kalman] = main
-%function [loc_error_intuitive,connectivity_counter] = main(num_node,dis_std_ratio,beacon_ratio)
-%if nargin < 3
-%    disp('Please give num_node,dis_std_ratio,beacon_ratio');
-%    return;
-%end
-%close all; clear all; clc;
-rng default;
-rng (6);
-% Configure topology-related parameters
-Topology_setup;
-kick_loc;
-DV_distance;
-N_hop_lateration;
-
+function [average_loc_error_array,coverage,avg_connectivity] = main(num_node,dis_std_ratio,beacon_ratio)
+    if nargin < 3
+        disp('Please give num_node,dis_std_ratio,beacon_ratio');
+        return;
+    end
+    %close all; clear all; clc;
+    %rng default;
+    %rng (6);
+    % Configure topology-related parameters
+    Topology_setup;
+    average_loc_error_kick = kick_loc;
+    [average_loc_error_DV_distance, coverage] = DV_distance;
+    [average_loc_error_N_hop_lateration, coverage] = N_hop_lateration;
+    average_loc_error_array = [average_loc_error_kick average_loc_error_DV_distance average_loc_error_N_hop_lateration];
+end
 
 %node_analysis(node_stat,'intuitive');
 %store the final resulting errors for all the unknowns
