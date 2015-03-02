@@ -12,12 +12,14 @@ Topology_setup;
 N_hop_lateration;
 %node_analysis(node_stat,'intuitive');
 %store the final resulting errors for all the unknowns
+%{
 loc_error_intuitive=[];
 for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
     loc_error_intuitive =[loc_error_intuitive sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)];
 end
+%}
 
-%
+%{
 figure;
 node_id = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE;
 bar(node_id,loc_error_intuitive/TRANS_RANGE,'FaceColor',[0.2,0.2,0.5])

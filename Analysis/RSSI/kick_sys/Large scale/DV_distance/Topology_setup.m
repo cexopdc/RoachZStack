@@ -5,9 +5,9 @@ Length=100; % area space, unit: meter
 global Width;
 Width=100;  % area space, unit: meter
 global NUM_NODE;
-NUM_NODE=50; % number of total nodes
+NUM_NODE=60; % number of total nodes
 global BEACON_RATIO;
-BEACON_RATIO=0.5; 
+BEACON_RATIO=0.2; 
 global TRANS_RANGE;
 TRANS_RANGE=30;       % transmission range 30 meters
 global DIS_STD_RATIO; 
@@ -30,7 +30,7 @@ for i=1:NUM_NODE
     end
 end
 
-%{
+%
 % Example topology
 Node(1).pos = [20;36.8];
 Node(1).est_pos = Node(1).pos;

@@ -19,9 +19,11 @@ function DV_distance
         if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
             Node(i).est_pos = Node(i).pos;
             Node(i).dv_vector=[Node(i).id 0];  % initialize accessible dv vector, itself.
+            Node(i).well_determined=1; % set beacon as well-determined.
         else                            % unknown
             Node(i).est_pos = [Width*0.5;Length*0.5]; % set initial est_pos at center.
             Node(i).dv_vector=[];  % initialize accessible dv vector to none
+            Node(i).well_determined=0; % set unknowns as not well-determined.
         end
     end
 
@@ -44,6 +46,7 @@ function DV_distance
     for i= round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
         beacon_list = Node(i).dv_vector(:,1)';
         if length(beacon_list)>2
+            Node(i).well_determined=1;
             Node(i) = lateration(Node(i));
         end
     end

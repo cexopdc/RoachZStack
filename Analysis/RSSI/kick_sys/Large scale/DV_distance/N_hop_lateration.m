@@ -10,6 +10,7 @@ function N_hop_lateration
     global Node;
     global BEACON_RATIO;
     global STAGE_NUMBER;
+    global TRANS_RANGE;
     
     % set nodes est coordinates, time scheduling
     for i=1:NUM_NODE
@@ -18,9 +19,11 @@ function N_hop_lateration
         if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
             Node(i).est_pos = Node(i).pos;
             Node(i).dv_vector=[Node(i).id 0];  % initialize accessible dv vector, itself.
+            Node(i).well_determined=1; % set beacon as well-determined.
         else                            % unknown
             Node(i).est_pos = [Width*0.5;Length*0.5]; % set initial est_pos at center.
             Node(i).dv_vector=[];  % initialize accessible dv vector to none
+            Node(i).well_determined=0; % set unknowns as not well-determined.
         end
     end
 
@@ -41,14 +44,37 @@ function N_hop_lateration
     
     % find well-determined unknowns, and apply sum-dist for initial
     % localization
-    for i= round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
-        beacon_list = Node(i).dv_vector(:,1)';
-        if length(beacon_list)>2
-            Node(i) = sum_dist(Node(i));
+    for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        if ~isempty(Node(i).dv_vector)
+            beacon_list = Node(i).dv_vector(:,1)';
+            if length(beacon_list)>2
+                Node(i).well_determined=1;
+                Node(i) = sum_dist(Node(i));
+            end
         end
     end
-             
+        
+    % Refinement phase: well-determined unknowns using neighbor info. to
+    % localize, using least-square
+    for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        if Node(i).well_determined==1
+            if length(Node(i).neighbor)>2
+                Node(i) = lateration(Node(i));
+            end
+        end
+    end
+        
+    loc_error=[];
+    for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        if Node(i).well_determined==1
+            loc_error =[loc_error sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)];
+        end
+    end
 
+    average_loc_error = mean(loc_error)/TRANS_RANGE
+    max_loc_error = max(loc_error)/TRANS_RANGE
+    coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO))
+    
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -74,6 +100,28 @@ function U = sum_dist(U)
     new_est = (bottom_left_corner + top_right_corner)/2;
     U.est_pos = new_est';
 end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% sub-function, node U calulate its own position using least-square lateration with its neighors only.
+function U = lateration(U)
+    global Node;
+    global WGN_DIST;
+    % initialize matrix A and b.
+    A=[];
+    b=[];
+    
+    neighbor_array = U.neighbor;
+    n= neighbor_array(end); % the last neighbor 
+    for neighbor_index = neighbor_array
+        if neighbor_index ~= n
+            A=[A;2*(Node(neighbor_index).pos(1)-Node(n).pos(1)) 2*(Node(neighbor_index).pos(2)-Node(n).pos(2))];
+            b=[b;(Node(neighbor_index).pos(1))^2 - (Node(n).pos(1))^2 + (Node(neighbor_index).pos(2))^2 - (Node(n).pos(2))^2 + WGN_DIST(n,U.id)^2 - WGN_DIST(neighbor_index,U.id)^2];
+        end
+    end
+    % solve the system using least-square
+    U.est_pos = (transpose(A)*A)^(-1)*transpose(A)*b;
+end
+
     
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
