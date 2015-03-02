@@ -64,6 +64,7 @@ function N_hop_lateration
         end
     end
         
+    % collect localization stats
     loc_error=[];
     for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
         if Node(i).well_determined==1

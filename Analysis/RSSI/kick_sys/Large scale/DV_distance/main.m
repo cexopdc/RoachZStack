@@ -6,10 +6,14 @@
 %end
 %close all; clear all; clc;
 rng default;
-rng (7);
+rng (6);
 % Configure topology-related parameters
 Topology_setup;
+kick_loc;
+DV_distance;
 N_hop_lateration;
+
+
 %node_analysis(node_stat,'intuitive');
 %store the final resulting errors for all the unknowns
 %{

@@ -10,6 +10,7 @@ function DV_distance
     global Node;
     global BEACON_RATIO;
     global STAGE_NUMBER;
+    global TRANS_RANGE;
     
     % set nodes est coordinates, time scheduling
     for i=1:NUM_NODE
@@ -44,12 +45,27 @@ function DV_distance
 
     %Phase 2: Node position - lateration
     for i= round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
-        beacon_list = Node(i).dv_vector(:,1)';
-        if length(beacon_list)>2
-            Node(i).well_determined=1;
-            Node(i) = lateration(Node(i));
+        if ~isempty(Node(i).dv_vector)
+            beacon_list = Node(i).dv_vector(:,1)';
+            if length(beacon_list)>2
+                Node(i).well_determined=1;
+                Node(i) = lateration(Node(i));
+            end
         end
     end
+    
+    % collect localization stats
+    loc_error=[];
+    for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        if Node(i).well_determined==1
+            loc_error =[loc_error sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)];
+        end
+    end
+
+    average_loc_error = mean(loc_error)/TRANS_RANGE
+    max_loc_error = max(loc_error)/TRANS_RANGE
+    coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO))
+    
 end
 
 
