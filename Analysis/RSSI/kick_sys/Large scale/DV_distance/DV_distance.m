@@ -4,10 +4,26 @@
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function DV_distance
+    global Length;
+    global Width;
     global NUM_NODE;
     global Node;
     global BEACON_RATIO;
     global STAGE_NUMBER;
+    
+    % set nodes est coordinates, time scheduling
+    for i=1:NUM_NODE
+        Node(i).sched=rand;    % time scheduling of the system, set to random
+        Node(i).correction=0;   % intiailize the correction to be 0
+
+        if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
+            Node(i).est_pos = Node(i).pos;
+            Node(i).dv_vector=[Node(i).id 0];  % initialize accessible dv vector, itself.
+        else                            % unknown
+            Node(i).est_pos = [Width*0.5;Length*0.5]; % set initial est_pos at center.
+            Node(i).dv_vector=[];  % initialize accessible dv vector to none
+        end
+    end
 
     % sort the time schedule of all the nodes
     tmp_sched = [];
@@ -87,7 +103,6 @@ end
 % sub-function, node U calulate its own position using least-square lateration.
 function U = lateration(U)
     global Node;
-    global DV_vector;
     % initialize matrix A and b.
     A=[];
     b=[];

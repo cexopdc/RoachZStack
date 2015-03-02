@@ -9,8 +9,7 @@ rng default;
 rng (7);
 % Configure topology-related parameters
 Topology_setup;
-
-DV_distance;
+N_hop_lateration;
 %node_analysis(node_stat,'intuitive');
 %store the final resulting errors for all the unknowns
 loc_error_intuitive=[];

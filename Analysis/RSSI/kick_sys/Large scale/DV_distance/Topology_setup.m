@@ -1,6 +1,8 @@
 % Localization initialization
 %clear all;
+global Length;
 Length=100; % area space, unit: meter
+global Width;
 Width=100;  % area space, unit: meter
 global NUM_NODE;
 NUM_NODE=50; % number of total nodes
@@ -15,22 +17,16 @@ global STAGE_NUMBER;
 STAGE_NUMBER=20;      % number of stages
 
 global Node;
-% set nodes coordinates, est coordinates, attribute,time scheduling and 
-% intial std
+
+%set nodes coordinates,id, attribute
 for i=1:NUM_NODE
     Node(i).pos = [Width*rand;Length*rand]; % node i position, 2 by 1 matrix [x;y]
     Node(i).id = i;         % node ID
-    Node(i).sched=rand;    % time scheduling of the system, set to random
-    Node(i).correction=0;   % intiailize the correction to be 0
-    
+
     if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
-        Node(i).est_pos = Node(i).pos;
         Node(i).attri = 'beacon';
-        Node(i).dv_vector=[Node(i).id 0];  % initialize accessible dv vector, itself.
     else                            % unknown
-        Node(i).est_pos = [Width*0.5;Length*0.5]; % set initial est_pos at center.
         Node(i).attri = 'unknown';
-        Node(i).dv_vector=[];  % initialize accessible dv vector to none
     end
 end
 
