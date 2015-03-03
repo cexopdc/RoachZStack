@@ -54,6 +54,23 @@ function [average_loc_error, coverage] = N_hop_lateration
         end
     end
         
+    % collect localization stats
+    loc_error=[];
+    for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        if Node(i).well_determined==1
+            loc_error =[loc_error sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)];
+        end
+    end
+
+    if ~isempty(loc_error)
+        average_loc_error = mean(loc_error)/TRANS_RANGE;
+        max_loc_error = max(loc_error)/TRANS_RANGE;
+        coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO));
+    else
+        average_loc_error = 0;
+        coverage = 0;
+    end
+    
     % Refinement phase: well-determined unknowns using neighbor info. to
     % localize, using least-square
     for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
@@ -63,6 +80,8 @@ function [average_loc_error, coverage] = N_hop_lateration
             end
         end
     end
+    
+    
         
     % collect localization stats
     loc_error=[];
@@ -120,12 +139,15 @@ function U = lateration(U)
     n= neighbor_array(end); % the last neighbor 
     for neighbor_index = neighbor_array
         if neighbor_index ~= n
-            A=[A;2*(Node(neighbor_index).pos(1)-Node(n).pos(1)) 2*(Node(neighbor_index).pos(2)-Node(n).pos(2))];
-            b=[b;(Node(neighbor_index).pos(1))^2 - (Node(n).pos(1))^2 + (Node(neighbor_index).pos(2))^2 - (Node(n).pos(2))^2 + WGN_DIST(n,U.id)^2 - WGN_DIST(neighbor_index,U.id)^2];
+            A=[A;2*(Node(neighbor_index).est_pos(1)-Node(n).est_pos(1)) 2*(Node(neighbor_index).est_pos(2)-Node(n).est_pos(2))];
+            b=[b;(Node(neighbor_index).est_pos(1))^2 - (Node(n).est_pos(1))^2 + (Node(neighbor_index).est_pos(2))^2 - (Node(n).est_pos(2))^2 + WGN_DIST(n,U.id)^2 - WGN_DIST(neighbor_index,U.id)^2];
         end
     end
     % solve the system using least-square
-    U.est_pos = (transpose(A)*A)^(-1)*transpose(A)*b;
+    % if the matrix is not ill-conditioned, update est_pos.
+    if rcond(transpose(A)*A)>0.001
+        U.est_pos = (transpose(A)*A)^(-1)*transpose(A)*b;
+    end
 end
 
     
