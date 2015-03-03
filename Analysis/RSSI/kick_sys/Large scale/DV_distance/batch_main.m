@@ -4,17 +4,16 @@ rng default;
 aggregate_error=[];
 aggregate_connectivity_counter=0;
 aggregate_coverage = 0;
-for i=1:10
+num_trials = 10;
+for i=1:num_trials
     [average_loc_error_array,coverage,avg_connectivity] = main(100,0.2,0.2);
     aggregate_error=[aggregate_error;average_loc_error_array];
     aggregate_connectivity_counter = aggregate_connectivity_counter + avg_connectivity;
     aggregate_coverage = aggregate_coverage + coverage;
 end
-global TRANS_RANGE;
-global NUM_NODE;
 mean_error_arrary = mean(aggregate_error);
-avg_connectivity = aggregate_connectivity_counter/10;
-avg_coverage = aggregate_coverage/10;
+avg_connectivity = aggregate_connectivity_counter/num_trials;
+avg_coverage = aggregate_coverage/num_trials;
 
 
 %{
