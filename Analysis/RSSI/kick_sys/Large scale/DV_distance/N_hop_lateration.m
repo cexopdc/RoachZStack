@@ -145,7 +145,7 @@ function U = lateration(U)
     end
     % solve the system using least-square
     % if the matrix is not ill-conditioned, update est_pos.
-    if rcond(transpose(A)*A)>0.001
+    if rcond(transpose(A)*A)>0.01
         U.est_pos = (transpose(A)*A)^(-1)*transpose(A)*b;
     end
 end

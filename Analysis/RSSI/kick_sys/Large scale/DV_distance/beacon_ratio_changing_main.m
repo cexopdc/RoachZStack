@@ -4,6 +4,7 @@ rng default;
 start_point = 0.03;
 end_point = 0.30;
 num_trials = 10;
+aggregate_error_matrix=[];
 error_matrix=[];
 connectivity_array=[];
 coverage_matrix = [];
@@ -17,6 +18,7 @@ for i=start_point:0.03:end_point % number of nodes
         aggregate_connectivity_counter = aggregate_connectivity_counter + avg_connectivity;
         aggregate_coverage = aggregate_coverage + coverage;
     end
+    aggregate_error_matrix = [aggregate_error_matrix;aggregate_error];
     error_matrix = [error_matrix;mean(aggregate_error)];
     connectivity_array = [connectivity_array aggregate_connectivity_counter/num_trials];
     coverage_matrix = [coverage_matrix aggregate_coverage/num_trials];
