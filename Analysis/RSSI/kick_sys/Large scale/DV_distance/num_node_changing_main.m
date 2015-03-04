@@ -12,6 +12,7 @@ for i=start_point:10:end_point % number of nodes
     aggregate_error=[];
     aggregate_connectivity_counter=0;
     aggregate_coverage = 0;
+    fprintf('i=%f\n',i);
     for j=1:num_trials % number of trials
         [average_loc_error_array,coverage,avg_connectivity] = main(i,0.2,0.2);
         aggregate_error=[aggregate_error;average_loc_error_array];
@@ -26,7 +27,7 @@ end
 
 error_matrix = error_matrix';
 
-save num_node_20_to_200.mat;
+save num_node_20_to_200_laptop.mat;
 
 figure;
 x = start_point:10:end_point;

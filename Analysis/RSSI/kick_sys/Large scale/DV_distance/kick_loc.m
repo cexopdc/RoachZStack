@@ -3,7 +3,7 @@
 % 
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [average_loc_error]=kick_loc
+function [average_loc_error,confidence_interval]=kick_loc
 
     global Length;
     global Width;
@@ -47,15 +47,32 @@ function [average_loc_error]=kick_loc
     
     % collect localization stats
     loc_error=[];
+    CI1_counter = 0; % confidence interval counter for 1 std
+    CI2_counter = 0; % confidence interval counter for 2 std
+    CI3_counter = 0; % confidence interval counter for 3 std
     for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
         %if Node(i).well_determined==1
-            loc_error =[loc_error sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)];
+            node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2);
+            loc_error =[loc_error node_loc_error];
+            % check if the std actually bounds the error.
+            if node_loc_error <= Node(i).std
+                CI1_counter = CI1_counter + 1;            
+            end
+            if node_loc_error <= 2*Node(i).std
+                CI2_counter = CI2_counter + 1;            
+            end
+            if node_loc_error <= 3*Node(i).std
+                CI3_counter = CI3_counter + 1;            
+            end
         %end
-    end
 
+    end
+    CI_counter = [CI1_counter CI2_counter CI3_counter];
+    confidence_interval = CI_counter/(NUM_NODE*(1-BEACON_RATIO));
     average_loc_error = mean(loc_error)/TRANS_RANGE;
     max_loc_error = max(loc_error)/TRANS_RANGE;
     coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO));
+    
     
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

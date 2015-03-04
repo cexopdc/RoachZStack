@@ -9,7 +9,7 @@ function [average_loc_error_array,coverage,avg_connectivity] = main(num_node,dis
     %rng (6);
     % Configure topology-related parameters
     Topology_setup;
-    average_loc_error_kick = kick_loc;
+    [average_loc_error_kick,confidence_interval] = kick_loc;
     [average_loc_error_DV_distance, coverage] = DV_distance;
     [average_loc_error_N_hop_lateration, coverage] = N_hop_lateration;
     average_loc_error_array = [average_loc_error_kick average_loc_error_DV_distance average_loc_error_N_hop_lateration];

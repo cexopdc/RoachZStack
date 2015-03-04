@@ -1,4 +1,4 @@
-load('num_node_20_to_200_ideal.mat')
+%load('num_node_20_to_200_ideal.mat')
 figure;
 x = start_point:10:end_point;
 [hAx,hLine1,hLine2] = plotyy(x,error_matrix,x,connectivity_array);
@@ -13,7 +13,7 @@ hLine2.Marker = 'o';
 xlabel('Number of nodes');
 ylabel(hAx(1),'Relative error') % left y-axis
 ylabel(hAx(2),'connectivity') % right y-axis
-legend('kick','DV-distance','N-hop-lateration','connectivity');
+legend('kick','DV-distance','N-hop-lateration-bound','connectivity');
 
 figure;
 x = start_point:10:end_point;
@@ -24,4 +24,4 @@ h(2).Marker = '*';
 h(3).Marker = 's';
 xlabel('Number of nodes');
 ylabel('Coverage');
-legend('kick','DV-distance','N-hop-lateration');
+legend('kick','DV-distance','N-hop-lateration-bound');
