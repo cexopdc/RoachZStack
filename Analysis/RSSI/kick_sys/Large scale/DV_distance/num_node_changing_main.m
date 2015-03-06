@@ -20,7 +20,7 @@ for i=start_point:10:end_point % number of nodes
         aggregate_coverage = aggregate_coverage + coverage;
     end
     aggregate_error_matrix = [aggregate_error_matrix;aggregate_error];
-    error_matrix = [error_matrix;mean(aggregate_error)];
+    error_matrix = [error_matrix;mean(nonzeros(aggregate_error(:,1))) mean(nonzeros(aggregate_error(:,2))) mean(nonzeros(aggregate_error(:,3)))]; 
     connectivity_array = [connectivity_array aggregate_connectivity_counter/num_trials];
     coverage_matrix = [coverage_matrix aggregate_coverage/num_trials];
 end
