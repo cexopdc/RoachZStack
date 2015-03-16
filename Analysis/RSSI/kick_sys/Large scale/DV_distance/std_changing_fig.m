@@ -4,4 +4,4 @@ x = start_point:0.05:end_point;
 plot(x,error_matrix,'*-');
 xlabel('Measurement error Std');
 ylabel('Relative error') ;
-legend('kick','DV-distance','N-hop-lateration-bound');
+legend('kick','DV-distance','N-hop-lateration-bound','IWLSE');

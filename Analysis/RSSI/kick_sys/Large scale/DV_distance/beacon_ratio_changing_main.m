@@ -20,19 +20,19 @@ for i=start_point:0.03:end_point % number of nodes
         aggregate_coverage = aggregate_coverage + coverage;
     end
     aggregate_error_matrix = [aggregate_error_matrix;aggregate_error];
-    error_matrix = [error_matrix;mean(aggregate_error)];
+    error_matrix = [error_matrix;mean(nonzeros(aggregate_error(:,1))) mean(nonzeros(aggregate_error(:,2))) mean(nonzeros(aggregate_error(:,3))) mean(nonzeros(aggregate_error(:,4)))]; 
     connectivity_array = [connectivity_array aggregate_connectivity_counter/num_trials];
     coverage_matrix = [coverage_matrix aggregate_coverage/num_trials];
 end
 
 error_matrix = error_matrix';
 
-save beacon_ratio_0.03_to_0.3.mat;
+save beacon_ratio_0.03_to_0.3_IWLSE.mat;
 
 figure;
 x = start_point:0.03:end_point;
 plot(x,error_matrix,'*-');
 xlabel('Beacon ratio');
 ylabel('Relative error');
-legend('kick','DV-distance','N-hop-lateration');
+legend('kick','DV-distance','N-hop-lateration','IWLSE');
 

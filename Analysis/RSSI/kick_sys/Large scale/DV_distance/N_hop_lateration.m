@@ -80,8 +80,6 @@ function [average_loc_error, coverage] = N_hop_lateration
             end
         end
     end
-    
-    
         
     % collect localization stats
     loc_error=[];

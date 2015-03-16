@@ -2,8 +2,8 @@ close all; clear all; clc;
 rng default;
 
 start_point = 20;
-end_point = 200;
-num_trials = 10;
+end_point = 200; 
+num_trials = 10; 
 error_matrix=[];
 aggregate_error_matrix=[];
 connectivity_array=[];
@@ -20,27 +20,30 @@ for i=start_point:10:end_point % number of nodes
         aggregate_coverage = aggregate_coverage + coverage;
     end
     aggregate_error_matrix = [aggregate_error_matrix;aggregate_error];
-    error_matrix = [error_matrix;mean(nonzeros(aggregate_error(:,1))) mean(nonzeros(aggregate_error(:,2))) mean(nonzeros(aggregate_error(:,3)))]; 
+    error_matrix = [error_matrix;mean(nonzeros(aggregate_error(:,1))) mean(nonzeros(aggregate_error(:,2))) mean(nonzeros(aggregate_error(:,3))) mean(nonzeros(aggregate_error(:,4)))]; 
     connectivity_array = [connectivity_array aggregate_connectivity_counter/num_trials];
     coverage_matrix = [coverage_matrix aggregate_coverage/num_trials];
 end
 
 error_matrix = error_matrix';
 
-save num_node_20_to_200_laptop.mat;
+save num_node_20_to_200_IWLSE.mat; % Remember to change the file name
 
 figure;
 x = start_point:10:end_point;
-[hAx,hLine1,hLine2] = plotyy(x,error_matrix,x,connectivity_array);
-hLine1(1).LineStyle = '-';
-hLine1(2).LineStyle = '-';
-hLine1(3).LineStyle = '-';
-hLine2.LineStyle = '-';
-hLine1(1).Marker = '*';
-hLine1(2).Marker = '*';
-hLine1(3).Marker = '*';
-hLine2.Marker = 'o';
+plot(x,error_matrix,'-*');
 xlabel('Number of nodes');
-ylabel(hAx(1),'Relative error') % left y-axis
-ylabel(hAx(2),'connectivity') % right y-axis
-legend('kick','DV-distance','N-hop-lateration','connectivity');
+ylabel('Relative error') % left y-axis
+legend('kick','DV-distance','N-hop-lateration-bound','IWLSE');
+
+figure;
+x = start_point:10:end_point;
+coverage_matrix = [ones(1,length(coverage_matrix));coverage_matrix;coverage_matrix;coverage_matrix];
+h = plot(x,coverage_matrix);
+h(1).Marker = 'o';
+h(2).Marker = '*';
+h(3).Marker = 's';
+h(4).Marker = 'd';
+xlabel('Number of nodes');
+ylabel('Coverage');
+legend('kick','DV-distance','N-hop-lateration-bound','IWLSE');
