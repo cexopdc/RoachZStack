@@ -42,14 +42,14 @@ function [average_loc_error, coverage] = N_hop_lateration
         end
     end
     
-    % find well-determined unknowns, and apply sum-dist for initial
+    % find well-determined unknowns, and apply min_max for initial
     % localization
     for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
         if ~isempty(Node(i).dv_vector)
             beacon_list = Node(i).dv_vector(:,1)';
             if length(beacon_list)>2
                 Node(i).well_determined=1;
-                Node(i) = sum_dist(Node(i));
+                Node(i) = min_max(Node(i));
             end
         end
     end
@@ -103,8 +103,8 @@ function [average_loc_error, coverage] = N_hop_lateration
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% sub-function, node U calulate its own position using simple sum_dist.
-function U = sum_dist(U)
+% sub-function, node U calulate its own position using simple min_max.
+function U = min_max(U)
     global Node;
     
     % The intersections of the bounding box are: [max(x_i-d_i),max(y_i-d_i)],[min(x_i+d_i),max(y_i+d_i)]

@@ -133,12 +133,12 @@ function U = lateration(U)
     n= beacon_list(end); % the last beacon 
     
     tmp_dv_vector = U.dv_vector(:,2)';
-    %{
+    %
     % use correction to correct the distance_vector
     if U.correction ~= 0
         tmp_dv_vector = tmp_dv_vector/U.correction;
     end
-    %}
+    %
     
     counter = 0; % counter for sequence to access dv_vector
     
