@@ -1,4 +1,4 @@
-load('std_0.05_to_0.5_ideal.mat');
+%load('std_0.05_to_0.5_ideal.mat');
 figure;
 x = start_point:0.05:end_point;
 plot(x,error_matrix,'*-');
