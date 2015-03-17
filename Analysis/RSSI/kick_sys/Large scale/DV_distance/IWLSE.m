@@ -52,6 +52,30 @@ function [average_loc_error, coverage] = IWLSE
         end
     end
     
+    % Obtain corrections for each beacon
+    for i= 1:round(NUM_NODE*BEACON_RATIO)
+        % if beacon has access to other beacon, then
+        % calculate a correction.
+        if size(Node(i).dv_vector,1)>1
+            tol_DIS = 0;
+            tol_dis = sum(Node(i).dv_vector(:,2));
+            for beacon_index = Node(i).dv_vector(:,1)'
+                tol_DIS = tol_DIS + DIST(Node(i),Node(beacon_index));
+            end
+            Node(i).correction = tol_dis/tol_DIS;
+        end
+    end
+    
+    % Obtain corrections for each unknown
+    for i= round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        if ~isempty(Node(i).dv_vector)
+            % find the nearest beacon for the correction
+            sorted_dv = sortrows(Node(i).dv_vector,2);
+            nearest_beacon = sorted_dv(1,1);
+            Node(i).correction = Node(nearest_beacon).correction;
+        end
+    end
+    
     % find well-determined unknowns, and apply lateration using beacons for initial
     % localization
     for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
@@ -169,24 +193,12 @@ function  A = broadcast(A)
     global Node;
     global WGN_DIST;
     global DIS_STD_RATIO;
-    % if beacon has no correction yet and has access to other beacon, then
-    % calculate a correction.
-    if A.correction == 0 && strcmp(A.attri,'beacon')  && size(A.dv_vector,1)>1
-        tmp_id = A.dv_vector(2,1);
-        A.correction = A.dv_vector(2,2)/DIST(A,Node(tmp_id)); 
-    end
     
     % if A has beacon dv_vector to broadcast
     if ~isempty(A.dv_vector)
         beacon_list = A.dv_vector(:,1)';
         % iterate all neighbors
         for neighbor_index = A.neighbor
-            %  if A has correction, and the neighbor doesn't have it,
-            %  forward the correction.
-            if A.correction ~= 0 && Node(neighbor_index).correction == 0
-                Node(neighbor_index).correction = A.correction;
-            end
-            
             for beacon_index = beacon_list
                 % if beacon not in neighbor's talbe, add directly
                 if isempty(Node(neighbor_index).dv_vector) 

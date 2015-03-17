@@ -27,7 +27,7 @@ end
 
 error_matrix = error_matrix';
 
-save num_node_20_to_200_IWLSE.mat; % Remember to change the file name
+save num_node_20_to_200_newtrial.mat; % Remember to change the file name
 
 figure;
 x = start_point:10:end_point;

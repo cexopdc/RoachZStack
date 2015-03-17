@@ -1,4 +1,4 @@
-%load('beacon_ratio_0.03_to_0.3.mat');
+load('beacon_ratio_0.03_to_0.3_IWLSE.mat');
 figure;
 x = start_point:0.03:end_point;
 plot(x,error_matrix,'*-');
