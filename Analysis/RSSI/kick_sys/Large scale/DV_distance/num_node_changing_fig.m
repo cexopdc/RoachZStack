@@ -1,5 +1,5 @@
-%clear all;
-%load('num_node_20_to_200_laptop.mat')
+clear all;
+load('num_node_20_to_200_newtrial.mat')
 
 %{
 figure;
@@ -20,16 +20,17 @@ legend('kick','DV-distance','N-hop-lateration-bound','connectivity');
 %}
 
 figure;
-x = start_point:10:end_point;
+x = start_point:10:200;
 plot(x,error_matrix,'-*');
 xlabel('Number of nodes');
 ylabel('Relative error') % left y-axis
 legend('kick','DV-distance','N-hop-lateration-bound','IWLSE');
 
-figure;
+figure
 x = start_point:10:end_point;
 coverage_matrix = [ones(1,length(coverage_matrix));coverage_matrix;coverage_matrix;coverage_matrix];
 h = plot(x,coverage_matrix);
+h(1);
 h(1).Marker = 'o';
 h(2).Marker = '*';
 h(3).Marker = 's';
