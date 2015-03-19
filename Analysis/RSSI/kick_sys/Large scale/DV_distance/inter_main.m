@@ -1,5 +1,5 @@
 %function [loc_error_intuitive,loc_error_kalman] = main
-function [average_loc_error_array,coverage,avg_connectivity] = main(num_node,dis_std_ratio,beacon_ratio)
+function [average_loc_error_array,coverage,avg_connectivity] = inter_main(num_node,dis_std_ratio,beacon_ratio)
     if nargin < 3
         disp('Please give num_node,dis_std_ratio,beacon_ratio');
         return;
