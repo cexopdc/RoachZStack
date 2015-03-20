@@ -1,24 +1,26 @@
 clear all;
 close all;
+delete(instrfindall);
 
-<<<<<<< HEAD
+transmitADC('0100')
+settings = {}
+
 % fclose(instrfind)
 port = serial('COM13','BaudRate',115200, 'FlowControl', 'hardware');
 fopen(port);
-=======
-delete(instrfindall)
-port = serial('COM3','BaudRate',115200, 'FlowControl', 'hardware');
-fopen(port)
->>>>>>> origin/moth_muscles
 
 inputs = 4;
-size = 16;
+size = 160;
 length_b = inputs*size;
 buffer = zeros(1, length_b);
 
 count = 0;
 while (count < length_b)
-    data = fread(port, 1, 'uint8')';
+    try 
+        data = fread(port, 1, 'uint8')';
+    catch
+        data = [0,0];
+    end
     buffer = [data(1), buffer(1:end-1)];
     count = count + 1;
 end

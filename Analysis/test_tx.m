@@ -1,39 +1,37 @@
 clear all;
 close all;
 %delete(instrfindall)
-<<<<<<< HEAD
+
 port = serial('COM13','BaudRate',115200);
-=======
-port = serial('COM3','BaudRate',38400);
->>>>>>> origin/moth_muscles
 fopen(port);
 
+% ADC READ SECTION
+% type = 'Y';
+adcTime = '0900';
+
+% STIMULATION TRANSMIT SECTION
 % transmit values in as 4 character (decimal) strings (for parse code to func)
 % pad with 0s at front if shorter value is required
+% type = 'X';
 pinCombo = 'P'; 
 posOnTime = '0100'; % time for positive stimulation
 negOnTime = posOnTime;
 negOffTime = '0050';
 posOffTime = negOffTime;
 stimCycleCount = '0003'; % numer of positive/neg stimulations
-<<<<<<< HEAD
-% current max value of 99
-9
-=======
-% current max value of 999
->>>>>>> origin/moth_muscles
-silenceTime = '3000';
+silenceTime = '1000';
 totalCycleCount = '0005';
 amplitude = 2; % will not be used for this iteration
 
-msg = [pinCombo, posOnTime, posOffTime, negOnTime, negOffTime, stimCycleCount, silenceTime,totalCycleCount];
-
-fwrite(port, msg); 
+type = 'X'; % Y for ADC, X for stimulation
+if type == 'X'
+    msg = [type,pinCombo, posOnTime, posOffTime, negOnTime, negOffTime, stimCycleCount, silenceTime,totalCycleCount];
+else
+    msg = [type,adcTime];
+end
+fwrite(port, msg)
 fclose(port);
 delete(port);
-<<<<<<< HEAD
-clear port;
-=======
 clear port;
 
 %     case 'A':
@@ -132,4 +130,3 @@ clear port;
 %       LEFT_2_SBIT = 1;
 %       RIGHT_2_SBIT = 1;
 %       break;
->>>>>>> origin/moth_muscles

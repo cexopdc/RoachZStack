@@ -138,6 +138,7 @@ if iscell(strings)
 else
   curstring = strings(curval, :);  %char array
 end
+transmitADC('500')
 numMics = str2num(get(handles.num, 'String'));
 plotMics(curstring, handles, numMics);
 
