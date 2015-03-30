@@ -31,7 +31,7 @@
 
 /* Verbose Startup? Turning this off saves plenty of bytes of CODE in HOME */
 #ifndef STARTUP_CONF_VERBOSE
-#define STARTUP_CONF_VERBOSE 1 /*fgong*/
+#define STARTUP_CONF_VERBOSE 0 /*fgong*/
 #endif
 
 /* More CODE space savings by turning off process names */
