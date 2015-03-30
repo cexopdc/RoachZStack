@@ -15,10 +15,12 @@ DIS_STD_RATIO = dis_std_ratio;  % the distance measurement error ratio
 global WGN_DIST; % the measurement distance with WGN, which is fixed during multiple stages.
 global STAGE_NUMBER;
 STAGE_NUMBER=20;      % number of stages
-
 global Node;
-
+global M_measurement; % M distance measurements info for CRLB
+global theta_array; % theta array for CRLB
 %set nodes coordinates,id, attribute
+
+theta_array_index = 0;
 for i=1:NUM_NODE
     Node(i).pos = [Width*rand;Length*rand]; % node i position, 2 by 1 matrix [x;y]
     Node(i).id = i;         % node ID
@@ -27,6 +29,13 @@ for i=1:NUM_NODE
         Node(i).attri = 'beacon';
     else                            % unknown
         Node(i).attri = 'unknown';
+        % set theta array for CRLB
+        theta_array_index = theta_array_index + 1;
+        theta_array(theta_array_index).id = i;
+        theta_array(theta_array_index).axis = 'x';
+        theta_array_index = theta_array_index + 1;
+        theta_array(theta_array_index).id = i;
+        theta_array(theta_array_index).axis = 'y';
     end
 end
 
@@ -74,6 +83,7 @@ for i=1:NUM_NODE
     for j=tmp_array
         if DIST(Node(i),Node(j))<=TRANS_RANGE
             connectivity_counter = connectivity_counter + 1;
+            
             Node(i).neighbor = [Node(i).neighbor j];
             % draw a line between neighbor nodes on the plot
             %line([Node(i).pos(1),Node(j).pos(1)],[Node(i).pos(2),Node(j).pos(2)],'Color','k','LineStyle',':'); 
@@ -81,6 +91,71 @@ for i=1:NUM_NODE
     end
 end
 avg_connectivity = connectivity_counter/NUM_NODE;
+
+% set M measurements info
+M_counter = 0;
+for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+    for j = 1:i-1
+        if DIST(Node(i),Node(j))<=TRANS_RANGE
+            M_counter = M_counter + 1;
+            
+            %store M_measurement info for CRLB
+            M_measurement(M_counter).id = M_counter;
+            M_measurement(M_counter).src = i;
+            M_measurement(M_counter).dst = j;
+            M_measurement(M_counter).dis = DIST(Node(i),Node(j));
+            M_measurement(M_counter).std = DIS_STD_RATIO*DIST(Node(i),Node(j));
+        end
+    end
+end
+
+% calculate CRLB
+% calculate G_prime_theta
+M = length(M_measurement);
+A = length(theta_array)/2;
+G_prime_theta = zeros(M,2*A);
+for m=1:M
+    for n=1:2*A
+        i = M_measurement(m).src;
+        j = M_measurement(m).dst;
+        i_prime = theta_array(n).id;
+        i_prime_axis = theta_array(n).axis;
+        if (i_prime == i) && strcmp(i_prime_axis,'x')
+            G_prime_theta(m,n) = (Node(i).pos(1) - Node(j).pos(1))/M_measurement(m).dis;
+        elseif (i_prime == j) && strcmp(i_prime_axis,'x')
+            G_prime_theta(m,n) = (Node(j).pos(1) - Node(i).pos(1))/M_measurement(m).dis;
+        elseif (i_prime == i) && strcmp(i_prime_axis,'y')
+            G_prime_theta(m,n) = (Node(i).pos(2) - Node(j).pos(2))/M_measurement(m).dis;
+        elseif (i_prime == j) && strcmp(i_prime_axis,'y')
+            G_prime_theta(m,n) = (Node(j).pos(2) - Node(i).pos(2))/M_measurement(m).dis;
+        else
+            G_prime_theta(m,n) = 0;
+        end
+    end
+end
+% calculate W for measurement error matrix
+W = zeros(M,M);
+for i=1:M
+    for j=1:M
+        if i == j 
+           W(i,j) = 1/((M_measurement(i).std)^2); 
+        else 
+            W(i,j) = 0;
+        end
+    end
+end
+% calculate FIM:J
+FIM_J = transpose(G_prime_theta) * W * G_prime_theta;
+% calculate CRLB
+
+CRLB = inv(FIM_J);
+% calculate root localization error.
+CRLB_loc_error=[];
+for i = 1:A
+    CRLB_loc_error = [CRLB_loc_error (sqrt(CRLB(2*i-1,2*i-1) + CRLB(2*i,2*i)))];
+end
+
+average_loc_error_CRLB = mean(CRLB_loc_error)/TRANS_RANGE;
 
 %{
 % take a look at the generated topology

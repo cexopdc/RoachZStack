@@ -21,5 +21,5 @@ function [average_loc_error_array, coverage, avg_connectivity] = main(num_node,d
         end
     end
         average_loc_error_array = [average_loc_error_kick average_loc_error_kick_kalman average_loc_error_kick_kalman_2nodes...
-            average_loc_error_DV_distance average_loc_error_N_hop_lateration average_loc_error_IWLSE];
+            average_loc_error_DV_distance average_loc_error_N_hop_lateration average_loc_error_IWLSE average_loc_error_CRLB];
 end
