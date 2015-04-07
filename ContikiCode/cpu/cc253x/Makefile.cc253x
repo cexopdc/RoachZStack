@@ -174,7 +174,7 @@ ifeq ($(HAVE_BANKING),1)
 %.ihx: $(OBJECTDIR)/%.app.rel $(CONTIKI_TARGET_MAIN) contiki-$(TARGET).lib
 	@echo "\nFirst Link"
 	@echo "==============="
-	$(CC) $(LDFLAGS) $(LD_PRE_FLAGS) -o $@ $(CONTIKI_TARGET_MAIN) $(OBJECTDIR)/$*.app.rel -llibsdcc.lib -lcontiki-$(TARGET).lib > /dev/null
+	$(CC) $(LDFLAGS) $(LD_PRE_FLAGS) -o $@ -lm $(CONTIKI_TARGET_MAIN) $(OBJECTDIR)/$*.app.rel -llibsdcc.lib -lcontiki-$(TARGET).lib > /dev/null
 
 %.flags: %.ihx
 ### Allocate modules to banks and relocate object files
@@ -186,7 +186,7 @@ ifeq ($(HAVE_BANKING),1)
 ### Link again with new bank allocations
 	@echo "\nFinal Link"
 	@echo "==============="
-	$(CC) $(LDFLAGS) $(shell cat $<) -o $@ $(CONTIKI_TARGET_MAIN) $(OBJECTDIR)/$*.app.rel -llibsdcc.lib -lcontiki-$(TARGET).lib > /dev/null
+	$(CC) $(LDFLAGS) $(shell cat $<) -o $@ -lm $(CONTIKI_TARGET_MAIN) $(OBJECTDIR)/$*.app.rel -llibsdcc.lib -lcontiki-$(TARGET).lib > /dev/null
 
 %.hex: %.banked-hex
 ### Post-process the hex file for programmers which dislike SDCC output hex format

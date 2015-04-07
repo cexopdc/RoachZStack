@@ -211,7 +211,7 @@ init(void)
   /* MAX FIFOP threshold */
   FIFOPCTRL = CC2530_RF_MAX_PACKET_LEN;
   //FIFOPCTRL   = 30u; /*fgong*/
-  printf("FIFOPCTRL=%u\n",FIFOPCTRL); /*fgong*/
+  //printf("FIFOPCTRL=%u\n",FIFOPCTRL); /*fgong*/
 
   cc2530_rf_power_set(CC2530_RF_TX_POWER);
   cc2530_rf_channel_set(CC2530_RF_CHANNEL);
