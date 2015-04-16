@@ -121,7 +121,7 @@ set_rime_addr(void) CC_NON_BANKED
     macp++;
   }
   //Manually set RIME address_fgong
-  rimeaddr_node_addr.u8[0] = 9;
+  rimeaddr_node_addr.u8[0] = 3;
   rimeaddr_node_addr.u8[1] = 0;
 
 #if !CC2530_CONF_MAC_FROM_PRIMARY
@@ -269,6 +269,7 @@ main(void) CC_NON_BANKED
   fade(LEDS_YELLOW);
 
   //Testing is AUTO_ACK set (fgong)
+/*
   #ifdef NULLRDC_802154_AUTOACK
 	if (NULLRDC_802154_AUTOACK)
 		printf("AutoACK_SET, rand=%u\n",random_rand() % 100);
@@ -277,7 +278,7 @@ main(void) CC_NON_BANKED
   #else
 	printf("NoAutoACKdefined, rand=%u\n",random_rand() % 100);
   #endif
-
+*/
   while(1) {
     uint8_t r;
     do {

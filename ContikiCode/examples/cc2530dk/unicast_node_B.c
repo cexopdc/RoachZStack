@@ -50,39 +50,73 @@
 PROCESS(example_unicast_process, "Example unicast");
 AUTOSTART_PROCESSES(&example_unicast_process);
 /*---------------------------------------------------------------------------*/
+static int rssi=0;
+//static int flag=0;
+static struct unicast_conn uc;
+//static int8_t rssi_val[100]={0};
+static int counter=0;
+//static int i;
 static void
 recv_uc(struct unicast_conn *c, const rimeaddr_t *from)
 {
-  printf("unicast message received from %d.%d: '%s', rssi=%d\n",
-         from->u8[0], from->u8[1], (char *)packetbuf_dataptr(), packetbuf_attr(PACKETBUF_ATTR_RSSI));
+    rimeaddr_t addr;
+    addr.u8[0] = 3; //Change RIME address
+    addr.u8[1] = 0; 
+    //printf("Entered recv_uc\n");
+    rssi=packetbuf_attr(PACKETBUF_ATTR_RSSI);
+    //flag=1;
+    //printf("unicast message received from %d.%d: '%s', rssi=%d\n",
+    //from->u8[0], from->u8[1], (char *)packetbuf_dataptr(), packetbuf_attr(PACKETBUF_ATTR_RSSI));
+    packetbuf_copyfrom((int*)&rssi, sizeof(int));
+    //flag = 0; // clear the flag _hxiong
+    //addr.u8[0] = 3; //Change RIME address
+    //addr.u8[1] = 0;
+    //printf("Node A to B rssi = %d\n",*((int *)packetbuf_dataptr()));
+    if(!rimeaddr_cmp(&addr, &rimeaddr_node_addr)) {
+     int send_status=unicast_send(&uc, &addr);
+     // printf("send_status:%d\n",send_status);
+      //printf("Unicast message sent to %u.%u\n", addr.u8[0], addr.u8[1]);
+    }
+
 }
 static const struct unicast_callbacks unicast_callbacks = {recv_uc};
-static struct unicast_conn uc;
+
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(example_unicast_process, ev, data)
 {
-  PROCESS_EXITHANDLER(unicast_close(&uc);)
-    
+ 
+ PROCESS_EXITHANDLER(unicast_close(&uc);)
+  
   PROCESS_BEGIN();
 
   unicast_open(&uc, 129, &unicast_callbacks);
-
+  //printf("flag before while:%d\n",flag);
   while(1) {
-    static struct etimer et;
-    rimeaddr_t addr;
-    
-    etimer_set(&et, 5*CLOCK_SECOND);
-    
-    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
-    packetbuf_copyfrom("Hello", 5);
-    addr.u8[0] = 4; //Change RIME address
+    static struct etimer et;
+    //rimeaddr_t addr;
+    
+    etimer_set(&et, 10*CLOCK_SECOND);
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) );
+    //printf("flag after wait until timer:%d\n",flag);
+/*
+   // flag = 1;
+   // PROCESS_WAIT_EVENT_UNTIL(flag == 1);
+   // printf("flag after wait until flag:%d\n",flag);
+    //packetbuf_copyfrom((char*)&received, sizeof(int));
+    if(flag == 1){
+    packetbuf_copyfrom((int*)&rssi, sizeof(int));
+    flag = 0; // clear the flag _hxiong
+    addr.u8[0] = 3; //Change RIME address
     addr.u8[1] = 0;
+    printf("Node A to B rssi = %d\n",*((int *)packetbuf_dataptr()));
     if(!rimeaddr_cmp(&addr, &rimeaddr_node_addr)) {
-      unicast_send(&uc, &addr);
+      int send_status=unicast_send(&uc, &addr);
+      printf("send_status:%d\n",send_status);
       printf("Unicast message sent to %u.%u\n", addr.u8[0], addr.u8[1]);
     }
-
+    }
+*/
   }
 
   PROCESS_END();

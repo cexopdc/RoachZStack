@@ -49,6 +49,81 @@
 /*---------------------------------------------------------------------------*/
 PROCESS(example_broadcast_process, "Broadcast example");
 AUTOSTART_PROCESSES(&example_broadcast_process);
+
+#define SCALING_FACTOR 100
+#define INITIAL_STD 1000*SCALING_FACTOR
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*****  RSSI PACKET FORMAT -hxiong *******/
+/* First number: ATTRIBUTE: 0 means Unknown, 1 means beacon.
+ *  * Second number: x position
+ *   * Third number: y position
+ *    * Fourth number: std                   */
+static int rssi_pkt_buf[4]={0,30*SCALING_FACTOR,40*SCALING_FACTOR,INITIAL_STD};
+static int neighbor_attr = 0;
+static int neighbor_x = 0;
+static int neighbor_y = 0;
+static int neighbor_std = 0;
+static int neighbor_dis = 0;
+static int neighbor_dis_std = 0;
+static int tmp = 0;
+static int32_t tmp2;
+
+
+void my_sqrt2()
+{
+	
+	static int number=100;
+	const static int32_t ACCURACY=1;
+	static int32_t lower, upper, guess;
+	if (number < 1)
+	{
+		lower = number;
+		upper = 1;
+	}
+	else
+	{
+		lower = 1;
+		upper = number;
+	}
+			
+	  while ((upper-lower) > ACCURACY)
+	  {
+		 
+		guess = (lower + upper)/2;
+		break;
+		
+		if(guess*guess>number)//guess*guess > number)
+			upper =guess;
+		else
+			lower = guess;
+		
+	   //printf("guess: %d\n",guess);	
+	}
+		
+	//return (lower + upper)/2;
+	
+	//return 0;
+} 
+
+static void 
+kick_loc()
+{
+	printf("Enter kick_loc...\n");
+	if (rssi_pkt_buf[3] == INITIAL_STD){
+		// I don't have estimate yet
+		if (neighbor_std != INITIAL_STD){
+			// neighbor has estimate, I'll update x,y,std accordingly.
+		//	printf("here");
+		//	rssi_pkt_buf[1] = neighbor_x;
+		//	rssi_pkt_buf[2] = neighbor_y;
+		//	rssi_pkt_buf[3] = sqrtf(neighbor_std*neighbor_std + neighbor_dis*neighbor_dis + neighbor_dis_std*neighbor_dis_std);
+		//	printf("estimate std: %f\n",rssi_pkt_buf[3]);
+		}
+			// neighbor also doesn't have estimate yet, do nothing.
+	}
+}
+
 /*---------------------------------------------------------------------------*/
 static void
 broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)

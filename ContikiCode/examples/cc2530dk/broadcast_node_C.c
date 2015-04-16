@@ -46,19 +46,27 @@
 #include "dev/leds.h"
 
 #include <stdio.h>
-#define FACTOR 2
 /*---------------------------------------------------------------------------*/
 PROCESS(example_broadcast_process, "Broadcast example");
 AUTOSTART_PROCESSES(&example_broadcast_process);
 /*---------------------------------------------------------------------------*/
+static int counter = 0;
+static int rssi=0;
+static struct broadcast_conn broadcast;
 static void
 broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)
-{
-   printf("broadcast message received from %d.%d: '%s'\n",
-         from->u8[0], from->u8[1], (char *)packetbuf_dataptr());
+{	
+	rimeaddr_t addr;
+	addr.u8[0] = 2; 
+	addr.u8[1] = 0;
+
+	if(rimeaddr_cmp(&addr, from)) {
+		printf("%d\n",*((int *)packetbuf_dataptr()));	
+	}
+
 }
 static const struct broadcast_callbacks broadcast_call = {broadcast_recv};
-static struct broadcast_conn broadcast;
+//static struct broadcast_conn broadcast;
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(example_broadcast_process, ev, data)
 {
@@ -69,18 +77,12 @@ PROCESS_THREAD(example_broadcast_process, ev, data)
   PROCESS_BEGIN();
 
   broadcast_open(&broadcast, 129, &broadcast_call);
-  
+
   while(1) {
-
-    /* Delay 2-4 seconds */
-    //etimer_set(&et, CLOCK_SECOND * 4 + random_rand() % (CLOCK_SECOND * 4));
-    etimer_set(&et, FACTOR*CLOCK_SECOND);
-
+    static struct etimer et;
+   	etimer_set(&et, 5*CLOCK_SECOND);
+    
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-
-    packetbuf_copyfrom("Hello", 6);
-    broadcast_send(&broadcast);
-	//printf("msg sent\n");
   }
 
   PROCESS_END();

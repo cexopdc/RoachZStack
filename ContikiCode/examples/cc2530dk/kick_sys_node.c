@@ -46,16 +46,31 @@
 #include "dev/leds.h"
 
 #include <stdio.h>
-#define FACTOR 2
+
+#include <math.h>
 /*---------------------------------------------------------------------------*/
 PROCESS(example_broadcast_process, "Broadcast example");
 AUTOSTART_PROCESSES(&example_broadcast_process);
 /*---------------------------------------------------------------------------*/
+/*****  RSSI PACKET FORMAT -hxiong *******/
+/* First number: ATTRIBUTE: 0 means Unknown, 1 means beacon.
+ * Second number: x position
+ * Third number: y position
+ * Fourth number: std                   */
+static double rssi_pkt_buf[4]={0,30,40,1000};
+
 static void
 broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)
 {
-   printf("broadcast message received from %d.%d: '%s'\n",
-         from->u8[0], from->u8[1], (char *)packetbuf_dataptr());
+//  printf("broadcast message received from %d.%d: '%s', rssi=%d\n",
+//         from->u8[0], from->u8[1], (char *)packetbuf_dataptr(), packetbuf_attr(PACKETBUF_ATTR_RSSI));
+	printf("***************\n");
+//	printf("Tx ID: %d.%d\nRx ID: %d.%d\nType: %f\nPos: %f,%f\nSTD:%f\nrssi: %d\n",
+//			from->u8[0], from->u8[1],rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],*(double *)packetbuf_dataptr(),*((double *)packetbuf_dataptr()+1),*((double *)packetbuf_dataptr()+2),*((double *)packetbuf_dataptr()+3),packetbuf_attr(PACKETBUF_ATTR_RSSI));
+	printf("Tx ID: %d.%d\nRx ID: %d.%d\n", from->u8[0], from->u8[1],rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
+	printf("Type: %f\n",*(double *)packetbuf_dataptr());
+	printf("Pos: %f,%f\n",*((double *)packetbuf_dataptr()+1),*((double *)packetbuf_dataptr()+2));
+	printf("STD: %f\n",*((double *)packetbuf_dataptr()+3));
 }
 static const struct broadcast_callbacks broadcast_call = {broadcast_recv};
 static struct broadcast_conn broadcast;
@@ -63,26 +78,18 @@ static struct broadcast_conn broadcast;
 PROCESS_THREAD(example_broadcast_process, ev, data)
 {
   static struct etimer et;
-
   PROCESS_EXITHANDLER(broadcast_close(&broadcast);)
 
   PROCESS_BEGIN();
 
   broadcast_open(&broadcast, 129, &broadcast_call);
-  
+
   while(1) {
-
-    /* Delay 2-4 seconds */
-    //etimer_set(&et, CLOCK_SECOND * 4 + random_rand() % (CLOCK_SECOND * 4));
-    etimer_set(&et, FACTOR*CLOCK_SECOND);
-
+    etimer_set(&et, CLOCK_SECOND);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-
-    packetbuf_copyfrom("Hello", 6);
-    broadcast_send(&broadcast);
-	//printf("msg sent\n");
+    packetbuf_copyfrom(rssi_pkt_buf, 4*sizeof(double));
+          broadcast_send(&broadcast);
   }
-
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/

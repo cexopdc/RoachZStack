@@ -14,5 +14,6 @@ all: example-abc example-mesh example-collect example-trickle example-polite \
 #APPS+=powertrace
 #DEFINES=NETSTACK_CONF_RDC=nullrdc_driver  #,NETSTACK_RDC_CHANNEL_CHECK_RATE=2
 HAVE_BANKING=1
+DEFINES+=MODEL_CC2531=1
 
 include $(CONTIKI)/Makefile.include
