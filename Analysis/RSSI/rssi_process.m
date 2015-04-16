@@ -6,7 +6,7 @@ end
 
 %get the first 1000 values
 input = load(input_file);
-input = input(1:100,:);
+input = input(1:1000,:);
 
 %calculate statisctics 
 max_rssi = max(input);

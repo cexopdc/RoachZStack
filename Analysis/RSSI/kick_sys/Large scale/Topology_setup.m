@@ -6,7 +6,7 @@ NUM_NODE=num_node; % number of total nodes
 global BEACON_RATIO;
 BEACON_RATIO=beacon_ratio; 
 global TRANS_RANGE;
-TRANS_RANGE=20;       % transmission range 30 meters
+TRANS_RANGE=30;       % transmission range 30 meters
 global STAGE_NUMBER;
 STAGE_NUMBER=20;      % number of stages
 global STD_INITIAL;

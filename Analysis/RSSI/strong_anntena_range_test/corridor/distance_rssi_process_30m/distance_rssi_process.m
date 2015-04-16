@@ -19,23 +19,23 @@ end
 
 max_rssi = max(sorted_dist_rssi_aggr(:,2))
 min_rssi = min(sorted_dist_rssi_aggr(:,2))
-%}
+%
 
 delete 'dist_mean_std_diff_rssi.txt';
 for i = rssi_list 
     current_dist_rssi = load(strcat('dist_rssi_',sprintf('%0.1f',i),'.txt'));
     mean_dist = mean(current_dist_rssi(:,1));
     std_dist = std(current_dist_rssi(:,1));
-    mean_std = [mean_dist std_dist];
-    dlmwrite('dist_mean_std_diff_rssi.txt', mean_std, 'delimiter','\t', '-append');
+    rssi_mean_std = [i mean_dist std_dist];
+    dlmwrite('dist_mean_std_diff_rssi.txt', rssi_mean_std, 'delimiter','\t', '-append');
 end
-
-mean_std = load('dist_mean_std_diff_rssi.txt');
-rho_mean = mean_std(:,1)';
-rho_std = mean_std(:,2)';
+%}
+rssi_mean_std = load('dist_mean_std_diff_rssi.txt');
+rho_mean = rssi_mean_std(:,2)';
+rho_std = rssi_mean_std(:,3)';
 
 figure
-x = rssi_list;
+x = rssi_mean_std(:,1)';
 plot(x,rho_mean,'b');
 ylim([0 40]);
 ylabel('distance (m)');

@@ -130,7 +130,8 @@ function A = intuitive_update_loc(A,B,d)
     else
         if (B.std == STD_INITIAL) || isequal(A.est_pos,B.est_pos) 
             % if B also has no est, do nothing; if A and B have same est, do
-            % nothing.
+            % nothing. FOR STATIC SYSTEM, and we're assuming the RSSI
+            % measurement is fixed at the beginning.
         else
             kick = intuitive_cal_kick(A,B,d);
             A.est_pos = A.est_pos + kick.pos;

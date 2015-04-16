@@ -1,5 +1,5 @@
 clear all;
-load('num_node_20_to_200_IWLSE.mat')
+load('num_node_20_to_200.mat')
 
 %{
 figure;
@@ -24,16 +24,19 @@ x = start_point:10:200;
 plot(x,error_matrix,'-*');
 xlabel('Number of nodes');
 ylabel('Relative error') % left y-axis
-legend('kick','DV-distance','N-hop-lateration','IWLSE');
+legend('kick','kick\_kalman','kick\_kalman\_2nodes','DV-distance','N-hop-lateration','IWLSE','CRLB');
 
 figure
 x = start_point:10:end_point;
-coverage_matrix = [ones(1,length(coverage_matrix));coverage_matrix;coverage_matrix;coverage_matrix];
+coverage_matrix = [ones(3,length(coverage_matrix));coverage_matrix;coverage_matrix;coverage_matrix;ones(1,length(coverage_matrix))];
 h = plot(x,coverage_matrix);
 h(1).Marker = 'o';
 h(2).Marker = '*';
 h(3).Marker = 's';
 h(4).Marker = 'd';
+h(5).Marker = 'p';
+h(6).Marker = '^';
+h(7).Marker = 'x';
 xlabel('Number of nodes');
 ylabel('Coverage');
-legend('kick','DV-distance','N-hop-lateration','IWLSE');
+legend('kick','kick\_kalman','kick\_kalman\_2nodes','DV-distance','N-hop-lateration','IWLSE','CRLB');
