@@ -121,7 +121,7 @@ set_rime_addr(void) CC_NON_BANKED
     macp++;
   }
   //Manually set RIME address_fgong
-  rimeaddr_node_addr.u8[0] = 3;
+  rimeaddr_node_addr.u8[0] = 2;
   rimeaddr_node_addr.u8[1] = 0;
 
 #if !CC2530_CONF_MAC_FROM_PRIMARY

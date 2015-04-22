@@ -66,81 +66,83 @@ static float neighbor_y = 0;
 static float neighbor_std = 0;
 static float neighbor_dis = 0;
 static float neighbor_dis_std = 0;
-static int neighbor_rssi = 0;
 static float tmp = 0;
 static void kick_loc();
 static void kick_cal();
 static float my_sqrt(const float x);
 static float my_sqrt2(const float number);
-// calibrated rssi_distance mapping from -42 to -87 dBm. The mapping between rssi value and array index is: index = -RSSI -42.
+// calibrated rssi_distance mapping from -26 to -86 dBm. The mapping between rssi value and array index is: index = -RSSI -25.
 static struct RSSI_DIS_MEAN_STD
 {
 	float mean;
 	float std;
-}mean_std_array[46] = {
-						{0.20,0}, // -42
-						{0.37,0.20}, // -43
-						{0.38,0.10}, // -44
-						{0.40,0}, // -45
-						{0.21,0.05}, // -46
-						{0.79,0.06}, // -47
-						{0.41,0.07}, // -48
-						{0.20,0}, // -49
-						{0.35,0.05}, // -50
-						{0.50,0.10}, // -51
-						{0.4,0}, // -52
-						{0.4,0}, // -53
-						{0.65,0.12}, // -54
-						{0.89,0.25}, // -55
-						{1.29,0.29}, // -56
-						{1.12,0.22}, // -57
-						{1.29,0.48}, // -58
-						{1.37,0.40}, // -59
-						{1.48,0.35}, // -60
-						{1.40,0.79}, // -61
-						{2.21,0.50}, // -62
-						{2.12,0.64}, // -63
-						{2.07,0.65}, // -64
-						{2.07,6.61}, // -65
-						{2.16,0.57}, // -66
-						{2.21,0.46}, // -67
-						{2.12,0.61}, // -68
-						{2.17,0.61}, // -69
-						{2.32,0.44}, // -70
-						{2.51,0.27}, // -71
-						{2.62,0.21}, // -72
-						{2.70,0.17}, // -73
-						{2.65,0.33}, // -74
-						{2.30,0.50}, // -75
-						{2.59,0.19}, // -76
-						{2.63,0.19}, // -77
-						{2.66,0.20}, // -78
-						{2.64,0.23}, // -79
-						{2.61,0.23}, // -80
-						{2.61,0.23}, // -81
-						{2.50,0.18}, // -82
-						{2.44,0.14}, // -83
-						{2.44,0.15}, // -84
-						{2.42,0.10}, // -85
-						{2.60,0.31}, // -86
-						{3.00,0.00}, // -87
+}mean_std_array[62] = {
+						{0.3,0}, // -25
+						{0.3,0}, // -26
+						{0.3,0}, // -27
+						{0.3,0}, // -28
+						{0.3,0}, // -29
+						{0.45,0.15}, // -30
+						{0.45,0.15}, // -31
+						{0.45,0.15}, // -32
+						{0.6,0}, // -33
+						{0.6,0}, // -34
+						{0.6,0}, // -35
+						{0.6,0}, // -36
+						{0.9,0}, // -37
+						{0.9,0}, // -38
+						{0.9,0}, // -39
+						{0.9,0}, // -40
+						{0.79,0.14}, // -41
+						{1.00,0.14}, // -42
+						{1.2,0}, // -43
+						{1.20,0.02}, // -44
+						{1.51,0.20}, // -45
+						{1.67,0.17}, // -46
+						{1.47,0.17}, // -47
+						{1.46,0.34}, // -48
+						{2.17,0.66}, // -49
+						{2.29,0.59}, // -50
+						{3.18,1.73}, // -51
+						{3.40,1.77}, // -52
+						{3.38,1.45}, // -53
+						{5.90,3.19}, // -54
+						{5.16,3.17}, // -55
+						{8.33,4.75}, // -56
+						{7.33,4.05}, // -57
+						{9.24,4.20}, // -58
+						{10.27,5.15}, // -59
+						{8.87,5.13}, // -60
+						{11.56,7.22}, // -61
+						{13.05,7.75}, // -62
+						{14.56,7.93}, // -63
+						{11.56,5.82}, // -64
+						{13.36,6.37}, // -65
+						{12.79,7.30}, // -66
+						{8.05,8.46}, // -67
+						{10.96,9.51}, // -68
+						{14.50,7.46}, // -69
+						{12.46,8.20}, // -70
+						{11.96,7.60}, // -71
+						{13.43,9.60}, // -72
+						{16.79,10.16}, // -73
+						{18.22,10.88}, // -74
+						{14.67,10.10}, // -75
+						{17.52,10.24}, // -76
+						{21.81,9.21}, // -77
+						{21.74,10.16}, // -78
+						{24.73,8.53}, // -79
+						{25.18,3.44}, // -80
+						{22.89,7.46}, // -81
+						{24,7.44}, // -82
+						{24.42,6.62}, // -83
+						{23.12,7.26}, // -84
 };
 static void
 broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)
 {
-	neighbor_rssi = packetbuf_attr(PACKETBUF_ATTR_RSSI);
-	/* if rssi out of calibration range, treat it as boundary values.*/
-    if (neighbor_rssi < -42)
-	{
-		neighbor_rssi = -42;
-	}
-	if (neighbor_rssi > -87)
-	{
-		neighbor_rssi = -87;
-	}
-
-	neighbor_dis = mean_std_array[-neighbor_rssi-42].mean; // need a mapping function
-	neighbor_dis_std = mean_std_array[-neighbor_rssi-42].std; // need a look up table
+	neighbor_dis = mean_std_array[-packetbuf_attr(PACKETBUF_ATTR_RSSI)-25].mean; // need a mapping function
+	neighbor_dis_std = mean_std_array[-packetbuf_attr(PACKETBUF_ATTR_RSSI)-25].std; // need a look up table
 	neighbor_attr = *(float *)packetbuf_dataptr();
     neighbor_x = *((float *)packetbuf_dataptr()+1);
 	neighbor_y = *((float *)packetbuf_dataptr()+2);

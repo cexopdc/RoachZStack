@@ -55,7 +55,7 @@ AUTOSTART_PROCESSES(&example_broadcast_process);
  * Second number: x position
  * Third number: y position
  * Fourth number: std                   */
-static float rssi_pkt_buf[4]={1,50,60,0}; // std of beacon is fixed to 0;
+static float rssi_pkt_buf[4]={1,50.3,60.2,0}; // std of beacon is fixed to 0;
 
 static void
 broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)

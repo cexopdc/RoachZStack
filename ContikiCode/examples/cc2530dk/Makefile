@@ -3,7 +3,7 @@ CONTIKI_PROJECT = example-unicast example-multihop example-broadcast hello-world
 #APPS+=powertrace
 all: $(CONTIKI_PROJECT) 
 DEFINES=NETSTACK_CONF_RDC=nullrdc_driver
-#HAVE_BANKING=1
+HAVE_BANKING=1
 #DEFINES+=MODEL_CC2531=1
 #TARGET_LIBFILES+=-lm
 #CFLAGS+=-lm
