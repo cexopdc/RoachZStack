@@ -1,0 +1,6 @@
+cat /dev/ttyACM0 > log.txt &
+
+killall cat
+
+scp log.txt hxiong@192.168.1.1:home/Desktop
+
