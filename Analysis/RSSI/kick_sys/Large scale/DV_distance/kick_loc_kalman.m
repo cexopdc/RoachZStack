@@ -3,7 +3,7 @@
 %  Using Kalman Filter
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [average_loc_error,confidence_interval]=kick_loc_kalman
+function [loc_error,coverage]=kick_loc_kalman
     global Length;
     global Width;
     global NUM_NODE;
@@ -39,11 +39,32 @@ function [average_loc_error,confidence_interval]=kick_loc_kalman
     tmp_sched = sortrows(tmp_sched);
     sched_array = tmp_sched(:,2)';
     
+    % global variable to store per iteration state
+    global KK_iteration_error_array;
+    KK_iteration_error_array = [];
+    % initial error
+    loc_error = [];
+    for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        %if Node(i).well_determined==1
+        node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
+        loc_error =[loc_error node_loc_error];
+    end
+    average_loc_error = mean(loc_error);
+    KK_iteration_error_array = [KK_iteration_error_array average_loc_error];
+    
     %the system runs 
-    for time = 0:STAGE_NUMBER
+    for time = 1:STAGE_NUMBER
         for index = sched_array
             broadcast(Node(index));
         end
+        loc_error = [];
+        for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+            %if Node(i).well_determined==1
+            node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
+            loc_error =[loc_error node_loc_error];
+        end
+        average_loc_error = mean(loc_error);
+        KK_iteration_error_array = [KK_iteration_error_array average_loc_error];
     end
     
     % collect localization stats
@@ -51,13 +72,22 @@ function [average_loc_error,confidence_interval]=kick_loc_kalman
     CI1_counter = 0; % confidence interval counter for 1 std
     CI2_counter = 0; % confidence interval counter for 2 std
     CI3_counter = 0; % confidence interval counter for 3 std
+    % IF WE USE BAD LOCALIZATION REMOVER
+    BAD_LOC_REMOVER = 0;
+    
     for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
         %if Node(i).well_determined==1
             
             %Node(i).std = sqrt(sum(sum(Node(i).cov))/2);
             Node(i).std = sqrt(Node(i).cov(1,1)+Node(i).cov(2,2));
-            node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2);
-            loc_error =[loc_error node_loc_error];
+            node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
+            if BAD_LOC_REMOVER == 0;
+                loc_error =[loc_error node_loc_error];
+            % if BAD_LOC_REMOVER is enabled, relative error threshold as 1.
+            elseif Node(i).std < TRANS_RANGE
+                loc_error =[loc_error node_loc_error];
+            end
+            
             % check if the std actually bounds the error.
             if node_loc_error <= Node(i).std
                 CI1_counter = CI1_counter + 1;            
@@ -73,8 +103,8 @@ function [average_loc_error,confidence_interval]=kick_loc_kalman
     end
     CI_counter = [CI1_counter CI2_counter CI3_counter];
     confidence_interval = CI_counter/(NUM_NODE*(1-BEACON_RATIO));
-    average_loc_error = mean(loc_error)/TRANS_RANGE;
-    max_loc_error = max(loc_error)/TRANS_RANGE;
+    average_loc_error = mean(loc_error);
+    max_loc_error = max(loc_error);
     coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO));
     
 end

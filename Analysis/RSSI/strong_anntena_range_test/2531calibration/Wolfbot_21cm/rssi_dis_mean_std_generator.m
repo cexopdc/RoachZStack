@@ -1,5 +1,5 @@
 clc;clear all; close all;
-%{
+%
 dist_rssi_aggr=[];
 
 %i=[0.3:0.3:5.1 6.0:0.9:15.0 18.0:3.0:66.0];
