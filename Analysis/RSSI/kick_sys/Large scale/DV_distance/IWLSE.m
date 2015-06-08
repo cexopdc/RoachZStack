@@ -21,7 +21,6 @@ function [average_loc_error, coverage] = IWLSE
     
     % set nodes est coordinates, time scheduling
     for i=1:NUM_NODE
-        Node(i).sched=rand;    % time scheduling of the system, set to random
         Node(i).correction=0;   % intiailize the correction to be 0
 
         if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon

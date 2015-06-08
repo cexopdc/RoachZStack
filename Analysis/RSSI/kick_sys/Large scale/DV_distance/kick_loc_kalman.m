@@ -18,16 +18,14 @@ function [loc_error,coverage]=kick_loc_kalman
     
     % set nodes est coordinates, time scheduling
     for i=1:NUM_NODE
-        Node(i).sched=rand;    % time scheduling of the system, set to random
-
         if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
             Node(i).est_pos = Node(i).pos;
-            Node(i).well_determined=1; % set beacon as well-determined.
-            Node(i).cov=[0 0;0 0]; 
+            Node(i).well_determined = 1; % set beacon as well-determined.
+            Node(i).cov = [0 0;0 0]; 
         else                            % unknown
             Node(i).est_pos = [Width*0.5;Length*0.5]; % set initial est_pos at center.
-            Node(i).well_determined=0; % set unknowns as not well-determined.
-            Node(i).cov=COV_INITIAL;
+            Node(i).well_determined = 0; % set unknowns as not well-determined.
+            Node(i).cov = COV_INITIAL;
         end
     end
     

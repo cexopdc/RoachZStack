@@ -14,8 +14,6 @@ function [average_loc_error, coverage] = N_hop_lateration
     
     % set nodes est coordinates, time scheduling
     for i=1:NUM_NODE
-        Node(i).sched=rand;    % time scheduling of the system, set to random
-
         if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
             Node(i).est_pos = Node(i).pos;
             Node(i).dv_vector=[Node(i).id 0];  % initialize accessible dv vector, itself.

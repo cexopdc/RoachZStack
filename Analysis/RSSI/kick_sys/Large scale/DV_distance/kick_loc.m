@@ -17,8 +17,6 @@ function [loc_error,coverage]=kick_loc
 
     % set nodes est coordinates, time scheduling
     for i=1:NUM_NODE
-        Node(i).sched=rand;    % time scheduling of the system, set to random
-
         if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
             Node(i).est_pos = Node(i).pos;
             Node(i).well_determined=1; % set beacon as well-determined.

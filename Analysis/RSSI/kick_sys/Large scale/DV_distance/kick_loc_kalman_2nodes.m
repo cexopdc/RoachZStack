@@ -17,9 +17,7 @@ function [loc_error,coverage]=kick_loc_kalman_2nodes
     COV_INITIAL = [STD_INITIAL^2 0; 0 STD_INITIAL^2];   % initial cov for unknown
     
     % set nodes est coordinates, time scheduling
-    for i=1:NUM_NODE
-        Node(i).sched=rand;    % time scheduling of the system, set to random
-        
+    for i=1:NUM_NODE   
         % for algorithm two_node_kalman
         Node(i).helper_node.est_pos = 0;
         Node(i).helper_node.cov = 0;
