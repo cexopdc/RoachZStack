@@ -66,8 +66,8 @@ global Node;
     end
 
     %calculate neighbor array, and calculate connectivity
-    %figure
-    % hold on;box on;axis([0 Length 0 Width]); %the frame of the plot
+    figure
+    hold on;box on;axis([0 Length 0 Width]); %the frame of the plot
     connectivity_counter = 0;
     for i=1:NUM_NODE
         Node(i).neighbor = []; %initialize the neighbor array
@@ -79,7 +79,7 @@ global Node;
 
                 Node(i).neighbor = [Node(i).neighbor j];
                 % draw a line between neighbor nodes on the plot
-                %line([Node(i).pos(1),Node(j).pos(1)],[Node(i).pos(2),Node(j).pos(2)],'Color','k','LineStyle',':'); 
+                line([Node(i).pos(1),Node(j).pos(1)],[Node(i).pos(2),Node(j).pos(2)],'Color','k','LineStyle',':'); 
             end
         end
     end
@@ -88,7 +88,7 @@ global Node;
 
 
     
-%{
+%
 % take a look at the generated topology
  for i=1:NUM_NODE
     if i<round(NUM_NODE*BEACON_RATIO)+1
@@ -99,7 +99,7 @@ global Node;
     %text(Node(i).pos(1)+2,Node(i).pos(2),strcat('Node',num2str(i)));
     text(Node(i).pos(1)+1,Node(i).pos(2),num2str(i),'FontWeight','bold');
  end
-%}
+%
 
 
 

@@ -3,7 +3,7 @@
 % 
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [loc_error,coverage]=kick_loc
+function [loc_error]=kick_loc
 
     global Length;
     global Width;
@@ -21,10 +21,12 @@ function [loc_error,coverage]=kick_loc
             Node(i).est_pos = Node(i).pos;
             Node(i).well_determined=1; % set beacon as well-determined.
             Node(i).std=0;
+            Node(i).beacon_list = [i]; % set beacon_list for each beacon as itself.
         else                            % unknown
             Node(i).est_pos = [Width*0.5;Length*0.5]; % set initial est_pos at center.
             Node(i).well_determined=0; % set unknowns as not well-determined.
             Node(i).std=STD_INITIAL;
+            Node(i).beacon_list = []; % set beacon_list for each unknown as empty.
         end
     end
     
@@ -39,14 +41,61 @@ function [loc_error,coverage]=kick_loc
     % global variable to store per iteration state
     global KI_iteration_error_array;
     KI_iteration_error_array = [];
+    global KI_iteration_coverage;
+    KI_iteration_coverage = [];
     % initial error
-    loc_error = [];
+    loc_error_0_beacon = [];
+    loc_error_1_beacon = [];
+    loc_error_2_beacon = [];
+    loc_error_3_more_beacon = [];
     for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
-        %if Node(i).well_determined==1
         node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
-        loc_error =[loc_error node_loc_error];
+        %if Node(i).well_determined==1
+        if length(Node(i).beacon_list) == 0
+            loc_error_0_beacon = [loc_error_0_beacon node_loc_error];
+        end
+        if length(Node(i).beacon_list) == 1
+            loc_error_0_beacon = [loc_error_0_beacon node_loc_error];
+            loc_error_1_beacon = [loc_error_1_beacon node_loc_error];
+        end
+        if length(Node(i).beacon_list) == 2
+            loc_error_0_beacon = [loc_error_0_beacon node_loc_error];
+            loc_error_1_beacon = [loc_error_1_beacon node_loc_error];
+            loc_error_2_beacon = [loc_error_2_beacon node_loc_error];
+        end
+        if length(Node(i).beacon_list) > 2
+            loc_error_0_beacon = [loc_error_0_beacon node_loc_error];
+            loc_error_1_beacon = [loc_error_1_beacon node_loc_error];
+            loc_error_2_beacon = [loc_error_2_beacon node_loc_error];
+            loc_error_3_more_beacon = [loc_error_3_more_beacon node_loc_error];
+        end
     end
-    average_loc_error = mean(loc_error);
+    if isempty(loc_error_0_beacon)
+        average_loc_error_0_beacon = 0;
+    else
+        average_loc_error_0_beacon = mean(loc_error_0_beacon);
+    end
+    if isempty(loc_error_1_beacon)
+        average_loc_error_1_beacon = 0;
+    else
+        average_loc_error_1_beacon = mean(loc_error_1_beacon);
+    end
+    if isempty(loc_error_2_beacon)
+        average_loc_error_2_beacon = 0;
+    else
+        average_loc_error_2_beacon = mean(loc_error_2_beacon);
+    end
+    if isempty(loc_error_3_more_beacon)
+        average_loc_error_3_more_beacon = 0;
+    else
+        average_loc_error_3_more_beacon = mean(loc_error_3_more_beacon);
+    end
+    average_loc_error = [average_loc_error_0_beacon;average_loc_error_1_beacon;average_loc_error_2_beacon;average_loc_error_3_more_beacon];
+    coverage_0_beacon = length(loc_error_0_beacon)/(NUM_NODE*(1-BEACON_RATIO));
+    coverage_1_beacon = length(loc_error_1_beacon)/(NUM_NODE*(1-BEACON_RATIO));
+    coverage_2_beacon = length(loc_error_2_beacon)/(NUM_NODE*(1-BEACON_RATIO));
+    coverage_3_more_beacon = length(loc_error_3_more_beacon)/(NUM_NODE*(1-BEACON_RATIO));
+    KI_iteration_coverage = [KI_iteration_coverage [coverage_0_beacon;coverage_1_beacon;coverage_2_beacon;coverage_3_more_beacon]];
     KI_iteration_error_array = [KI_iteration_error_array average_loc_error];
     
     %the system runs 
@@ -54,55 +103,95 @@ function [loc_error,coverage]=kick_loc
         for index = sched_array
             broadcast(Node(index));
         end
-        loc_error = [];
+        % initial error
+        loc_error_0_beacon = [];
+        loc_error_1_beacon = [];
+        loc_error_2_beacon = [];
+        loc_error_3_more_beacon = [];
         for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
             %if Node(i).well_determined==1
             node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
-            loc_error =[loc_error node_loc_error];
+            %if Node(i).well_determined==1
+            if length(Node(i).beacon_list) == 0
+                loc_error_0_beacon = [loc_error_0_beacon node_loc_error];
+            end
+            if length(Node(i).beacon_list) == 1
+                loc_error_0_beacon = [loc_error_0_beacon node_loc_error];
+                loc_error_1_beacon = [loc_error_1_beacon node_loc_error];
+            end
+            if length(Node(i).beacon_list) == 2
+                loc_error_0_beacon = [loc_error_0_beacon node_loc_error];
+                loc_error_1_beacon = [loc_error_1_beacon node_loc_error];
+                loc_error_2_beacon = [loc_error_2_beacon node_loc_error];
+            end
+            if length(Node(i).beacon_list) > 2
+                loc_error_0_beacon = [loc_error_0_beacon node_loc_error];
+                loc_error_1_beacon = [loc_error_1_beacon node_loc_error];
+                loc_error_2_beacon = [loc_error_2_beacon node_loc_error];
+                loc_error_3_more_beacon = [loc_error_3_more_beacon node_loc_error];
+            end
         end
-        average_loc_error = mean(loc_error);
+        if isempty(loc_error_0_beacon)
+            average_loc_error_0_beacon = 0;
+        else
+            average_loc_error_0_beacon = mean(loc_error_0_beacon);
+        end
+        if isempty(loc_error_1_beacon)
+            average_loc_error_1_beacon = 0;
+        else
+            average_loc_error_1_beacon = mean(loc_error_1_beacon);
+        end
+        if isempty(loc_error_2_beacon)
+            average_loc_error_2_beacon = 0;
+        else
+            average_loc_error_2_beacon = mean(loc_error_2_beacon);
+        end
+        if isempty(loc_error_3_more_beacon)
+            average_loc_error_3_more_beacon = 0;
+        else
+            average_loc_error_3_more_beacon = mean(loc_error_3_more_beacon);
+        end
+        average_loc_error = [average_loc_error_0_beacon;average_loc_error_1_beacon;average_loc_error_2_beacon;average_loc_error_3_more_beacon];
+        coverage_0_beacon = length(loc_error_0_beacon)/(NUM_NODE*(1-BEACON_RATIO));
+        coverage_1_beacon = length(loc_error_1_beacon)/(NUM_NODE*(1-BEACON_RATIO));
+        coverage_2_beacon = length(loc_error_2_beacon)/(NUM_NODE*(1-BEACON_RATIO));
+        coverage_3_more_beacon = length(loc_error_3_more_beacon)/(NUM_NODE*(1-BEACON_RATIO));
+        KI_iteration_coverage = [KI_iteration_coverage [coverage_0_beacon;coverage_1_beacon;coverage_2_beacon;coverage_3_more_beacon]];
         KI_iteration_error_array = [KI_iteration_error_array average_loc_error];
     end
     
     % collect localization stats
-    loc_error=[];
-    CI1_counter = 0; % confidence interval counter for 1 std
-    CI2_counter = 0; % confidence interval counter for 2 std
-    CI3_counter = 0; % confidence interval counter for 3 std
-    
-    % IF WE USE BAD LOCALIZATION REMOVER
-    BAD_LOC_REMOVER = 0;
+    % initialize error
+    loc_error_0_beacon = [];
+    loc_error_1_beacon = [];
+    loc_error_2_beacon = [];
+    loc_error_3_more_beacon = [];
     for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
         %if Node(i).well_determined==1
-            node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
-            
-            if BAD_LOC_REMOVER == 0;
-                loc_error =[loc_error node_loc_error];
-            % if BAD_LOC_REMOVER is enabled, relative error threshold as 1.
-            elseif Node(i).std < TRANS_RANGE
-                loc_error =[loc_error node_loc_error];
-            end
-            
-            % check if the std actually bounds the error.
-            if node_loc_error <= Node(i).std
-                CI1_counter = CI1_counter + 1;            
-            end
-            if node_loc_error <= 2*Node(i).std
-                CI2_counter = CI2_counter + 1;            
-            end
-            if node_loc_error <= 3*Node(i).std
-                CI3_counter = CI3_counter + 1;            
-            end
-        %end
-
+        if length(Node(i).beacon_list) == 0
+            loc_error_0_beacon = [loc_error_0_beacon node_loc_error];
+        end
+        if length(Node(i).beacon_list) == 1
+            loc_error_0_beacon = [loc_error_0_beacon node_loc_error];
+            loc_error_1_beacon = [loc_error_1_beacon node_loc_error];
+        end
+        if length(Node(i).beacon_list) == 2
+            loc_error_0_beacon = [loc_error_0_beacon node_loc_error];
+            loc_error_1_beacon = [loc_error_1_beacon node_loc_error];
+            loc_error_2_beacon = [loc_error_2_beacon node_loc_error];
+        end
+        if length(Node(i).beacon_list) > 2
+            loc_error_0_beacon = [loc_error_0_beacon node_loc_error];
+            loc_error_1_beacon = [loc_error_1_beacon node_loc_error];
+            loc_error_2_beacon = [loc_error_2_beacon node_loc_error];
+            loc_error_3_more_beacon = [loc_error_3_more_beacon node_loc_error];
+        end
     end
-    CI_counter = [CI1_counter CI2_counter CI3_counter];
-    confidence_interval = CI_counter/(NUM_NODE*(1-BEACON_RATIO));
-    average_loc_error = mean(loc_error);
-    max_loc_error = max(loc_error);
-    coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO));
-    
-    
+    loc_error.loc_error_0_beacon = loc_error_0_beacon;
+    loc_error.loc_error_1_beacon = loc_error_1_beacon;
+    loc_error.loc_error_2_beacon = loc_error_2_beacon;
+    loc_error.loc_error_3_more_beacon = loc_error_3_more_beacon;
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % sub-function, to generate the distance measurement between 
@@ -139,6 +228,19 @@ function broadcast(A)
            Node(neighbor_index) = intuitive_update_loc(Node(neighbor_index),A,wgn_dist);        
         end
     end
+    %addition to the main body of the algorithm, we also track beacon_list.
+    % if A has beacon_list to broadcast
+    if ~isempty(A.beacon_list)
+        for neighbor_index = A.neighbor
+            for beacon_index = A.beacon_list
+                % if beacon not in neighbor's table, add directly
+                if ~ismember(beacon_index,Node(neighbor_index).beacon_list)
+                    Node(neighbor_index).beacon_list = [Node(neighbor_index).beacon_list beacon_index];
+                end
+            end
+        end
+    end
+                
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
