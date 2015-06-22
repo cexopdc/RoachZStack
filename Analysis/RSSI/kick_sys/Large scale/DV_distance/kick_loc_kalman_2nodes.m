@@ -47,7 +47,7 @@ function [loc_error]=kick_loc_kalman_2nodes
     loc_error_3_more_beacon = [];
     for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
         node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
-        if size(Node(i).dv_vector,2) > 2
+        if size(Node(i).dv_vector,1) > 2
             loc_error_3_more_beacon = [loc_error_3_more_beacon node_loc_error];
         end
     end

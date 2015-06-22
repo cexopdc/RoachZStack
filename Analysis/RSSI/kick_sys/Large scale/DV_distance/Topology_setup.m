@@ -1,15 +1,15 @@
 % Localization initialization
 %clear all;
 global Length;
-Length=100; % area space, unit: meter
+Length=area_space; % area space, unit: meter
 global Width;       
-Width=100;  % area space, unit: meter
+Width=area_space;  % area space, unit: meter
 global NUM_NODE;
 NUM_NODE=num_node; % number of total nodes
 global BEACON_RATIO;
 BEACON_RATIO=beacon_ratio; 
 global TRANS_RANGE;
-TRANS_RANGE = 20;       % transmission range 20 meters  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+TRANS_RANGE = trans_range;       % transmission range 20 meters  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global DIS_STD_RATIO; 
 DIS_STD_RATIO = dis_std_ratio;  % the distance measurement error ratio
 global WGN_DIST; % the measurement distance with WGN, which is fixed during multiple stages.

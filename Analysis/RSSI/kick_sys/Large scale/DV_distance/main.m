@@ -1,6 +1,6 @@
-function [average_loc_error_array, coverage, avg_connectivity] = main(num_node,dis_std_ratio,beacon_ratio)
-    if nargin < 3
-        disp('Please give num_node,dis_std_ratio,beacon_ratio');
+function [average_loc_error_array, coverage, avg_connectivity] = main(num_node,area_space,trans_range,beacon_ratio,dis_std_ratio)
+    if nargin < 5
+        disp('Please give num_node,area_space,trans_range,beacon_ratio,dis_std_ratio');
         return;
     end
     %close all; clear all; clc;

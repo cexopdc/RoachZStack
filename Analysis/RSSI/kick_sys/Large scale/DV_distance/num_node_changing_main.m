@@ -1,9 +1,9 @@
 close all; clear all; clc;
 rng default;
 
-start_point = 110;
-end_point = 150; 
-num_trials = 100;  %%%%%%%%%%%%
+start_point = 20;
+end_point = 30; 
+num_trials = 10;  %%%%%%%%%%%%
 error_matrix=[];
 aggregate_error_matrix=[];
 connectivity_array=[];
@@ -14,7 +14,7 @@ for i=start_point:10:end_point % number of nodes
     aggregate_coverage = 0;
     fprintf('i=%f\n',i);
     for j=1:num_trials % number of trials
-        [average_loc_error_array,coverage,avg_connectivity] = main(i,0.2,0.2);
+        [average_loc_error_array,coverage,avg_connectivity] = main(i,100,20,0.2,0.2);
         aggregate_error=[aggregate_error;average_loc_error_array];
         aggregate_connectivity_counter = aggregate_connectivity_counter + avg_connectivity;
         aggregate_coverage = aggregate_coverage + coverage;
@@ -28,7 +28,7 @@ end
 
 error_matrix = error_matrix';
 
-save num_node_110_to_150_100trials.mat; % Remember to change the file name
+save num_node_20_to_30_10trials.mat; % Remember to change the file name
 
 figure;
 x = start_point:10:end_point;
