@@ -16,20 +16,31 @@ global WGN_DIST; % the measurement distance with WGN, which is fixed during mult
 global STAGE_NUMBER;
 STAGE_NUMBER=20;      % number of stages
 global Node;
+global LOCALIZABLE_ID; % IDs of localizable nodes
+LOCALIZABLE_ID = [];
+global sched_array; %sorted global schedule array
 %M_measurement; % M distance measurements info for CRLB
 %theta_array; % theta array for CRLB
 %set nodes coordinates,id, attribute
 
+
+% sort the time schedule of all the nodes
+tmp_sched = [];
+% set break_flag to 0, break when CRLB is not ill-conditioned.
+break_flag = 0;
 while 1
     theta_array_index = 0;
     for i=1:NUM_NODE
         Node(i).pos = [Width*rand;Length*rand]; % node i position, 2 by 1 matrix [x;y]
         Node(i).id = i;         % node ID
-
+        Node(i).sched=rand;    % time scheduling of the system, set to random
+        tmp_sched = [tmp_sched;[Node(i).sched Node(i).id]];
         if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
             Node(i).attri = 'beacon';
+            Node(i).dv_vector=[Node(i).id 0 0];  % initialize accessible dv vector, itself.
         else                            % unknown
             Node(i).attri = 'unknown';
+            Node(i).dv_vector=[];  % initialize accessible dv vector to none
             % set theta array for CRLB
             theta_array_index = theta_array_index + 1;
             theta_array(theta_array_index).id = i;
@@ -39,7 +50,9 @@ while 1
             theta_array(theta_array_index).axis = 'y';
         end
     end
-
+    tmp_sched = sortrows(tmp_sched);
+    sched_array = tmp_sched(:,2)';
+    
     %{
     % Example topology
     Node(1).pos = [20;36.8];
@@ -72,26 +85,6 @@ while 1
             WGN_DIST(i,j)=DIST(Node(i),Node(j)) + DIS_STD_RATIO*DIST(Node(i),Node(j))*randn;
         end
     end
-
-    %calculate neighbor array, and calculate connectivity
-    %figure
-    %hold on;box on;axis([0 Length 0 Width]); %the frame of the plot
-    connectivity_counter = 0;
-    for i=1:NUM_NODE
-        Node(i).neighbor = []; %initialize the neighbor array
-        tmp_array = [1:NUM_NODE];
-        tmp_array(tmp_array==i)=[]; % delete node i itself
-        for j=tmp_array
-            if DIST(Node(i),Node(j))<=TRANS_RANGE
-                connectivity_counter = connectivity_counter + 1;
-
-                Node(i).neighbor = [Node(i).neighbor j];
-                % draw a line between neighbor nodes on the plot
-                %line([Node(i).pos(1),Node(j).pos(1)],[Node(i).pos(2),Node(j).pos(2)],'Color','k','LineStyle',':'); 
-            end
-        end
-    end
-    avg_connectivity = connectivity_counter/NUM_NODE;
 
     % set M measurements info
     M_counter = 0;
@@ -157,8 +150,39 @@ while 1
         for i = 1:A
             CRLB_loc_error = [CRLB_loc_error (sqrt(CRLB(2*i-1,2*i-1) + CRLB(2*i,2*i)))];
         end
+        %average_loc_error_CRLB = mean(CRLB_loc_error)/TRANS_RANGE;
+        break_flag = 1;
+    end 
+ 
+    if break_flag == 1
+        %calculate neighbor array, and calculate connectivity
+        %figure
+        %hold on;box on;axis([0 Length 0 Width]); %the frame of the plot
+        connectivity_counter = 0;
+        for i=1:NUM_NODE
+            Node(i).neighbor = []; %initialize the neighbor array
+            tmp_array = [1:NUM_NODE];
+            tmp_array(tmp_array==i)=[]; % delete node i itself
+            for j=tmp_array
+                if DIST(Node(i),Node(j))<=TRANS_RANGE
+                    connectivity_counter = connectivity_counter + 1;
 
-        average_loc_error_CRLB = mean(CRLB_loc_error)/TRANS_RANGE;
+                    Node(i).neighbor = [Node(i).neighbor j];
+                    % draw a line between neighbor nodes on the plot
+                    %line([Node(i).pos(1),Node(j).pos(1)],[Node(i).pos(2),Node(j).pos(2)],'Color','k','LineStyle',':'); 
+                end
+            end
+        end
+        avg_connectivity = connectivity_counter/NUM_NODE;
+        
+        % establish dv_vector for each node.
+        %the system runs 
+        for time = 0:STAGE_NUMBER
+            for index = sched_array
+                Node(index) = dv_vector_update(Node(index));
+            end
+        end
+        
         break;
     end
 end

@@ -25,31 +25,15 @@ function [average_loc_error, coverage] = IWLSE
 
         if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
             Node(i).est_pos = Node(i).pos;
-            Node(i).dv_vector=[Node(i).id 0 0];  % initialize accessible dv vector, itself.
             Node(i).well_determined=1; % set beacon as well-determined.
             Node(i).std=0;
         else                            % unknown
             Node(i).est_pos = [Width*0.5;Length*0.5]; % set initial est_pos at center.
-            Node(i).dv_vector=[];  % initialize accessible dv vector to none
             Node(i).well_determined=0; % set unknowns as not well-determined.
             Node(i).std=STD_INITIAL;
         end
     end
 
-    % sort the time schedule of all the nodes
-    tmp_sched = [];
-    for i=1:NUM_NODE
-        tmp_sched = [tmp_sched;[Node(i).sched Node(i).id]];
-    end
-    tmp_sched = sortrows(tmp_sched);
-    sched_array = tmp_sched(:,2)';
-    
-    %the system runs 
-    for time = 0:STAGE_NUMBER
-        for index = sched_array
-            Node(index) = broadcast(Node(index));
-        end
-    end
     
     % Obtain corrections for each beacon
     for i= 1:round(NUM_NODE*BEACON_RATIO)
@@ -185,49 +169,7 @@ function U = neighbor_lateration(U)
     end
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% sub-function, node A broadcasts to its neighbors its current distance
-% to all the beacons it can reach.
-function  A = broadcast(A)
-    global Node;
-    global WGN_DIST;
-    global DIS_STD_RATIO;
-    
-    % if A has beacon dv_vector to broadcast
-    if ~isempty(A.dv_vector)
-        beacon_list = A.dv_vector(:,1)';
-        % iterate all neighbors
-        for neighbor_index = A.neighbor
-            for beacon_index = beacon_list
-                % if beacon not in neighbor's talbe, add directly
-                if isempty(Node(neighbor_index).dv_vector) 
-                    beacon_node_dist = A.dv_vector(find(A.dv_vector(:,1)==beacon_index),2); 
-                    beacon_neighbor_dist = beacon_node_dist + WGN_DIST(A.id,Node(neighbor_index).id);
-                    % update the dist_std 
-                    beacon_neighbor_dist_std = sqrt((beacon_node_dist*DIS_STD_RATIO)^2 + (WGN_DIST(A.id,Node(neighbor_index).id)*DIS_STD_RATIO)^2);
-                    Node(neighbor_index).dv_vector = [Node(neighbor_index).dv_vector; beacon_index beacon_neighbor_dist beacon_neighbor_dist_std];
-                elseif ~ismember(beacon_index,Node(neighbor_index).dv_vector(:,1))
-                    beacon_node_dist = A.dv_vector(find(A.dv_vector(:,1)==beacon_index),2); 
-                    beacon_neighbor_dist = beacon_node_dist + WGN_DIST(A.id,Node(neighbor_index).id);
-                    % update the dist_std 
-                    beacon_neighbor_dist_std = sqrt((beacon_node_dist*DIS_STD_RATIO)^2 + (WGN_DIST(A.id,Node(neighbor_index).id)*DIS_STD_RATIO)^2);
-                    Node(neighbor_index).dv_vector = [Node(neighbor_index).dv_vector; beacon_index beacon_neighbor_dist  beacon_neighbor_dist_std];
-                % if beacon is already in neighbor's table, compare and
-                % update accordingly.
-                else
-                    beacon_neighbor_dist = Node(neighbor_index).dv_vector(find(Node(neighbor_index).dv_vector(:,1)==beacon_index),2);
-                    beacon_node_dist = A.dv_vector(find(A.dv_vector(:,1)==beacon_index),2); 
-                    if beacon_neighbor_dist > beacon_node_dist + WGN_DIST(A.id,Node(neighbor_index).id)
-                        Node(neighbor_index).dv_vector(find(Node(neighbor_index).dv_vector(:,1)==beacon_index),2) = beacon_node_dist + WGN_DIST(A.id,Node(neighbor_index).id);
-                        % update the dist_std 
-                        beacon_neighbor_dist_std = sqrt((beacon_node_dist*DIS_STD_RATIO)^2 + (WGN_DIST(A.id,Node(neighbor_index).id)*DIS_STD_RATIO)^2);
-                        Node(neighbor_index).dv_vector(find(Node(neighbor_index).dv_vector(:,1)==beacon_index),3) = beacon_neighbor_dist_std;
-                    end  
-                end
-            end
-        end
-    end
-end
+
 
 
     

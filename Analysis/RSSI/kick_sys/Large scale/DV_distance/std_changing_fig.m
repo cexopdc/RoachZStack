@@ -1,5 +1,5 @@
 clear all;
-load('std_0.05_to_0.5.mat');
+load('std_0.05_to_0.5_100nodes.mat');
 figure;
 x = start_point:0.05:end_point;
 plot(x,error_matrix,'*-');

@@ -14,6 +14,9 @@ function [loc_error]=kick_loc
     global TRANS_RANGE;
     global STD_INITIAL;
     STD_INITIAL = 10000;   % initial std for unknown
+    
+    global LOCALIZABLE_ID; % IDs of localizable nodes
+    LOCALIZABLE_ID = [];
 
     % set nodes est coordinates, time scheduling
     for i=1:NUM_NODE
@@ -29,14 +32,6 @@ function [loc_error]=kick_loc
             Node(i).beacon_list = []; % set beacon_list for each unknown as empty.
         end
     end
-    
-    % sort the time schedule of all the nodes
-    tmp_sched = [];
-    for i=1:NUM_NODE
-        tmp_sched = [tmp_sched;[Node(i).sched Node(i).id]];
-    end
-    tmp_sched = sortrows(tmp_sched);
-    sched_array = tmp_sched(:,2)';
 
     % global variable to store per iteration state
     global KI_iteration_error_array;
@@ -186,6 +181,7 @@ function [loc_error]=kick_loc
             loc_error_1_beacon = [loc_error_1_beacon node_loc_error];
             loc_error_2_beacon = [loc_error_2_beacon node_loc_error];
             loc_error_3_more_beacon = [loc_error_3_more_beacon node_loc_error];
+            LOCALIZABLE_ID = [LOCALIZABLE_ID i];
         end
     end
     loc_error.loc_error_0_beacon = loc_error_0_beacon;
