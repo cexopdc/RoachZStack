@@ -29,7 +29,7 @@ end
 
 error_matrix = error_matrix';
 
-save std_0.05_to_0.5_100nodes.mat; 
+save std_0.05_to_0.5_100nodes_100trials.mat; 
 
 figure;
 x = start_point:0.05:end_point;

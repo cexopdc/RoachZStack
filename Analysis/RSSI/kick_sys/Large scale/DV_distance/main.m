@@ -9,7 +9,7 @@ function [average_loc_error_array, coverage, avg_connectivity] = main(num_node,a
 
     while 1
         % Configure topology-related parameters
-        Topology_setup;
+        Topology_setup_no_CRLB; %%%%%%%%%%%
         [average_loc_error_N_hop_lateration, coverage] = N_hop_lateration;
         if average_loc_error_N_hop_lateration < 100 % if error is not too humongous, break; 
             [loc_error_kick] = kick_loc;
@@ -33,9 +33,10 @@ function [average_loc_error_array, coverage, avg_connectivity] = main(num_node,a
             [average_loc_error_DV_distance, coverage] = DV_distance;
             [average_loc_error_IWLSE, coverage] = IWLSE;
             % calculate CRLB average error, remove non-localizable nodes.
+            %{
             tmp_CRLB_loc_error = [];
             for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
-                if size(Node(i).dv_vector,2) > 2
+                if size(Node(i).dv_vector,1) > 2
                     tmp_CRLB_loc_error = [tmp_CRLB_loc_error CRLB_loc_error(i-round(NUM_NODE*BEACON_RATIO))];
                 end
             end
@@ -44,6 +45,9 @@ function [average_loc_error_array, coverage, avg_connectivity] = main(num_node,a
             else
                 average_loc_error_CRLB = mean(tmp_CRLB_loc_error)/TRANS_RANGE;
             end
+            %}
+            average_loc_error_CRLB = 0; %%%%%%%%%%%%
+
                
             break;
         end

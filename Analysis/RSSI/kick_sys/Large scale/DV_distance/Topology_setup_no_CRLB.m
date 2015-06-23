@@ -16,6 +16,8 @@ global WGN_DIST; % the measurement distance with WGN, which is fixed during mult
 global STAGE_NUMBER;
 STAGE_NUMBER=20;      % number of stages
 global Node;
+global sched_array; %sorted global schedule array
+
 %M_measurement; % M distance measurements info for CRLB
 %theta_array; % theta array for CRLB
 %set nodes coordinates,id, attribute

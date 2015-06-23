@@ -1,5 +1,5 @@
 clear all;
-load('num_node_20_to_200_combination.mat')
+load('area_space_20_to_200_combination.mat')
 
 %{
 figure;
@@ -22,12 +22,12 @@ legend('kick','DV-distance','N-hop-lateration-bound','connectivity');
 figure;
 x = start_point:20:end_point;
 plot(x,error_matrix,'-*');
-xlabel('Number of nodes');
+xlabel('Area space Length');
 ylabel('Relative error') % left y-axis
 legend('kick','kick\_kalman','kick\_kalman\_2nodes','DV-distance','N-hop-lateration','IWLSE','CRLB');
 
 figure
 x = start_point:20:end_point;
 h = plot(x,coverage_matrix);
-xlabel('Number of nodes');
+xlabel('Area space Length');
 ylabel('Coverage');

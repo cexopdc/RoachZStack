@@ -1,5 +1,5 @@
 clear all;
-load('num_node_20_to_200_combination.mat')
+load('trans_range_10_to_50_50trials.mat')
 
 %{
 figure;
@@ -20,14 +20,14 @@ legend('kick','DV-distance','N-hop-lateration-bound','connectivity');
 %}
 
 figure;
-x = start_point:20:end_point;
+x = start_point:10:end_point;
 plot(x,error_matrix,'-*');
-xlabel('Number of nodes');
+xlabel('Transmission range (m)');
 ylabel('Relative error') % left y-axis
 legend('kick','kick\_kalman','kick\_kalman\_2nodes','DV-distance','N-hop-lateration','IWLSE','CRLB');
 
 figure
-x = start_point:20:end_point;
+x = start_point:10:end_point;
 h = plot(x,coverage_matrix);
-xlabel('Number of nodes');
+xlabel('Transmission range (m)');
 ylabel('Coverage');
