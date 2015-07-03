@@ -51,17 +51,20 @@
 PROCESS(example_broadcast_process, "Broadcast example");
 AUTOSTART_PROCESSES(&example_broadcast_process);
 /*---------------------------------------------------------------------------*/
-static unsigned int i;
+static unsigned int i; //line added
 
 static void
 broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)
 {
-const char s[2] = "-";
+const char s[2] = "-";  //variables added
 const char t[2] = ",";
 char *token;
 
   /*printf("broadcast message received from %d.%d: '%s'\n",
          from->u8[0], from->u8[1], (char *)packetbuf_dataptr());*/
+//*********************************************************************//
+//Changes made. The piece of code below parses a string into multiple parts and compares the parts for address 
+//of the receivers and eventually checks the task to by performed by a specific receiver.
 
 token = strtok((char *)packetbuf_dataptr(),t);
 token = strtok(NULL,t);
@@ -72,7 +75,7 @@ token = strtok(NULL,s);
 printf("%s \n", token);
 if(strcmp(token,"left") == 0)
 {
-    P1SEL &=~ 0x01; //change starts
+    P1SEL &=~ 0x01; 
     P1DIR |= 0x01;
     LED1_PIN |= 0x01;
     for(i=0;i<60000;i++);
@@ -80,7 +83,7 @@ if(strcmp(token,"left") == 0)
     //for(i=0;i<60000;i++);
     LED1_PIN &= 0x00;
     //for(i=0;i<60000;i++);
-    //for(i=0;i<60000;i++); //change ends
+    //for(i=0;i<60000;i++); 
 
 /*leds_on(LEDS_GREEN);
 for(i=0;i<60000;i++);
