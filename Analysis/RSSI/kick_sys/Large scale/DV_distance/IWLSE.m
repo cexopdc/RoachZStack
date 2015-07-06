@@ -8,7 +8,7 @@
 %
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [average_loc_error, coverage] = IWLSE
+function [average_loc_error, std_loc_error, coverage] = IWLSE
     global Length;
     global Width;
     global NUM_NODE;
@@ -93,6 +93,7 @@ function [average_loc_error, coverage] = IWLSE
 
     if ~isempty(loc_error)
         average_loc_error = mean(loc_error)/TRANS_RANGE;
+        std_loc_error = std(loc_error)/TRANS_RANGE;
         max_loc_error = max(loc_error)/TRANS_RANGE;
         coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO));
     else
