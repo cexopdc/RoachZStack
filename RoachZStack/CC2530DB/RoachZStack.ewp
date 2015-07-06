@@ -2648,6 +2648,7 @@
           <state>$_ZSTACK_$\stack\zdo</state>
           <state>$_ZSTACK_$\zmac</state>
           <state>$_ZSTACK_$\zmac\f8w</state>
+          <state>C:\Texas Instruments\ZStack-CC2530-2.5.1a\Components</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
