@@ -1,4 +1,4 @@
-%
+%{
 %%% RSSI VS distance %%%
 clear all;
 input = load('dist_mean_std_diff_rssi.txt');
@@ -20,10 +20,10 @@ xlabel('RSSI');
 legend('original data','Nonlinear Regression');
 hold on;
 errorbar(x1,distance_mean_list,distance_std_list,'bo','markersize', 5);
+%}
+
+
 %
-
-
-%{
 %%%distance vs RSSI%%%
 
 %aggregate rssi from 0.2 to 3.0m.
@@ -55,4 +55,17 @@ ylabel('RSSI');
 legend('original data','Nonlinear Regression');
 hold on;
 errorbar(x1,aggr_mean_rssi,aggr_std_rssi,'bo','markersize', 5);
-%}
+%
+
+syms x
+f(x) = b(1)+b(2).*log(x./b(3));
+g = finverse(f,'x');
+figure;
+h = ezplot(g,[-90,-40]);
+title([]);
+ylabel('distance (m)');
+xlabel('RSSI');
+ylim([0 3]);
+
+
+

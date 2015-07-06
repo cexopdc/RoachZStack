@@ -21,13 +21,20 @@ legend('kick','DV-distance','N-hop-lateration-bound','connectivity');
 
 figure;
 x = start_point:20:end_point;
-plot(x,error_matrix,'-*');
-xlabel('Area space Length');
+hLine = plot(x,error_matrix);
+hLine(1).Marker = '*';
+hLine(2).Marker = '+';
+hLine(3).Marker = 'x';
+hLine(4).Marker = 'd';
+hLine(5).Marker = 'p';
+hLine(6).Marker = '^';
+hLine(7).Marker = 'o';
+xlabel('Area side Length (m)');
 ylabel('Relative error') % left y-axis
-legend('kick','kick\_kalman','kick\_kalman\_2nodes','DV-distance','N-hop-lateration','IWLSE','CRLB');
+legend('KI','KK','KK2','DV-distance','N-hop-lateration','IWLSE','CRLB');
 
 figure
 x = start_point:20:end_point;
 h = plot(x,coverage_matrix);
-xlabel('Area space Length');
+xlabel('Area side Length (m)');
 ylabel('Coverage');

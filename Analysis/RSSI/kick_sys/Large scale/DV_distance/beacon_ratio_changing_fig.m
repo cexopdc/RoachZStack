@@ -2,17 +2,22 @@ clear all;
 load('beacon_ratio_0.03_to_0.30_100nodes_100trials.mat');
 figure;
 x = start_point:0.03:end_point;
-plot(x,error_matrix,'*-');
+hLine = plot(x,error_matrix);
+hLine(1).Marker = '*';
+hLine(2).Marker = '+';
+hLine(3).Marker = 'x';
+hLine(4).Marker = 'd';
+hLine(5).Marker = 'p';
+hLine(6).Marker = '^';
+hLine(7).Marker = 'o';
 xlabel('Beacon ratio');
 ylabel('Relative error');
-legend('kick','kick\_kalman','kick\_kalman\_2nodes','DV-distance','N-hop-lateration','IWLSE','CRLB');
+legend('KI','KK','KK2','DV-distance','N-hop-lateration','IWLSE','CRLB');
 ax = gca;
 ax.XTick = 0:0.03:0.30;
 
-figure;
+figure
 x = start_point:0.03:end_point;
-coverage_matrix = [ones(3,length(coverage_matrix));coverage_matrix;coverage_matrix;coverage_matrix;ones(1,length(coverage_matrix))];
-plot(x,coverage_matrix,'*-');
+h = plot(x,coverage_matrix);
 xlabel('Beacon ratio');
 ylabel('Coverage');
-legend('kick','kick\_kalman','kick\_kalman\_2nodes','DV-distance','N-hop-lateration','IWLSE','CRLB');

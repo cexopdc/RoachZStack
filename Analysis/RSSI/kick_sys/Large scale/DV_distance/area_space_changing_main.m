@@ -1,8 +1,8 @@
 close all; clear all; clc;
 rng default;
 
-start_point = 20;
-end_point = 100; 
+start_point = 120;
+end_point = 200; 
 num_trials = 30;  %%%%%%%%%%%%
 error_matrix=[];
 aggregate_error_matrix=[];
@@ -28,7 +28,7 @@ end
 
 error_matrix = error_matrix';
 
-save area_space_20_to_100_30trials.mat; % Remember to change the file name
+save area_space_120_to_200_30trials_NEW_CHECK.mat; % Remember to change the file name
 
 figure;
 x = start_point:20:end_point;
