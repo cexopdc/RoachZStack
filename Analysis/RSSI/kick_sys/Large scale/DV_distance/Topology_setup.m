@@ -145,11 +145,6 @@ while 1
     if rcond(FIM_J)>1*10^-10 
         % calculate CRLB
         CRLB = inv(FIM_J);
-        % calculate root localization error.
-        CRLB_loc_error=[];
-        for i = 1:A
-            CRLB_loc_error = [CRLB_loc_error (sqrt(CRLB(2*i-1,2*i-1) + CRLB(2*i,2*i)))];
-        end
         %average_loc_error_CRLB = mean(CRLB_loc_error)/TRANS_RANGE;
         break_flag = 1;
     end 

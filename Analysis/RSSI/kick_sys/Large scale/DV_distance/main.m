@@ -53,8 +53,6 @@ function [average_loc_error_array,std_loc_error_array, coverage, avg_connectivit
             end
             %}
             std_loc_error_CRLB = 0; %%%%%%%%%%%%
-            
-               
             break;
         end
     end 
