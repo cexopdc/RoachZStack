@@ -140,7 +140,7 @@ while 1
     end
     % calculate FIM:J
     FIM_J = transpose(G_prime_theta) * W * G_prime_theta;
-        
+    
     % check if the matrix is ill-conditioned
     if rcond(FIM_J)>1*10^-10 
         % calculate CRLB

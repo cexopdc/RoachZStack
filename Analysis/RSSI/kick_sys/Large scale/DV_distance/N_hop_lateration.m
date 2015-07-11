@@ -77,6 +77,7 @@ function [average_loc_error,std_loc_error, coverage] = N_hop_lateration
         coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO));
     else
         average_loc_error = 0;
+        std_loc_error = 0;
         coverage = 0;
     end
     

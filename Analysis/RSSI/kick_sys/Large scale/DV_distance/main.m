@@ -10,7 +10,7 @@ function [average_loc_error_array,std_loc_error_array, coverage, avg_connectivit
     while 1
         % Configure topology-related parameters
         Topology_setup_no_CRLB; %%%%%%%%%%%
-        [average_loc_error_N_hop_lateration,std_loc_error_N_hop_lateration coverage] = N_hop_lateration;
+        [average_loc_error_N_hop_lateration,std_loc_error_N_hop_lateration,coverage] = N_hop_lateration;
         if average_loc_error_N_hop_lateration < 20 % if error is not too humongous, break; 
             [loc_error_kick] = kick_loc;
             if isempty(loc_error_kick)
