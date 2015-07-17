@@ -3,7 +3,7 @@ rng default;
 
 start_point = 0.03;
 end_point = 0.30;
-num_trials = 100;  %%%%%%%%%%
+num_trials = 50;  %%%%%%%%%%
 error_matrix=[];
 std_matrix=[];
 aggregate_error_matrix=[];
@@ -27,6 +27,7 @@ for i=start_point:0.03:end_point % number of nodes
     aggregate_std_matrix = [aggregate_std_matrix;aggregate_std];
     % if running CRLB_ONLY
     if size(aggregate_std_matrix,2) == 1 
+        error_matrix = [error_matrix;0];
         std_matrix = [std_matrix;mean(nonzeros(aggregate_std(:,1)))];
     % running other 6 algorithms
     else
@@ -42,6 +43,7 @@ end
 error_matrix = error_matrix';
 std_matrix = std_matrix';
 
+save STD_beacon_ratio_0.03_to_0.30_100nodes_50trials_CRLB_ONLY.mat;  %%%%%%
 
 figure;
 x = start_point:0.03:end_point;

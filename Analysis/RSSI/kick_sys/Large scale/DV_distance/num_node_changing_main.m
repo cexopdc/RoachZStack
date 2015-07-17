@@ -1,9 +1,9 @@
 close all; clear all; clc;
 rng default;
 
-start_point = 20;
-end_point = 20; 
-num_trials = 300;  %%%%%%%%%%%%
+start_point = 100;
+end_point = 110; 
+num_trials = 1;  %%%%%%%%%%%%
 error_matrix=[];
 std_matrix=[];
 aggregate_error_matrix=[];
