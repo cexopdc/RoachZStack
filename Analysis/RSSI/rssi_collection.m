@@ -41,7 +41,7 @@ port.BytesAvailableFcn = @serial_callback;
 
 
 
-while (counter<(1000+7))
+while (counter<(500+7))
   pause(0.0001);
 end
 dlmwrite(strcat('original_',output_filename), Data, 'delimiter','');%, '-append');

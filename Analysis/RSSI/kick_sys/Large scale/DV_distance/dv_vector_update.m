@@ -14,13 +14,15 @@ function  A = dv_vector_update(A)
             for beacon_index = beacon_list
                 % if beacon not in neighbor's talbe, add directly
                 if isempty(Node(neighbor_index).dv_vector) 
-                    beacon_node_dist = A.dv_vector(find(A.dv_vector(:,1)==beacon_index),2); 
+                    beacon_node_dist = A.dv_vector(A.dv_vector(:,1)==beacon_index,2); 
+                    beacon_node_dist = A.dv_vector(A.dv_vector(:,1)==beacon_index,2); 
+                    
                     beacon_neighbor_dist = beacon_node_dist + WGN_DIST(A.id,Node(neighbor_index).id);
                     % update the dist_std 
                     beacon_neighbor_dist_std = sqrt((beacon_node_dist*DIS_STD_RATIO)^2 + (WGN_DIST(A.id,Node(neighbor_index).id)*DIS_STD_RATIO)^2);
                     Node(neighbor_index).dv_vector = [Node(neighbor_index).dv_vector; beacon_index beacon_neighbor_dist beacon_neighbor_dist_std];
-                elseif ~ismember(beacon_index,Node(neighbor_index).dv_vector(:,1))
-                    beacon_node_dist = A.dv_vector(find(A.dv_vector(:,1)==beacon_index),2); 
+                elseif ~any(Node(neighbor_index).dv_vector(:,1)==beacon_index) %~ismember(beacon_index,Node(neighbor_index).dv_vector(:,1))
+                    beacon_node_dist = A.dv_vector(A.dv_vector(:,1)==beacon_index,2); 
                     beacon_neighbor_dist = beacon_node_dist + WGN_DIST(A.id,Node(neighbor_index).id);
                     % update the dist_std 
                     beacon_neighbor_dist_std = sqrt((beacon_node_dist*DIS_STD_RATIO)^2 + (WGN_DIST(A.id,Node(neighbor_index).id)*DIS_STD_RATIO)^2);
@@ -28,13 +30,13 @@ function  A = dv_vector_update(A)
                 % if beacon is already in neighbor's table, compare and
                 % update accordingly.
                 else
-                    beacon_neighbor_dist = Node(neighbor_index).dv_vector(find(Node(neighbor_index).dv_vector(:,1)==beacon_index),2);
-                    beacon_node_dist = A.dv_vector(find(A.dv_vector(:,1)==beacon_index),2); 
+                    beacon_neighbor_dist = Node(neighbor_index).dv_vector(Node(neighbor_index).dv_vector(:,1)==beacon_index,2);
+                    beacon_node_dist = A.dv_vector(A.dv_vector(:,1)==beacon_index,2); 
                     if beacon_neighbor_dist > beacon_node_dist + WGN_DIST(A.id,Node(neighbor_index).id)
-                        Node(neighbor_index).dv_vector(find(Node(neighbor_index).dv_vector(:,1)==beacon_index),2) = beacon_node_dist + WGN_DIST(A.id,Node(neighbor_index).id);
+                        Node(neighbor_index).dv_vector(Node(neighbor_index).dv_vector(:,1)==beacon_index,2) = beacon_node_dist + WGN_DIST(A.id,Node(neighbor_index).id);
                         % update the dist_std 
                         beacon_neighbor_dist_std = sqrt((beacon_node_dist*DIS_STD_RATIO)^2 + (WGN_DIST(A.id,Node(neighbor_index).id)*DIS_STD_RATIO)^2);
-                        Node(neighbor_index).dv_vector(find(Node(neighbor_index).dv_vector(:,1)==beacon_index),3) = beacon_neighbor_dist_std;
+                        Node(neighbor_index).dv_vector(Node(neighbor_index).dv_vector(:,1)==beacon_index,3) = beacon_neighbor_dist_std;
                     end  
                 end
             end

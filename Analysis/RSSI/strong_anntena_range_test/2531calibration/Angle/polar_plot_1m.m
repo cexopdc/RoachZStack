@@ -43,10 +43,12 @@ subplot(1,2,1)
 %set the range of the mean in the polar plot
 Range_mean = [-80 -45];
 
-polar2(theta,rho_mean,Range_mean)
+H = polar2(theta,rho_mean,Range_mean);
+H.LineWidth = 1.75;
 lh=legend('mean');
 set(lh,'location', 'Best');
 title('Polar plot of mean rssi','FontSize',14)
+exportfig(gcf,'6h_trace_cesp_compare_others.eps','height',6,'Width',8,'fontmode','Scaled', 'color', 'rgb');
 
 hold on
 subplot(1,2,2)

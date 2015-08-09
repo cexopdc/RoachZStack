@@ -158,28 +158,29 @@ title('IN CHAMBER: with\_tube\_tilt');
 ylim([-85 -50]);
 %}
 
-cd /Users/hongxiong/Documents/RoachZStack/Analysis/RSSI/strong_anntena_range_test/2531calibration/Angle/Small_fading_test/telosb_no_tube_flat;
+%cd /Users/hongxiong/Documents/RoachZStack/Analysis/RSSI/strong_anntena_range_test/2531calibration/angle/small_fading_test/wifi_no_tube_flat_25hz;
 
 mean_rssi = [];
 for i=0:1:8
     input = load(strcat('1m_0degree_pos_',num2str(i),'.txt'));
-    input = input(1:1000,:);
+    input = input(1:500,:);
     mean_rssi = [mean_rssi mean(input)];
 end
 
+
 % subtract the offset
-mean_rssi = mean_rssi - 45*ones(1,9);
+%mean_rssi = mean_rssi - 45*ones(1,9);
 
 
 mean_rssi_2 = [];
 for i=0:1:8
     input = load(strcat('1m_90degree_pos_',num2str(i),'.txt'));
-    input = input(1:1000,:);
+    input = input(1:500,:);
     mean_rssi_2 = [mean_rssi_2 mean(input)];
 end
 
 % subtract the offset
-mean_rssi_2 = mean_rssi_2 - 45*ones(1,9);
+%mean_rssi_2 = mean_rssi_2 - 45*ones(1,9);
 
 figure; hold on;
 pos_id = 1:9;
@@ -188,34 +189,35 @@ plot(pos_id,mean_rssi,pos_id,mean_rssi_2);
 xlabel('Position ID');
 ylabel('RSSI');
 legend('0 degree','90 degree');
-title('OUTSIDE CHAMBER: TelosB\_no\_tube\_flat');
+title('OUTSIDE CHAMBER: wifi\_no\_tube\_flat\_25Hz');
 %ylim([-85 -50]);
+ylim([-50 -20]);
 
-cd /Users/hongxiong/Documents/RoachZStack/Analysis/RSSI/strong_anntena_range_test/2531calibration/angle/small_fading_test/IN_CHAMBER/telos_no_tube_flat;
+cd /Users/hongxiong/Documents/RoachZStack/Analysis/RSSI/strong_anntena_range_test/2531calibration/angle/small_fading_test/in_chamber/wifi_no_tube_flat_25hz;
 mean_rssi = zeros(1,9);
 std_rssi = zeros(1,9);
 for i=0:1:8
     input = load(strcat('1m_0degree_pos_',num2str(i),'.txt'));
-    input = input(1:1000,:);
+    input = input(1:500,:);
     mean_rssi(i+1) = mean(input);
     std_rssi(i+1) = std(input);
 end
 
 % subtract the offset
-mean_rssi = mean_rssi - 45*ones(1,9);
+%mean_rssi = mean_rssi - 45*ones(1,9);
 
 
 mean_rssi_2 = [];
 std_rssi_2 = [];
 for i=0:1:8
     input = load(strcat('1m_90degree_pos_',num2str(i),'.txt'));
-    input = input(1:1000,:);
+    input = input(1:500,:);
     mean_rssi_2 = [mean_rssi_2 mean(input)];
     std_rssi_2 = [std_rssi_2 std(input)];
 end
 
 % subtract the offset
-mean_rssi_2 = mean_rssi_2 - 45*ones(1,9);
+%mean_rssi_2 = mean_rssi_2 - 45*ones(1,9);
 
 pos_id = 1:9;
 subplot(2,1,2)
@@ -224,8 +226,9 @@ plot(pos_id,mean_rssi,pos_id,mean_rssi_2);
 xlabel('Position ID');
 ylabel('RSSI');
 legend('0 degree','90 degree');
-title('INSIDE CHAMBER: TelosB\_no\_tube\_flat');
-h_error=errorbar(pos_id,mean_rssi,std_rssi,'bo','markersize', 5); %set(h,'linestyle','none');
-h_error=errorbar(pos_id,mean_rssi_2,std_rssi_2,'bo','markersize', 5); %set(h,'linestyle','none');
+title('INSIDE CHAMBER: wifi\_no\_tube\_flat\_25Hz');
+%h_error=errorbar(pos_id,mean_rssi,std_rssi,'bo','markersize', 5); %set(h,'linestyle','none');
+%h_error=errorbar(pos_id,mean_rssi_2,std_rssi_2,'bo','markersize', 5); %set(h,'linestyle','none');
 %ylim([-85 -50]);
-
+ylim([-50 -20]);
+%}
