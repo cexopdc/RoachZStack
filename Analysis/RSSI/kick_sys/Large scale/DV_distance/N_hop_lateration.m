@@ -3,7 +3,7 @@
 %
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [average_loc_error,std_loc_error, coverage] = N_hop_lateration
+function [average_loc_error,std_loc_error, coverage,tol_flop] = N_hop_lateration
     global Length;
     global Width;
     global NUM_NODE;
@@ -11,6 +11,8 @@ function [average_loc_error,std_loc_error, coverage] = N_hop_lateration
     global BEACON_RATIO;
     global STAGE_NUMBER;
     global TRANS_RANGE;
+    global FLOP_COUNT_FLAG;
+    flops(0); %%start global flop count at 0
     
     % set nodes est coordinates, time scheduling
     for i=1:NUM_NODE
@@ -26,6 +28,9 @@ function [average_loc_error,std_loc_error, coverage] = N_hop_lateration
     % find well-determined unknowns, and apply min_max for initial
     % localization
     for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        if FLOP_COUNT_FLAG == 1
+            addflops(2);
+        end
         if ~isempty(Node(i).dv_vector)
             beacon_list = Node(i).dv_vector(:,1)';
             if length(beacon_list)>2
@@ -55,6 +60,9 @@ function [average_loc_error,std_loc_error, coverage] = N_hop_lateration
     % Refinement phase: well-determined unknowns using neighbor info. to
     % localize, using least-square
     for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        if FLOP_COUNT_FLAG == 1
+            addflops(2);
+        end
         if Node(i).well_determined==1
             if length(Node(i).neighbor)>2
                 Node(i) = lateration(Node(i));
@@ -81,13 +89,20 @@ function [average_loc_error,std_loc_error, coverage] = N_hop_lateration
         coverage = 0;
     end
     
+    if FLOP_COUNT_FLAG == 1
+        tol_flop = flops;
+    else
+        tol_flop = 0;
+    end
+    
+    
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % sub-function, node U calulate its own position using simple min_max.
 function U = min_max(U)
     global Node;
-    
+    global FLOP_COUNT_FLAG;
     % The intersections of the bounding box are: [max(x_i-d_i),max(y_i-d_i)],[min(x_i+d_i),max(y_i+d_i)]
     tmp_dv_vector = U.dv_vector;
     % initialize x_minus_d_arrary,y_minus_d_arrary,x_plus_d_arrary,y_plus_d_arrary
@@ -96,10 +111,16 @@ function U = min_max(U)
     x_plus_d_arrary = [];
     y_plus_d_arrary = [];
     for i = 1:1:length(tmp_dv_vector)
+        if FLOP_COUNT_FLAG == 1
+            addflops(4*1);
+        end
         x_minus_d_arrary = [x_minus_d_arrary Node(tmp_dv_vector(i,1)).pos(1)-tmp_dv_vector(i,2)];
         y_minus_d_arrary = [y_minus_d_arrary Node(tmp_dv_vector(i,1)).pos(2)-tmp_dv_vector(i,2)];
         x_plus_d_arrary = [x_plus_d_arrary Node(tmp_dv_vector(i,1)).pos(1)+tmp_dv_vector(i,2)];
         y_plus_d_arrary = [y_plus_d_arrary Node(tmp_dv_vector(i,1)).pos(2)+tmp_dv_vector(i,2)];
+    end
+    if FLOP_COUNT_FLAG == 1
+        addflops(size(x_minus_d_arrary,2)*2*2 + 1 + flops_div);
     end
     bottom_left_corner = [max(x_minus_d_arrary) max(y_minus_d_arrary)];
     top_right_corner = [min(x_plus_d_arrary) min(y_plus_d_arrary)];
@@ -112,6 +133,7 @@ end
 function U = lateration(U)
     global Node;
     global WGN_DIST;
+    global FLOP_COUNT_FLAG;
     % initialize matrix A and b.
     A=[];
     b=[];
@@ -119,14 +141,26 @@ function U = lateration(U)
     neighbor_array = U.neighbor;
     n= neighbor_array(end); % the last neighbor 
     for neighbor_index = neighbor_array
+        if FLOP_COUNT_FLAG == 1
+            addflops(2);
+        end
         if neighbor_index ~= n
             A=[A;2*(Node(neighbor_index).est_pos(1)-Node(n).est_pos(1)) 2*(Node(neighbor_index).est_pos(2)-Node(n).est_pos(2))];
+            if FLOP_COUNT_FLAG == 1
+                addflops(4);
+            end
             b=[b;(Node(neighbor_index).est_pos(1))^2 - (Node(n).est_pos(1))^2 + (Node(neighbor_index).est_pos(2))^2 - (Node(n).est_pos(2))^2 + WGN_DIST(n,U.id)^2 - WGN_DIST(neighbor_index,U.id)^2];
+            if FLOP_COUNT_FLAG == 1
+                addflops(6*flops_pow(2) + 5*1);
+            end
         end
     end
     % solve the system using least-square
     % if the matrix is not ill-conditioned, update est_pos.
     if rcond(transpose(A)*A)>0.1
         U.est_pos = (transpose(A)*A)^(-1)*transpose(A)*b;
+    end
+    if FLOP_COUNT_FLAG == 1
+        addflops(flops_mul(transpose(A),A) + flops_inv(size(A,2)) + flops_mul(size(A,2),size(A,1),size(A,2))  + size(A,1)*size(A,2));
     end
 end

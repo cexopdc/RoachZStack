@@ -23,12 +23,16 @@ y_j = B.est_pos(2);
 x_k = C.est_pos(1);
 y_k = C.est_pos(2);
 % formula obtained from above commented code
+global FLOP_COUNT_FLAG;
 my_f_x_i = 2*x_k-2*x_j;
 my_f_y_i = 2*y_k-2*y_j;
 my_f_x_j = 2*x_j - 2*x_i;
 my_f_y_j = 2*y_j - 2*y_i;
 my_f_x_k = 2*x_i - 2*x_k;
 my_f_y_k = 2*y_i - 2*y_k;
+if FLOP_COUNT_FLAG == 1
+    addflops(3*6*1);
+end
 
 H_i = [my_f_x_i my_f_y_i];
 H_j = [my_f_x_j my_f_y_j];

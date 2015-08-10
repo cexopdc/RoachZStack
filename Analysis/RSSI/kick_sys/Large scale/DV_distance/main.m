@@ -6,13 +6,16 @@ function [average_loc_error_array,std_loc_error_array, coverage, avg_connectivit
     %close all; clear all; clc;
     %rng default;
     %rng (6);
+    
+    global FLOP_COUNT_FLAG;
+    FLOP_COUNT_FLAG = 1;
 
     while 1
         % Configure topology-related parameters
         Topology_setup_no_CRLB; %%%%%%%%%%%
-        [average_loc_error_N_hop_lateration,std_loc_error_N_hop_lateration,coverage] = N_hop_lateration;
+        [average_loc_error_N_hop_lateration,std_loc_error_N_hop_lateration,coverage,tol_flop_N_hop_lateration] = N_hop_lateration;
         if average_loc_error_N_hop_lateration < 20 % if error is not too humongous, break; 
-            [loc_error_kick] = kick_loc;
+            [loc_error_kick,tol_flop_kick] = kick_loc;
             if isempty(loc_error_kick)
                 average_loc_error_kick = 0;
                 std_loc_error_kick = 0;
@@ -20,7 +23,7 @@ function [average_loc_error_array,std_loc_error_array, coverage, avg_connectivit
                 average_loc_error_kick = mean(loc_error_kick); % only need 3 or more beacon stats for inter-comparison
                 std_loc_error_kick = std(loc_error_kick);
             end
-            [loc_error_kick_kalman] = kick_loc_kalman;
+            [loc_error_kick_kalman,tol_flop_kick_kalman] = kick_loc_kalman;
             if isempty(loc_error_kick_kalman)
                 average_loc_error_kick_kalman = 0;
                 std_loc_error_kick_kalman = 0;
@@ -28,7 +31,7 @@ function [average_loc_error_array,std_loc_error_array, coverage, avg_connectivit
                 average_loc_error_kick_kalman = mean(loc_error_kick_kalman); % only need 3 or more beacon stats for inter-comparison
                 std_loc_error_kick_kalman = std(loc_error_kick_kalman);
             end
-            [loc_error_kick_kalman_2nodes]=kick_loc_kalman_2nodes;
+            [loc_error_kick_kalman_2nodes,tol_flop_kick_kalman_2nodes]=kick_loc_kalman_2nodes;
             if isempty(loc_error_kick_kalman_2nodes)
                 average_loc_error_kick_kalman_2nodes = 0;
                 std_loc_error_kick_kalman_2nodes = 0;
@@ -36,8 +39,8 @@ function [average_loc_error_array,std_loc_error_array, coverage, avg_connectivit
                 average_loc_error_kick_kalman_2nodes = mean(loc_error_kick_kalman_2nodes); % only need 3 or more beacon stats for inter-comparison
                 std_loc_error_kick_kalman_2nodes = std(loc_error_kick_kalman_2nodes);
             end
-            [average_loc_error_DV_distance, std_loc_error_DV_distance, coverage] = DV_distance;
-            [average_loc_error_IWLSE,std_loc_error_IWLSE, coverage] = IWLSE;
+            [average_loc_error_DV_distance, std_loc_error_DV_distance, coverage,tol_flop_DV_distance] = DV_distance;
+            [average_loc_error_IWLSE,std_loc_error_IWLSE, coverage,tol_flop_IWLSE] = IWLSE;
             % calculate CRLB average error, remove non-localizable nodes.
             %{
             tmp_CRLB_loc_error = [];

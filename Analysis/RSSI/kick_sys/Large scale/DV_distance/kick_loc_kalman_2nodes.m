@@ -3,7 +3,7 @@
 %  Using Kalman Filter, 2 nodes
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [loc_error]=kick_loc_kalman_2nodes
+function [loc_error,tol_flop]=kick_loc_kalman_2nodes
     global Length;
     global Width;
     global NUM_NODE;
@@ -12,6 +12,8 @@ function [loc_error]=kick_loc_kalman_2nodes
     global STAGE_NUMBER;
     global TRANS_RANGE;
     global sched_array;
+    global FLOP_COUNT_FLAG;
+    flops(0); %%start global flop count at 0
     global STD_INITIAL;
     STD_INITIAL = 10000;   % initial std for unknown
     global COV_INITIAL;
@@ -53,6 +55,11 @@ function [loc_error]=kick_loc_kalman_2nodes
     end
     loc_error = loc_error_3_more_beacon;  
 
+    if FLOP_COUNT_FLAG == 1
+        tol_flop = flops;
+    else
+        tol_flop = 0;
+    end
     
 end
 
@@ -83,11 +90,21 @@ function A = two_node_kalman_update_loc(A,B,d)
     % if A has no est yet, it will use B as its current est. 
     global COV_INITIAL;
     global DIS_STD_RATIO;
+    global FLOP_COUNT_FLAG;
+    if FLOP_COUNT_FLAG == 1
+        addflops(4*2);
+    end
     if isequal(A.cov,COV_INITIAL)
+        if FLOP_COUNT_FLAG == 1
+            addflops(4*2);
+        end
         if (~isequal(B.cov,COV_INITIAL)) % if B also has no est, do nothing
             A.est_pos = B.est_pos;
     % set cov_d=(DIS_STD_RATIO * d)^2, hence in accordance with std_d = DIS_STD_RATIO * d
             A.cov = B.cov + [d^2 0;0 d^2] + [(DIS_STD_RATIO * d)^2 0;0 (DIS_STD_RATIO * d)^2];
+            if FLOP_COUNT_FLAG == 1
+                addflops(2*flops_pow + 4*2);
+            end
             % store the current helper_node info
             A.helper_node.est_pos = B.est_pos;
             A.helper_node.cov = B.cov;
@@ -96,12 +113,18 @@ function A = two_node_kalman_update_loc(A,B,d)
 
     % if A has an est already, it will add a kick factor to its current est.
     else
+        if FLOP_COUNT_FLAG == 1
+                addflops(4*2 + 4*2 + 4*2);
+         end
         if isequal(B.cov,COV_INITIAL) || isequal(A.est_pos,B.est_pos) 
             % if B also has no est, do nothing; if A and B have same est, do
             % nothing.
         else
             kick = two_node_kalman_cal_kick(A,B,d);
             A.est_pos = A.est_pos + kick.pos;
+            if FLOP_COUNT_FLAG == 1
+                addflops(4);
+            end
             A.cov = kick.cov;
 
             % update the current helper_node info
@@ -116,8 +139,12 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % sub-function, calculate kick factor of node A from B's broadcast.
 function kick = two_node_kalman_cal_kick(A,B,d)
+    global FLOP_COUNT_FLAG;
     % calculate delta_d
     delta_d = (A.helper_node.d)^2 - d^2  - (est_DIST(A.helper_node,A))^2 + (est_DIST(A,B))^2;
+    if FLOP_COUNT_FLAG == 1
+        addflops(4*flops_pow(2) + 3*1);
+    end
     % calculate H_i and H_j 
     [H_i,H_j,H_k] = two_node_jacobian(A,A.helper_node,B);
     % set cov_d=(DIS_STD_RATIO * d)^2, hence in accordance with std_d = DIS_STD_RATIO * d
@@ -126,13 +153,25 @@ function kick = two_node_kalman_cal_kick(A,B,d)
     % cov of measurement (d_ij)^2-(d_ik)^2
     cov_measurement = (2*(DIS_STD_RATIO * d)^4+4*(d * DIS_STD_RATIO * d)^2) + ...
         (2*(DIS_STD_RATIO * A.helper_node.d)^4+4*(A.helper_node.d*DIS_STD_RATIO * A.helper_node.d)^2);
+    if FLOP_COUNT_FLAG == 1
+        addflops(7*1 + 2*flops_pow(2));
+    end
     % calculate K, commented the original one and use the simplified one
     %K = A.cov*transpose(H_i)/(H_i*A.cov*transpose(H_i) + H_j*B.cov*transpose(H_j) + cov_d)
     K = A.cov*transpose(H_i)/(H_i*A.cov*transpose(H_i) + H_j*A.helper_node.cov*transpose(H_j) + H_k*B.cov*transpose(H_k) + cov_measurement);
+    if FLOP_COUNT_FLAG == 1
+        addflops(flops_mul(A.cov,transpose(H_i)) + 3*(flops_mul(H_i,A.cov) + flops_mul(1,2,1)) + 3*1 + flops_div);
+    end
     % calculate kick.pos, which will add to the current pos.
     kick.pos = K * delta_d;
+    if FLOP_COUNT_FLAG == 1
+        addflops(2);
+    end
     % calculate the post covariance of node A
     kick.cov = (eye(2,2) - K*H_i) * A.cov;
+    if FLOP_COUNT_FLAG == 1
+        addflops(4 + flops_mul(2,2,2));
+    end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
@@ -140,7 +179,11 @@ end
 % sub-function, to calculate the distance between two nodes using est
 % position
 function est_dist=est_DIST(A,B)
+    global FLOP_COUNT_FLAG;
     est_dist=sqrt((A.est_pos(1)-B.est_pos(1))^2+(A.est_pos(2)-B.est_pos(2))^2);
+    if FLOP_COUNT_FLAG == 1
+        addflops(flops_sqrt + 2*flops_pow(2) + 3*1);
+    end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     

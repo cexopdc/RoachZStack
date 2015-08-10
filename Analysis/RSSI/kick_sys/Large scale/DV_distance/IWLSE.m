@@ -8,7 +8,7 @@
 %
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [average_loc_error, std_loc_error, coverage] = IWLSE
+function [average_loc_error, std_loc_error, coverage,tol_flop] = IWLSE
     global Length;
     global Width;
     global NUM_NODE;
@@ -18,6 +18,8 @@ function [average_loc_error, std_loc_error, coverage] = IWLSE
     global TRANS_RANGE;
     global STD_INITIAL;
     STD_INITIAL = 10000;   % initial std for unknown
+    global FLOP_COUNT_FLAG;
+    flops(0); %%start global flop count at 0
     
     % set nodes est coordinates, time scheduling
     for i=1:NUM_NODE
@@ -42,17 +44,32 @@ function [average_loc_error, std_loc_error, coverage] = IWLSE
         if size(Node(i).dv_vector,1)>1
             tol_DIS = 0;
             tol_dis = sum(Node(i).dv_vector(:,2));
+            if FLOP_COUNT_FLAG == 1
+                addflops(size(Node(i).dv_vector,1));
+            end
             for beacon_index = Node(i).dv_vector(:,1)'
                 tol_DIS = tol_DIS + DIST(Node(i),Node(beacon_index));
+                if FLOP_COUNT_FLAG == 1
+                    addflops(1);
+                end
             end
             Node(i).correction = tol_dis/tol_DIS;
+            if FLOP_COUNT_FLAG == 1
+                    addflops(flops_div);
+            end
         end
     end
     
     % Obtain corrections for each unknown
     for i= round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        if FLOP_COUNT_FLAG == 1
+            addflops(2);
+        end
         if ~isempty(Node(i).dv_vector)
-            % find the nearest beacon for the correction
+            % find the nearest beacon for the 
+            if FLOP_COUNT_FLAG == 1
+                    addflops(size(Node(i).dv_vector,1));
+            end
             sorted_dv = sortrows(Node(i).dv_vector,2);
             nearest_beacon = sorted_dv(1,1);
             Node(i).correction = Node(nearest_beacon).correction;
@@ -62,8 +79,14 @@ function [average_loc_error, std_loc_error, coverage] = IWLSE
     % find well-determined unknowns, and apply lateration using beacons for initial
     % localization
     for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        if FLOP_COUNT_FLAG == 1
+            addflops(2);
+        end
         if ~isempty(Node(i).dv_vector)
             beacon_list = Node(i).dv_vector(:,1)';
+            if FLOP_COUNT_FLAG == 1
+                addflops(2);
+            end
             if length(beacon_list)>2
                 Node(i).well_determined=1;
                 Node(i) = beacon_lateration(Node(i));
@@ -101,14 +124,23 @@ function [average_loc_error, std_loc_error, coverage] = IWLSE
         std_loc_error = 0;
         coverage = 0;
     end
-    
+
+    if FLOP_COUNT_FLAG == 1
+        tol_flop = flops;
+    else
+        tol_flop = 0;
+    end
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % sub-function, to calculate the distance between two nodes using est
 % position
 function est_dist=est_DIST(A,B)
+    global FLOP_COUNT_FLAG;
     est_dist=sqrt((A.est_pos(1)-B.est_pos(1))^2+(A.est_pos(2)-B.est_pos(2))^2);
+    if FLOP_COUNT_FLAG == 1
+        addflops(3*1 + flops_sqrt + 2*flops_pow(2));
+    end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -116,6 +148,7 @@ end
 % sub-function, node U calulate initial est using beacon info. to do lateration.
 function U = beacon_lateration(U)
     global Node;
+    global FLOP_COUNT_FLAG;
     % initialize matrix A and b.
     A=[];
     b=[];
@@ -124,8 +157,14 @@ function U = beacon_lateration(U)
     tmp_dv_vector = U.dv_vector(:,2)';
     %
     % use correction to correct the distance_vector
+    if FLOP_COUNT_FLAG == 1
+        addflops(2);
+    end
     if U.correction ~= 0
         tmp_dv_vector = tmp_dv_vector/U.correction;
+        if FLOP_COUNT_FLAG == 1
+            addflops(flops_div);
+        end 
     end
     %
     
@@ -133,15 +172,39 @@ function U = beacon_lateration(U)
     
     for beacon_index = beacon_list
         counter = counter + 1; 
+        if FLOP_COUNT_FLAG == 1
+            addflops(1);
+        end
+        if FLOP_COUNT_FLAG == 1
+            addflops(2);
+        end
         l = ((U.est_pos - Node(beacon_index).est_pos)/est_DIST(U,Node(beacon_index)))';
+        if FLOP_COUNT_FLAG == 1
+            addflops(2*(1 + flops_div));
+        end
         w = 1/sqrt(U.dv_vector(counter,3)^2 + Node(beacon_index).std^2);
+        if FLOP_COUNT_FLAG == 1
+            addflops(2*flops_pow(2) + flops_sqrt + flops_div);
+        end
         A = [A; l*w];
+        if FLOP_COUNT_FLAG == 1
+            addflops(2*1);
+        end
         b = [b;(tmp_dv_vector(counter) - est_DIST(U,Node(beacon_index)))*w];
+        if FLOP_COUNT_FLAG == 1
+            addflops(2);
+        end
     end
     % solve the system using least-square
     U.est_pos = U.est_pos + (transpose(A)*A)^(-1)*transpose(A)*b;
+    if FLOP_COUNT_FLAG == 1
+        addflops(flops_mul(transpose(A),A) + flops_inv(size(A,2)) + flops_mul(size(A,2),size(A,1),size(A,2))  + size(A,1)*size(A,2) + 4);
+    end
     C = (transpose(A)*A)^(-1);
     U.std = sqrt(0.5*(sum(C(:))));
+    if FLOP_COUNT_FLAG == 1
+        addflops(3+1+flops_sqrt);
+    end
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -150,6 +213,7 @@ function U = neighbor_lateration(U)
     global Node;
     global WGN_DIST;
     global DIS_STD_RATIO;
+    global FLOP_COUNT_FLAG;
     % initialize matrix A and b.
     A=[];
     b=[];
@@ -158,16 +222,34 @@ function U = neighbor_lateration(U)
     
     for neighbor_index = neighbor_array
         l = ((U.est_pos - Node(neighbor_index).est_pos)/est_DIST(U,Node(neighbor_index)))';
+        if FLOP_COUNT_FLAG == 1
+            addflops(2*(1 + flops_div));
+        end
         w = 1/sqrt((WGN_DIST(neighbor_index,U.id)*DIS_STD_RATIO)^2 + Node(neighbor_index).std^2);
+        if FLOP_COUNT_FLAG == 1
+            addflops(flops_div + flops_sqrt + 1 + flops_pow(2));
+        end
         A = [A; l*w];
+        if FLOP_COUNT_FLAG == 1
+            addflops(1*2);
+        end
         b = [b;(WGN_DIST(neighbor_index,U.id) - est_DIST(U,Node(neighbor_index)))*w]; 
+        if FLOP_COUNT_FLAG == 1
+            addflops(1*2);
+        end
     end
     % solve the system using least-square
     % if the matrix is not ill-conditioned, update est_pos.
     if rcond(transpose(A)*A)>0.01
         U.est_pos = U.est_pos + (transpose(A)*A)^(-1)*transpose(A)*b;
+        if FLOP_COUNT_FLAG == 1
+            addflops(flops_mul(transpose(A),A) + flops_inv(size(A,2)) + flops_mul(size(A,2),size(A,1),size(A,2))  + size(A,1)*size(A,2) + 4);
+        end
         C = (transpose(A)*A)^(-1);
         U.std = sqrt(0.5*(sum(C(:))));
+        if FLOP_COUNT_FLAG == 1
+            addflops(3+1+flops_sqrt);
+        end
     end
 end
 

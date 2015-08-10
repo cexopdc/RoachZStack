@@ -3,7 +3,7 @@
 % 
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [loc_error]=kick_loc
+function [loc_error,tol_flop]=kick_loc
 
     global Length;
     global Width;
@@ -15,7 +15,8 @@ function [loc_error]=kick_loc
     global sched_array;
     global STD_INITIAL;
     STD_INITIAL = 10000;   % initial std for unknown
-   
+    global FLOP_COUNT_FLAG;
+    flops(0); %%start global flop count at 0
 
     % set nodes est coordinates, time scheduling
     for i=1:NUM_NODE
@@ -48,6 +49,11 @@ function [loc_error]=kick_loc
     end
     loc_error = loc_error_3_more_beacon;  
 
+    if FLOP_COUNT_FLAG == 1
+        tol_flop = flops;
+    else
+        tol_flop = 0;
+    end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % sub-function, to generate the distance measurement between 
@@ -64,7 +70,11 @@ end
 % sub-function, to calculate the distance between two nodes using est
 % position
 function est_dist=est_DIST(A,B)
+    global FLOP_COUNT_FLAG;
     est_dist=sqrt((A.est_pos(1)-B.est_pos(1))^2+(A.est_pos(2)-B.est_pos(2))^2);
+    if FLOP_COUNT_FLAG == 1
+        addflops(flops_sqrt + 2*flops_pow(2) + 3*1);
+    end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -94,14 +104,27 @@ function A = intuitive_update_loc(A,B,d)
     % if A has no est yet, it will use B as its current est. 
     global STD_INITIAL;
     global DIS_STD_RATIO;
+    global FLOP_COUNT_FLAG;
+    if FLOP_COUNT_FLAG == 1
+        addflops(2);
+    end
     if A.std == STD_INITIAL
+        if FLOP_COUNT_FLAG == 1
+            addflops(2);
+        end
         if B.std ~= STD_INITIAL % if B also has no est, do nothing
             A.est_pos = B.est_pos;
             % set std_d = DIS_STD_RATIO*d
             A.std = sqrt((B.std)^2 + d^2 + (DIS_STD_RATIO*d)^2);
+            if FLOP_COUNT_FLAG == 1
+                addflops(flops_sqrt + 3*flops_pow + 2);
+            end
         end
     % if A has an est already, it will add a kick factor to its current est.
     else
+        if FLOP_COUNT_FLAG == 1
+                addflops(2 + 2 + 2);
+         end
         if (B.std == STD_INITIAL) || isequal(A.est_pos,B.est_pos) 
             % if B also has no est, do nothing; if A and B have same est, do
             % nothing. FOR STATIC SYSTEM, and we're assuming the RSSI
@@ -109,6 +132,9 @@ function A = intuitive_update_loc(A,B,d)
         else
             kick = intuitive_cal_kick(A,B,d);
             A.est_pos = A.est_pos + kick.pos;
+            if FLOP_COUNT_FLAG == 1
+                addflops(1);
+            end
             A.std = kick.std;
         end
     end
@@ -118,17 +144,33 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % sub-function, calculate kick factor of node A from B's broadcast.
 function kick = intuitive_cal_kick(A,B,d)
+    global FLOP_COUNT_FLAG;
     delta_d = (est_DIST(A,B) - d)*(B.est_pos - A.est_pos)/est_DIST(A,B);
+    if FLOP_COUNT_FLAG == 1
+        addflops(3*1 + flops_div);
+    end
     % set std_d = DIS_STD_RATIO*d
     global DIS_STD_RATIO;
     std_d = DIS_STD_RATIO*d;
     % calculate the std of the update
     std_update = sqrt(std_d^2 + B.std^2);
+    if FLOP_COUNT_FLAG == 1
+        addflops(flops_sqrt + flops_pow(2)*2 + 1);
+    end
     % calculate the alpha factor
     alpha = A.std/(A.std + std_update);
+    if FLOP_COUNT_FLAG == 1
+        addflops(1 + flops_div);
+    end
     % calculate the new std of node A
     kick.std = alpha*std_update + (1 - alpha)*A.std;
+    if FLOP_COUNT_FLAG == 1
+        addflops(4*1);
+    end
     % calculate the kick factor of node A
     kick.pos = alpha * delta_d;
+    if FLOP_COUNT_FLAG == 1
+        addflops(1);
+    end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
