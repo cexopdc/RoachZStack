@@ -14,7 +14,7 @@ global DIS_STD_RATIO;
 DIS_STD_RATIO = dis_std_ratio;  % the distance measurement error ratio
 global WGN_DIST; % the measurement distance with WGN, which is fixed during multiple stages.
 global STAGE_NUMBER;
-STAGE_NUMBER=5;      % number of stages
+STAGE_NUMBER=20;      % number of stages
 global Node;
 global sched_array; %sorted global schedule array
 

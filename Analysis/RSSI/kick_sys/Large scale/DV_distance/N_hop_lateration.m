@@ -3,7 +3,7 @@
 %
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [average_loc_error,std_loc_error, coverage,tol_flop] = N_hop_lateration
+function [average_loc_error,std_loc_error, coverage,tol_flop,break_stage] = N_hop_lateration
     global Length;
     global Width;
     global NUM_NODE;
@@ -39,35 +39,44 @@ function [average_loc_error,std_loc_error, coverage,tol_flop] = N_hop_lateration
             end
         end
     end
-        
-    % collect localization stats
-    loc_error=[];
+    
+    % initial loc_error %
+    loc_error_prev = [];
     for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
-        if Node(i).well_determined==1
-            loc_error =[loc_error sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)];
+        node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
+        if size(Node(i).dv_vector,1) > 2
+            loc_error_prev = [loc_error_prev node_loc_error];
         end
     end
-
-    if ~isempty(loc_error)
-        average_loc_error = mean(loc_error)/TRANS_RANGE;
-        max_loc_error = max(loc_error)/TRANS_RANGE;
-        coverage = length(loc_error)/(NUM_NODE*(1-BEACON_RATIO));
-    else
-        average_loc_error = 0;
-        coverage = 0;
-    end
+    avg_loc_error_prev = mean(loc_error_prev);
     
     % Refinement phase: well-determined unknowns using neighbor info. to
     % localize, using least-square
-    for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
-        if FLOP_COUNT_FLAG == 1
-            addflops(2);
-        end
-        if Node(i).well_determined==1
-            if length(Node(i).neighbor)>2
-                Node(i) = lateration(Node(i));
+    for time = 0:STAGE_NUMBER
+        for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+            if FLOP_COUNT_FLAG == 1
+                addflops(2);
+            end
+            if Node(i).well_determined==1
+                if length(Node(i).neighbor)>2
+                    Node(i) = lateration(Node(i));
+                end
             end
         end
+        % current loc_error %
+        loc_error_cur = [];
+        for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+            node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
+            if size(Node(i).dv_vector,1) > 2
+                loc_error_cur = [loc_error_cur node_loc_error];
+            end
+        end
+        avg_loc_error_cur = mean(loc_error_cur);
+        if abs(avg_loc_error_cur - avg_loc_error_prev) <= 0.05
+            %fprintf('IWLSE stage: %d\n',time);            
+            %break;
+        end
+        avg_loc_error_prev = avg_loc_error_cur;
     end
         
     % collect localization stats
@@ -95,6 +104,8 @@ function [average_loc_error,std_loc_error, coverage,tol_flop] = N_hop_lateration
         tol_flop = 0;
     end
     
+    break_stage = time;
+
     
 end
 

@@ -8,7 +8,7 @@
 %
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [average_loc_error, std_loc_error, coverage,tol_flop] = IWLSE
+function [average_loc_error, std_loc_error, coverage,tol_flop,break_stage] = IWLSE
     global Length;
     global Width;
     global NUM_NODE;
@@ -96,6 +96,17 @@ function [average_loc_error, std_loc_error, coverage,tol_flop] = IWLSE
     
     % Refinement phase: well-determined unknowns using neighbor info. to
     % localize, using weighted least-square
+    
+    % initial loc_error %
+    loc_error_prev = [];
+    for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
+        if size(Node(i).dv_vector,1) > 2
+            loc_error_prev = [loc_error_prev node_loc_error];
+        end
+    end
+    avg_loc_error_prev = mean(loc_error_prev);
+    
     for time = 0:STAGE_NUMBER
         for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
             if Node(i).well_determined==1
@@ -104,6 +115,21 @@ function [average_loc_error, std_loc_error, coverage,tol_flop] = IWLSE
                 end
             end
         end
+        
+        % current loc_error %
+        loc_error_cur = [];
+        for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+            node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
+            if size(Node(i).dv_vector,1) > 2
+                loc_error_cur = [loc_error_cur node_loc_error];
+            end
+        end
+        avg_loc_error_cur = mean(loc_error_cur);
+        if abs(avg_loc_error_cur - avg_loc_error_prev) <= 0.05
+            %fprintf('IWLSE stage: %d\n',time);            
+            %break;
+        end
+        avg_loc_error_prev = avg_loc_error_cur;
     end
     
     % collect localization stats
@@ -130,6 +156,9 @@ function [average_loc_error, std_loc_error, coverage,tol_flop] = IWLSE
     else
         tol_flop = 0;
     end
+    
+    break_stage = time;
+
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

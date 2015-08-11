@@ -3,7 +3,7 @@
 %  Using Kalman Filter, 2 nodes
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [loc_error,tol_flop]=kick_loc_kalman_2nodes
+function [loc_error,tol_flop,break_stage]=kick_loc_kalman_2nodes
     global Length;
     global Width;
     global NUM_NODE;
@@ -37,11 +37,36 @@ function [loc_error,tol_flop]=kick_loc_kalman_2nodes
         end
     end
     
+    % initial loc_error %
+    loc_error_prev = [];
+    for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
+        if size(Node(i).dv_vector,1) > 2
+            loc_error_prev = [loc_error_prev node_loc_error];
+        end
+    end
+    avg_loc_error_prev = mean(loc_error_prev);
+    
     %the system runs 
     for time = 1:STAGE_NUMBER
         for index = sched_array
             broadcast(Node(index));
         end
+        
+        % current loc_error %
+        loc_error_cur = [];
+        for i=round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+            node_loc_error = sqrt((Node(i).pos(1)-Node(i).est_pos(1))^2+(Node(i).pos(2)-Node(i).est_pos(2))^2)/TRANS_RANGE;
+            if size(Node(i).dv_vector,1) > 2
+                loc_error_cur = [loc_error_cur node_loc_error];
+            end
+        end
+        avg_loc_error_cur = mean(loc_error_cur);
+        if abs(avg_loc_error_cur - avg_loc_error_prev) <= 0.05
+            %fprintf('kick_loc_2nodes stage: %d\n',time);
+            %break;
+        end
+        avg_loc_error_prev = avg_loc_error_cur;
     end
     
     % collect localization stats
@@ -60,7 +85,7 @@ function [loc_error,tol_flop]=kick_loc_kalman_2nodes
     else
         tol_flop = 0;
     end
-    
+    break_stage = time;    
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
