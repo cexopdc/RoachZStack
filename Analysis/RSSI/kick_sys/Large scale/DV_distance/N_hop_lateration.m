@@ -3,19 +3,22 @@
 %
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [average_loc_error,std_loc_error, coverage,tol_flop,break_stage] = N_hop_lateration
+function [average_loc_error,std_loc_error, coverage,tol_flop,break_stage,tol_msg_sent,tol_bytes_sent] = N_hop_lateration
     global Length;
     global Width;
     global NUM_NODE;
     global Node;
     global BEACON_RATIO;
     global STAGE_NUMBER;
+    global STAGE_FLAG;
     global TRANS_RANGE;
     global FLOP_COUNT_FLAG;
     flops(0); %%start global flop count at 0
     
     % set nodes est coordinates, time scheduling
     for i=1:NUM_NODE
+        Node(i).msg_count = 0;
+        Node(i).bytes_count = 0;
         if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
             Node(i).est_pos = Node(i).pos;
             Node(i).well_determined=1; % set beacon as well-determined.
@@ -53,6 +56,16 @@ function [average_loc_error,std_loc_error, coverage,tol_flop,break_stage] = N_ho
     % Refinement phase: well-determined unknowns using neighbor info. to
     % localize, using least-square
     for time = 0:STAGE_NUMBER
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % this part solely for msg collection purpose.
+        %
+        for i = 1:NUM_NODE
+            Node(i).msg_count = Node(i).msg_count + 1;
+            Node(i).bytes_count = Node(i).bytes_count + 1*2;  % x,y          
+        end
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
         for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
             if FLOP_COUNT_FLAG == 1
                 addflops(2);
@@ -73,8 +86,10 @@ function [average_loc_error,std_loc_error, coverage,tol_flop,break_stage] = N_ho
         end
         avg_loc_error_cur = mean(loc_error_cur);
         if abs(avg_loc_error_cur - avg_loc_error_prev) <= 0.05
-            %fprintf('IWLSE stage: %d\n',time);            
-            %break;
+            if STAGE_FLAG == 0
+                %fprintf('kick_loc stage: %d\n',time);
+                break;
+            end
         end
         avg_loc_error_prev = avg_loc_error_cur;
     end
@@ -106,6 +121,13 @@ function [average_loc_error,std_loc_error, coverage,tol_flop,break_stage] = N_ho
     
     break_stage = time;
 
+    %calculate the cumulative msg sent and bytes sent
+    tol_msg_sent = 0;
+    tol_bytes_sent = 0;
+    for i=1:NUM_NODE
+        tol_msg_sent = tol_msg_sent + Node(i).msg_count;
+        tol_bytes_sent = tol_bytes_sent + Node(i).bytes_count;
+    end
     
 end
 

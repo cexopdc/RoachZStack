@@ -3,13 +3,14 @@
 %  Using Kalman Filter, 2 nodes
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [loc_error,tol_flop,break_stage]=kick_loc_kalman_2nodes
+function [loc_error,tol_flop,break_stage,tol_msg_sent,tol_bytes_sent]=kick_loc_kalman_2nodes
     global Length;
     global Width;
     global NUM_NODE;
     global Node;
     global BEACON_RATIO;
     global STAGE_NUMBER;
+    global STAGE_FLAG;
     global TRANS_RANGE;
     global sched_array;
     global FLOP_COUNT_FLAG;
@@ -26,6 +27,8 @@ function [loc_error,tol_flop,break_stage]=kick_loc_kalman_2nodes
         Node(i).helper_node.cov = 0;
         Node(i).helper_node.d = 0;
         
+        Node(i).msg_count = 0;
+        Node(i).bytes_count = 0;
         if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
             Node(i).est_pos = Node(i).pos;
             Node(i).well_determined=1; % set beacon as well-determined.
@@ -63,8 +66,10 @@ function [loc_error,tol_flop,break_stage]=kick_loc_kalman_2nodes
         end
         avg_loc_error_cur = mean(loc_error_cur);
         if abs(avg_loc_error_cur - avg_loc_error_prev) <= 0.05
-            %fprintf('kick_loc_2nodes stage: %d\n',time);
-            %break;
+            if STAGE_FLAG == 0
+                %fprintf('kick_loc stage: %d\n',time);
+                break;
+            end
         end
         avg_loc_error_prev = avg_loc_error_cur;
     end
@@ -85,7 +90,15 @@ function [loc_error,tol_flop,break_stage]=kick_loc_kalman_2nodes
     else
         tol_flop = 0;
     end
-    break_stage = time;    
+    break_stage = time;   
+    
+    %calculate the cumulative msg sent and bytes sent
+    tol_msg_sent = 0;
+    tol_bytes_sent = 0;
+    for i=1:NUM_NODE
+        tol_msg_sent = tol_msg_sent + Node(i).msg_count;
+        tol_bytes_sent = tol_bytes_sent + Node(i).bytes_count;
+    end
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -95,6 +108,9 @@ function broadcast(A)
     global Node;
     global WGN_DIST;
     neighbor_array = A.neighbor;
+    % a broadcast msg is sent 
+    Node(A.id).msg_count = Node(A.id).msg_count + 1;
+    Node(A.id).bytes_count = Node(A.id).bytes_count + 6; % x,y,covariance
     for neighbor_index = neighbor_array
         %if the neighbor is an unknown, update; if a beacon, do nothing.
         if strcmp(Node(neighbor_index).attri,'unknown');

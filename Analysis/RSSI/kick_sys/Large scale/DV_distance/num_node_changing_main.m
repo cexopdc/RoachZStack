@@ -14,6 +14,10 @@ aggregate_flop_matrix=[];
 aggregate_stage_matrix=[];
 flop_matrix=[];
 stage_matrix=[];
+aggregate_msg_matrix = [];
+aggregate_bytes_matrix = [];
+msg_matrix = [];
+bytes_matrix = [];
 for i=start_point:20:end_point % number of nodes
     aggregate_error=[];
     aggregate_std=[];
@@ -21,20 +25,26 @@ for i=start_point:20:end_point % number of nodes
     aggregate_coverage = 0;
     aggregate_flop = [];
     aggregate_stage = [];
+    aggregate_msg = [];
+    aggregate_bytes = [];
     fprintf('i=%f\n',i);
     for j=1:num_trials % number of trials
-        [average_loc_error_array,std_loc_error_array,coverage,avg_connectivity,tol_flop_arrary,break_stage_arrary] = main(i,100,20,0.2,0.2); %%%%%%%%%
+        [average_loc_error_array,std_loc_error_array,coverage,avg_connectivity,tol_flop_arrary,break_stage_arrary,tol_msg_sent_arrary,tol_bytes_sent_arrary] = main(0,i,100,20,0.2,0.2); %%%%%%%%%
         aggregate_error=[aggregate_error;average_loc_error_array];
         aggregate_std=[aggregate_std;std_loc_error_array];        
         aggregate_connectivity_counter = aggregate_connectivity_counter + avg_connectivity;
         aggregate_coverage = aggregate_coverage + coverage;
         aggregate_flop = [aggregate_flop;tol_flop_arrary];
         aggregate_stage = [aggregate_stage;break_stage_arrary];
+        aggregate_msg = [aggregate_msg;tol_msg_sent_arrary];
+        aggregate_bytes = [aggregate_bytes;tol_bytes_sent_arrary];
     end
     aggregate_error_matrix = [aggregate_error_matrix;aggregate_error];
     aggregate_std_matrix = [aggregate_std_matrix;aggregate_std];
     aggregate_flop_matrix = [aggregate_flop_matrix;aggregate_flop];
     aggregate_stage_matrix = [aggregate_stage_matrix;aggregate_stage];
+    aggregate_msg_matrix = [aggregate_msg_matrix;aggregate_msg];
+    aggregate_bytes_matrix = [aggregate_bytes_matrix;aggregate_bytes];
     % if running CRLB_ONLY
     if size(aggregate_std_matrix,2) == 1 
         error_matrix = [error_matrix;0];
@@ -47,11 +57,13 @@ for i=start_point:20:end_point % number of nodes
             mean(nonzeros(aggregate_std(:,4))) mean(nonzeros(aggregate_std(:,5))) mean(nonzeros(aggregate_std(:,6))) mean(nonzeros(aggregate_std(:,7)))];
         flop_matrix = [flop_matrix;mean(aggregate_flop,1)];
         stage_matrix = [stage_matrix;mean(aggregate_stage,1)];
+        msg_matrix = [msg_matrix;mean(aggregate_msg,1)];
+        bytes_matrix = [bytes_matrix;mean(aggregate_bytes,1)];
     end
     connectivity_array = [connectivity_array aggregate_connectivity_counter/num_trials];
     coverage_matrix = [coverage_matrix aggregate_coverage/num_trials];
     if (i==100) && (j==100)
-        save FLOP_num_node_20_to_100_100trials_no_break_stage.mat; % Remember to change the file name
+        save flop_results/FLOP_num_node_20_to_100_100trials_no_stage_LINUX.mat; % Remember to change the file name
     end
 end
 
@@ -59,8 +71,10 @@ error_matrix = error_matrix';
 std_matrix = std_matrix';
 flop_matrix = flop_matrix';
 stage_matrix = stage_matrix';
+msg_matrix = msg_matrix';
+bytes_matrix = bytes_matrix';
 
-save FLOP_num_node_20_to_200_100trials_no_break_stage.mat; % Remember to change the file name
+save flop_results/FLOP_num_node_20_to_200_100trials_no_stage_LINUX.mat; % Remember to change the file name
 
 
 figure;

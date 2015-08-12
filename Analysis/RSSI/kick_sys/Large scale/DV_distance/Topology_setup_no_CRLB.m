@@ -15,6 +15,10 @@ DIS_STD_RATIO = dis_std_ratio;  % the distance measurement error ratio
 global WGN_DIST; % the measurement distance with WGN, which is fixed during multiple stages.
 global STAGE_NUMBER;
 STAGE_NUMBER=20;      % number of stages
+global STAGE_FLAG;
+STAGE_FLAG = stage_flag;
+global HOP_CONSTRAINT
+HOP_CONSTRAINT = 10; % number of hop constraint for dv update
 global Node;
 global sched_array; %sorted global schedule array
 
@@ -29,6 +33,8 @@ global sched_array; %sorted global schedule array
         Node(i).id = i;         % node ID
         Node(i).sched=rand;    % time scheduling of the system, set to random
         tmp_sched = [tmp_sched;[Node(i).sched Node(i).id]];
+        Node(i).msg_count_dv_vector_update = 0;
+        Node(i).bytes_count_dv_vector_update = 0;
 
         if (i <= round(NUM_NODE*BEACON_RATIO)) % beacon
             Node(i).attri = 'beacon';
@@ -95,14 +101,31 @@ global sched_array; %sorted global schedule array
     avg_connectivity = connectivity_counter/NUM_NODE;
 
     % establish dv_vector for each node.
-    %the system runs 
-    for time = 0:STAGE_NUMBER
+    %the system runs
+    flops(0); %%start global flop count at 0
+    global FLOP_COUNT_FLAG;
+    global IWLSE_extra_flops;
+    IWLSE_extra_flops = 0;
+    for time = 0:HOP_CONSTRAINT
         for index = sched_array
             Node(index) = dv_vector_update(Node(index));
         end
     end
     
-
+    if FLOP_COUNT_FLAG == 1
+        tol_flop_dv_vector_update = flops;
+    else
+        tol_flop_dv_vector_update = 0;
+    end
+    
+    %calculate the cumulative msg sent and bytes sent
+    tol_msg_sent_dv_vector_update = 0;
+    tol_bytes_sent_dv_vector_update = 0;
+    for i=1:NUM_NODE
+        tol_msg_sent_dv_vector_update = tol_msg_sent_dv_vector_update + Node(i).msg_count_dv_vector_update;
+        tol_bytes_sent_dv_vector_update = tol_bytes_sent_dv_vector_update + Node(i).bytes_count_dv_vector_update;
+    end
+   
 
     
 %{
