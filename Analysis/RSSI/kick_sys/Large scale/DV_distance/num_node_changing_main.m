@@ -29,7 +29,8 @@ for i=start_point:20:end_point % number of nodes
     aggregate_bytes = [];
     fprintf('i=%f\n',i);
     for j=1:num_trials % number of trials
-        [average_loc_error_array,std_loc_error_array,coverage,avg_connectivity,tol_flop_arrary,break_stage_arrary,tol_msg_sent_arrary,tol_bytes_sent_arrary] = main(0,i,100,20,0.2,0.2); %%%%%%%%%
+        [average_loc_error_array,std_loc_error_array,coverage,avg_connectivity,tol_flop_arrary,break_stage_arrary,tol_msg_sent_arrary,tol_bytes_sent_arrary]...
+            = main(0,i,100,20,0.2,0.2); %%%%%%%%%
         aggregate_error=[aggregate_error;average_loc_error_array];
         aggregate_std=[aggregate_std;std_loc_error_array];        
         aggregate_connectivity_counter = aggregate_connectivity_counter + avg_connectivity;
@@ -62,9 +63,9 @@ for i=start_point:20:end_point % number of nodes
     end
     connectivity_array = [connectivity_array aggregate_connectivity_counter/num_trials];
     coverage_matrix = [coverage_matrix aggregate_coverage/num_trials];
-    if (i==100) && (j==100)
-        save flop_results/FLOP_num_node_20_to_100_100trials_no_stage_LINUX.mat; % Remember to change the file name
-    end
+%     if (i==100) && (j==100)
+%         save flop_results/FLOP_num_node_20_to_100_100trials_have_stage.mat; % Remember to change the file name
+%     end
 end
 
 error_matrix = error_matrix';
@@ -74,24 +75,5 @@ stage_matrix = stage_matrix';
 msg_matrix = msg_matrix';
 bytes_matrix = bytes_matrix';
 
-save flop_results/FLOP_num_node_20_to_200_100trials_no_stage_LINUX.mat; % Remember to change the file name
+save flop_results/FLOP_num_node_20_to_200_100trials_no_stage.mat; % Remember to change the file name
 
-
-figure;
-x = start_point:20:end_point;
-plot(x,error_matrix,'-*');
-xlabel('Number of nodes');
-ylabel('Relative error') % left y-axis
-legend('kick','kick\_kalman','kick\_kalman\_2nodes','DV-distance','N-hop-lateration','IWLSE','CRLB');
-
-figure;
-x = start_point:20:end_point;
-coverage_matrix = [ones(1,length(coverage_matrix));coverage_matrix;coverage_matrix;coverage_matrix];
-h = plot(x,coverage_matrix);
-h(1).Marker = 'o';
-h(2).Marker = '*';
-h(3).Marker = 's';
-h(4).Marker = 'd';
-xlabel('Number of nodes');
-ylabel('Coverage');
-legend('kick','kick\_kalman','kick\_kalman\_2nodes','DV-distance','N-hop-lateration','IWLSE','CRLB');

@@ -100,6 +100,21 @@ global sched_array; %sorted global schedule array
     end
     avg_connectivity = connectivity_counter/NUM_NODE;
 
+    %{
+    % take a look at the generated topology
+     for i=1:NUM_NODE
+        if i<round(NUM_NODE*BEACON_RATIO)+1
+            plot(Node(i).pos(1),Node(i).pos(2),'ko','MarkerFace','g','MarkerSize',8);
+        else
+            plot(Node(i).pos(1),Node(i).pos(2),'ko','MarkerFace','r','MarkerSize',8);
+        end
+        %text(Node(i).pos(1)+2,Node(i).pos(2),strcat('Node',num2str(i)));
+        text(Node(i).pos(1)+1,Node(i).pos(2),num2str(i),'FontWeight','bold');
+     end
+     set(gca, 'FontSize', 16,'XTick',0:20:100,'YTick',0:20:100);
+     exportfig(gcf,'dense_topo.eps','height',6,'Width',8,'fontmode','Scaled', 'color', 'rgb');
+    %}
+    
     % establish dv_vector for each node.
     %the system runs
     flops(0); %%start global flop count at 0
@@ -128,18 +143,7 @@ global sched_array; %sorted global schedule array
    
 
     
-%{
-% take a look at the generated topology
- for i=1:NUM_NODE
-    if i<round(NUM_NODE*BEACON_RATIO)+1
-        plot(Node(i).pos(1),Node(i).pos(2),'ko','MarkerFace','g','MarkerSize',8);
-    else
-        plot(Node(i).pos(1),Node(i).pos(2),'ko','MarkerFace','r','MarkerSize',8);
-    end
-    %text(Node(i).pos(1)+2,Node(i).pos(2),strcat('Node',num2str(i)));
-    text(Node(i).pos(1)+1,Node(i).pos(2),num2str(i),'FontWeight','bold');
- end
-%}
+
 
 
 

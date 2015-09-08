@@ -55,7 +55,7 @@ function [average_loc_error,std_loc_error, coverage,tol_flop,break_stage,tol_msg
     
     % Refinement phase: well-determined unknowns using neighbor info. to
     % localize, using least-square
-    for time = 0:STAGE_NUMBER
+    for time = 1:STAGE_NUMBER
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % this part solely for msg collection purpose.

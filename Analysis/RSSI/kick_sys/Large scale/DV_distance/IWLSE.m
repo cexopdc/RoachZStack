@@ -110,7 +110,7 @@ function [average_loc_error, std_loc_error, coverage,tol_flop,break_stage,tol_ms
     end
     avg_loc_error_prev = mean(loc_error_prev);
     
-    for time = 0:STAGE_NUMBER
+    for time = 1:STAGE_NUMBER
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % this part solely for msg collection purpose.
