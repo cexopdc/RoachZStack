@@ -53,6 +53,7 @@ global settings data fullData status
         fullData = [fullData, newData];     
         status.close_flag = 1;
     end 
+        
 end
 
 function cleanup()
