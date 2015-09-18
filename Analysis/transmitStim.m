@@ -1,4 +1,4 @@
-port = serial('COM13','BaudRate',115200);
+port = serial('COM4','BaudRate',115200);
 fopen(port);
 
 % STIMULATION TRANSMIT SECTION

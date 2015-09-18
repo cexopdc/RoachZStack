@@ -138,7 +138,7 @@ if iscell(strings)
 else
   curstring = strings(curval, :);  %char array
 end
-transmitADC('500')
+transmitADC('0000') % MUS TX 4 DIGITS 0100
 numMics = str2num(get(handles.num, 'String'));
 plotMics(curstring, handles, numMics);
 

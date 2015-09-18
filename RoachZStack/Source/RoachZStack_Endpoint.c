@@ -439,12 +439,14 @@ void RoachZStack_ProcessMSGCmd( afIncomingMSGPacket_t *pkt )
     
     if (pkt->cmd.Data[1] == 'Y') // X signifies stimulation
     {
+#ifdef AUDIO
         ADC_command = parseADCCommand(pkt->cmd.Data+1, pkt->cmd.DataLength-1);
         ADC_SetCommand(ADC_command);
         if (ADC_command != NULL)
         {
           osal_set_event(RoachZStack_TaskID, RZS_ADC_READ );
         }
+#endif
     }
     
     default:

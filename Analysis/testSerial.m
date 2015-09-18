@@ -2,11 +2,11 @@ clear all;
 close all;
 delete(instrfindall);
 
-transmitADC('0100')
+transmitADC('0001')
 settings = {}
 
 % fclose(instrfind)
-port = serial('COM13','BaudRate',115200, 'FlowControl', 'hardware');
+port = serial('COM4','BaudRate',115200, 'FlowControl', 'hardware');
 fopen(port);
 
 inputs = 4;
