@@ -72,6 +72,8 @@ uint8 Stimulator_TaskID;    // Task ID for internal task/event processing.
 static stimCommand* command = NULL;
 
 static void stimulate(uint8 direction);
+static void n_stimulate(uint8 direction);
+static void p_stimulate(uint8 direction);
 static void stopStimulate(void);
 
 #ifdef VOLT_MONITOR
@@ -127,9 +129,9 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
     if (command != NULL && command->repeats > 0 && command->totalCount > 0 && command->stim == 1)
     {
 #ifdef BIPHASIC_STIM
-      BICLK_SBIT = 0;
+      //BICLK_SBIT = 0;
 #endif
-      stimulate(command->direction);
+      p_stimulate(command->direction);
 #ifdef VOLT_MONITOR
       measureVoltage();
 #endif
@@ -169,9 +171,9 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
     if (command != NULL)
     {
 #ifdef BIPHASIC_STIM
-      BICLK_SBIT = 1;
+      //BICLK_SBIT = 1;
 #endif
-      stimulate(command->direction);
+      n_stimulate(command->direction);
       osal_start_timerEx( Stimulator_TaskID, ROACHZSTACK_NSTIM_STOP, command->negOn); 
     }
     return ( events ^ ROACHZSTACK_NSTIM_START );
@@ -180,7 +182,7 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
   if ( events & ROACHZSTACK_NSTIM_STOP )
   {
 #ifdef BIPHASIC_STIM
-    BICLK_SBIT = 0;
+    //BICLK_SBIT = 0;
 #endif
     stopStimulate();
     if (command != NULL && command->repeats > 0 && command->stim == 1)
@@ -213,6 +215,25 @@ static void stopStimulate(void)
   BICLK_SBIT = 0;
 }
 
+static void p_stimulate(uint8 direction)
+{
+  switch(direction)
+  {
+  case 'P':
+    LEFT_1_SBIT = 1;
+    BICLK_SBIT = 0; // used for negative stimulation
+  }
+}
+
+static void n_stimulate(uint8 direction)
+{
+  switch(direction)
+  {
+  case 'P':
+    LEFT_1_SBIT = 0;
+    BICLK_SBIT = 1; // used for negative stimulation
+  }
+}
 static void stimulate(uint8 direction)
 {
   switch (direction)

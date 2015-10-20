@@ -2,7 +2,7 @@ clear all;
 close all;
 delete(instrfindall);
 
-transmitADC('0001')
+transmitADC('0500')
 settings = {}
 
 % fclose(instrfind)

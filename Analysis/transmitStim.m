@@ -11,7 +11,7 @@ negOffTime = '0050';
 posOffTime = negOffTime;
 stimCycleCount = '0003'; % numer of positive/neg stimulations
 silenceTime = '1000';
-totalCycleCount = '0005';
+totalCycleCount = '0010';
 amplitude = 2; % will not be used for this iteration
 
 type = 'X'; % Y for ADC, X for stimulation
