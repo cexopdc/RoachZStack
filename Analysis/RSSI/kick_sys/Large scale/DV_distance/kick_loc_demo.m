@@ -17,6 +17,7 @@ function [loc_error,tol_flop,break_stage,tol_msg_sent,tol_bytes_sent,myMovie]=ki
     global STD_INITIAL;
     STD_INITIAL = 10000;   % initial std for unknown
     global FLOP_COUNT_FLAG;
+    global time;
     flops(0); %%start global flop count at 0
     
     % set nodes est coordinates, time scheduling
@@ -129,7 +130,7 @@ function myMovie = broadcast(A,myMovie)
     global h_est;
     global frame_index;
     global PAUSE_TIME;
-    set(h(A.id),'XData',A.pos(1),'YData',A.pos(2),'MarkerSize',18,'LineWidth',2)
+    set(h(A.id),'XData',A.pos(1),'YData',A.pos(2),'MarkerSize',40,'LineWidth',2)
     drawnow;
      pause(PAUSE_TIME)
      thisFrame = getframe(gcf);
@@ -152,12 +153,12 @@ function myMovie = broadcast(A,myMovie)
             %wgn_dist = DIST(A,Node(neighbor_index));
             
             %show on figure, that neighbor received broadcast.
-            set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',14)
+            set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',34)
             tmp_color = get(h_est(neighbor_index),'MarkerFace');
-            h_circle_tmp = circle(Node(neighbor_index).est_pos,3*Node(neighbor_index).std,360,':');
+            h_circle_tmp = circle(Node(neighbor_index),Node(neighbor_index).est_pos,3*Node(neighbor_index).std,360,':');
             set(h_circle_tmp,'Color',tmp_color);
             tmp_pos = Node(neighbor_index).est_pos;
-            h_tmp = plot(Node(neighbor_index).est_pos(1),Node(neighbor_index).est_pos(2),'kx','MarkerEdgeColor',tmp_color,'MarkerSize',14);
+            h_tmp = plot(Node(neighbor_index).est_pos(1),Node(neighbor_index).est_pos(2),'kx','MarkerEdgeColor',tmp_color,'MarkerSize',34);
             drawnow;
              pause(PAUSE_TIME)
              thisFrame = getframe(gcf);
@@ -170,9 +171,9 @@ function myMovie = broadcast(A,myMovie)
            % show on figure, the update result.
             if ~isequal(tmp_pos',Node(neighbor_index).est_pos')
                 h_arrow = arrow(tmp_pos',Node(neighbor_index).est_pos','Length',10);
-                set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',14);
+                set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',34);
                 
-                h_circle = circle(Node(neighbor_index).est_pos,3*Node(neighbor_index).std,360,':');
+                h_circle = circle(Node(neighbor_index),Node(neighbor_index).est_pos,3*Node(neighbor_index).std,360,':');
                 set(h_circle,'Color',tmp_color);
                 drawnow;
                  pause(PAUSE_TIME)
@@ -184,12 +185,12 @@ function myMovie = broadcast(A,myMovie)
                  
                 % after update, neighbor back to norm, delete arrow and
                 % previous node estimation
-                set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',10)
+                set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',28)
          
                 delete(h_arrow);
                 delete(h_circle);
             else
-                set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',10)
+                set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',28)
                
             end
             delete(h_tmp);
@@ -205,7 +206,7 @@ function myMovie = broadcast(A,myMovie)
         end
     end
     % after broadcast, A back to norm
-    set(h(A.id),'XData',A.pos(1),'YData',A.pos(2),'MarkerSize',8)
+    set(h(A.id),'XData',A.pos(1),'YData',A.pos(2),'MarkerSize',28)
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -225,12 +226,20 @@ function A = intuitive_update_loc(A,B,d)
             addflops(2);
         end
         if B.std ~= STD_INITIAL % if B also has no est, do nothing
+            %{
             A.est_pos = B.est_pos;
             % set std_d = DIS_STD_RATIO*d
             A.std = sqrt((B.std)^2 + d^2 + (DIS_STD_RATIO*d)^2);
             if FLOP_COUNT_FLAG == 1
                 addflops(flops_sqrt + 3*flops_pow + 2);
             end
+            %}
+            kick = intuitive_cal_kick(A,B,d);
+            A.est_pos = A.est_pos + kick.pos;
+            if FLOP_COUNT_FLAG == 1
+                addflops(1);
+            end
+            A.std = kick.std;
         end
     % if A has an est already, it will add a kick factor to its current est.
     else

@@ -1,4 +1,4 @@
-function H=circle(center,radius,NOP,style)
+function H=circle(A,center,radius,NOP,style)
 %---------------------------------------------------------------------------------------------
 % H=CIRCLE(CENTER,RADIUS,NOP,STYLE)
 % This routine draws a circle with center defined as
@@ -17,12 +17,21 @@ function H=circle(center,radius,NOP,style)
 %   Version 1.00
 %   December, 2002
 %---------------------------------------------------------------------------------------------
-
+global time;
 if (nargin <3),
  error('Please see help for INPUT DATA.');
 elseif (nargin==3)
     style='b-';
 end;
+%if radius/3 > 1
+if time < 7
+    radius = radius*(1 + 1/time);
+elseif A.id == 4
+    radius = radius*(1.2 - time/20);
+elseif A.id == 5
+    radius = radius*(1 + 1/time);
+end
+    
 THETA=linspace(0,2*pi,NOP);
 RHO=ones(1,NOP)*radius;
 [X,Y] = pol2cart(THETA,RHO);

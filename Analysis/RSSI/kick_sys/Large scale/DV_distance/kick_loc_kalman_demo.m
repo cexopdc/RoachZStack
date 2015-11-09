@@ -4,7 +4,7 @@
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [loc_error,tol_flop,break_stage,tol_msg_sent,tol_bytes_sent,myMovie]=kick_loc_kalman_demo(myMovie)
-    global Length;
+     global Length;
     global Width;
     global NUM_NODE;
     global Node;
@@ -121,7 +121,7 @@ function myMovie = broadcast(A,myMovie)
     global h_est;
     global frame_index;
     global PAUSE_TIME;
-    set(h(A.id),'XData',A.pos(1),'YData',A.pos(2),'MarkerSize',18,'LineWidth',2)
+    set(h(A.id),'XData',A.pos(1),'YData',A.pos(2),'MarkerSize',40,'LineWidth',2)
     drawnow;
      pause(PAUSE_TIME)
      thisFrame = getframe(gcf);
@@ -142,7 +142,7 @@ function myMovie = broadcast(A,myMovie)
             %wgn_dist = DIST(A,Node(neighbor_index)); 
             
             %show on figure, that neighbor received broadcast.
-            set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',14)
+            set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',34)
             
             
             tmp_color = get(h_est(neighbor_index),'MarkerFace');
@@ -151,7 +151,7 @@ function myMovie = broadcast(A,myMovie)
             set(h_circle_tmp,'Color',tmp_color);
             
             tmp_pos = Node(neighbor_index).est_pos;
-            h_tmp = plot(Node(neighbor_index).est_pos(1),Node(neighbor_index).est_pos(2),'kx','MarkerEdgeColor',tmp_color,'MarkerSize',14);
+            h_tmp = plot(Node(neighbor_index).est_pos(1),Node(neighbor_index).est_pos(2),'kx','MarkerEdgeColor',tmp_color,'MarkerSize',34);
             drawnow;
              pause(PAUSE_TIME)
              thisFrame = getframe(gcf);
@@ -165,7 +165,7 @@ function myMovie = broadcast(A,myMovie)
             % show on figure, the update result.
             if ~isequal(tmp_pos',Node(neighbor_index).est_pos')
                 h_arrow = arrow(tmp_pos',Node(neighbor_index).est_pos','Length',10);
-                set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',14);
+                set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',34);
                 
                 % plot the new ellipse std.
                 h_circle = ellipse(Node(neighbor_index));
@@ -182,12 +182,12 @@ function myMovie = broadcast(A,myMovie)
                  
                 % after update, neighbor back to norm, delete arrow and
                 % previous node estimation
-                set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',10)
+                set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',28)
          
                 delete(h_arrow);
                 delete(h_circle);
             else
-                set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',10)
+                set(h_est(neighbor_index),'XData',Node(neighbor_index).est_pos(1),'YData',Node(neighbor_index).est_pos(2),'MarkerSize',28)
                
             end
             delete(h_tmp);
@@ -203,7 +203,7 @@ function myMovie = broadcast(A,myMovie)
         end
     end
     % after broadcast, A back to norm
-    set(h(A.id),'XData',A.pos(1),'YData',A.pos(2),'MarkerSize',8)
+    set(h(A.id),'XData',A.pos(1),'YData',A.pos(2),'MarkerSize',28)
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -223,12 +223,22 @@ function A = kalman_update_loc(A,B,d)
             addflops(4*2);
         end
         if (~isequal(B.cov,COV_INITIAL)) % if B also has no est, do nothing
+            %{
             A.est_pos = B.est_pos;
     % set cov_d=(DIS_STD_RATIO * d)^2, hence in accordance with std_d = DIS_STD_RATIO * d
             A.cov = B.cov + [d^2 0;0 d^2] + [(DIS_STD_RATIO * d)^2 0;0 (DIS_STD_RATIO * d)^2];
             if FLOP_COUNT_FLAG == 1
                 addflops(2*flops_pow + 4*2);
             end
+            %}
+            kick = kalman_cal_kick(A,B,d);
+            A.est_pos = A.est_pos + kick.pos;
+            if FLOP_COUNT_FLAG == 1
+                addflops(4);
+            end
+            A.cov = kick.cov;
+            A.cov = B.cov + [d^2 0;0 d^2] + [(DIS_STD_RATIO * d)^2 0;0 (DIS_STD_RATIO * d)^2];
+            %}
         end
 
     % if A has an est already, it will add a kick factor to its current est.

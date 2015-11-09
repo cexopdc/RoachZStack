@@ -3,7 +3,7 @@ delete 'mean_std_1m.txt';
 for i=0:20:360
     if i~= 360
         input = load(strcat('1m_',num2str(i),'degree.txt'));
-        input = input(1:1000,:);
+        input = input(1:500,:);
 
         mean_rssi = mean(input);
         std_rssi = std(input);
@@ -15,7 +15,7 @@ for i=0:20:360
         dlmwrite('mean_std_1m.txt', mean_std, 'delimiter','', '-append');
     else
         input = load(strcat('1m_0degree.txt'));
-        input = input(1:1000,:);
+        input = input(1:500,:);
 
         mean_rssi = mean(input);
         std_rssi = std(input);
@@ -41,14 +41,13 @@ min_std = min(rho_std)
 figure
 subplot(1,2,1)
 %set the range of the mean in the polar plot
-Range_mean = [-80 -45];
+Range_mean = [-80 -55];
 
 H = polar2(theta,rho_mean,Range_mean);
 H.LineWidth = 1.75;
 lh=legend('mean');
 set(lh,'location', 'Best');
 title('Polar plot of mean rssi','FontSize',14)
-exportfig(gcf,'6h_trace_cesp_compare_others.eps','height',6,'Width',8,'fontmode','Scaled', 'color', 'rgb');
 
 hold on
 subplot(1,2,2)
@@ -59,6 +58,8 @@ lh=legend('std');
 set(lh,'location', 'Best');
 %set(lh,'FontSize',18);
 title('Polar plot of rssi std','FontSize',14)
+exportfig(gcf,'radiation_pattern_grass.eps'...
+    ,'height',6,'Width',8,'fontmode','Scaled', 'color', 'rgb');
 
 figure
 x = 0:20:360;

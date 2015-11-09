@@ -1,4 +1,4 @@
 clear all;close all;
-for i=14:1:30
+for i=1:1:10
     demo_main(i);
 end

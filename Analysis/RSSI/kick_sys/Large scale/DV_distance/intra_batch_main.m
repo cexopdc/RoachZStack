@@ -61,8 +61,7 @@ aggregate_KK2_iteration_coverage_3_more_beacon = [];
 
 for i=1:num_trials
     fprintf('i=%f\n',i);
-    [loc_error_kick, loc_error_kick_kalman, loc_error_kick_kalman_2nodes,connectivity_counter] = intra_main(30,0.2,0.2); %%%%%%%
-    
+    [loc_error_kick, loc_error_kick_kalman, loc_error_kick_kalman_2nodes,connectivity_counter] = intra_main(1,30,100,20,0.2,0.2); %%%%%%%
     aggregate_error_kick_0_beacon=[aggregate_error_kick_0_beacon loc_error_kick.loc_error_0_beacon];
     aggregate_error_kick_1_beacon=[aggregate_error_kick_1_beacon loc_error_kick.loc_error_1_beacon];
     aggregate_error_kick_2_beacon=[aggregate_error_kick_2_beacon loc_error_kick.loc_error_2_beacon];

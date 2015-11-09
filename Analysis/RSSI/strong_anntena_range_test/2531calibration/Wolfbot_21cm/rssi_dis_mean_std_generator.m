@@ -4,11 +4,12 @@ dist_rssi_aggr=[];
 
 %i=[0.3:0.3:5.1 6.0:0.9:15.0 18.0:3.0:66.0];
 %i=[0.3:0.3:5.1 6.0:0.9:15.0 18.0:3.0:30.0];
-for i = 0.2:0.2:3.0
+%for i = 0.2:0.2:3.0
+for i = 0.2:0.2:4.4
     for j=1:1:5
         input = load(strcat(sprintf('%0.1f',i),'m_',num2str(j),'.txt'));
-        input = input(1:1000,:);
-        current_dist_rssi = [i*ones(1000,1) input];
+        input = input(1:500,:);
+        current_dist_rssi = [i*ones(500,1) input];
         dist_rssi_aggr = [dist_rssi_aggr;current_dist_rssi];
     end
 end
@@ -35,6 +36,7 @@ end
 max_rssi = max(sorted_dist_rssi_aggr(:,2))
 min_rssi = min(sorted_dist_rssi_aggr(:,2))
 
+delete dist_mean_std_diff_rssi.txt
 for i = rssi_list 
     current_dist_rssi = load(strcat('dist_rssi_',sprintf('%0.1f',i),'.txt'));
     mean_dist = mean(current_dist_rssi(:,1));

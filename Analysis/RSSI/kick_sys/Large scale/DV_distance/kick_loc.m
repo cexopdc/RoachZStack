@@ -157,12 +157,20 @@ function A = intuitive_update_loc(A,B,d)
             addflops(2);
         end
         if B.std ~= STD_INITIAL % if B also has no est, do nothing
+            %{
             A.est_pos = B.est_pos;
             % set std_d = DIS_STD_RATIO*d
             A.std = sqrt((B.std)^2 + d^2 + (DIS_STD_RATIO*d)^2);
             if FLOP_COUNT_FLAG == 1
                 addflops(flops_sqrt + 3*flops_pow + 2);
             end
+            %}
+            kick = intuitive_cal_kick(A,B,d);
+            A.est_pos = A.est_pos + kick.pos;
+            if FLOP_COUNT_FLAG == 1
+                addflops(1);
+            end
+            A.std = kick.std;
         end
     % if A has an est already, it will add a kick factor to its current est.
     else

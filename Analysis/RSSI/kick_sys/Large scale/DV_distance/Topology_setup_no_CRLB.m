@@ -81,8 +81,8 @@ global sched_array; %sorted global schedule array
     end
 
     %calculate neighbor array, and calculate connectivity
-    %figure
-    %hold on;box on;axis([0 Length 0 Width]); %the frame of the plot
+    figure
+    hold on;box on;axis([0 Length 0 Width]); %the frame of the plot
     connectivity_counter = 0;
     for i=1:NUM_NODE
         Node(i).neighbor = []; %initialize the neighbor array
@@ -94,13 +94,13 @@ global sched_array; %sorted global schedule array
 
                 Node(i).neighbor = [Node(i).neighbor j];
                 % draw a line between neighbor nodes on the plot
-                %line([Node(i).pos(1),Node(j).pos(1)],[Node(i).pos(2),Node(j).pos(2)],'Color','k','LineStyle',':'); 
+                line([Node(i).pos(1),Node(j).pos(1)],[Node(i).pos(2),Node(j).pos(2)],'Color','k','LineStyle',':'); 
             end
         end
     end
     avg_connectivity = connectivity_counter/NUM_NODE;
 
-    %{
+    %
     % take a look at the generated topology
      for i=1:NUM_NODE
         if i<round(NUM_NODE*BEACON_RATIO)+1
@@ -112,7 +112,7 @@ global sched_array; %sorted global schedule array
         text(Node(i).pos(1)+1,Node(i).pos(2),num2str(i),'FontWeight','bold');
      end
      set(gca, 'FontSize', 16,'XTick',0:20:100,'YTick',0:20:100);
-     exportfig(gcf,'dense_topo.eps','height',6,'Width',8,'fontmode','Scaled', 'color', 'rgb');
+     %exportfig(gcf,'dense_topo.eps','height',6,'Width',8,'fontmode','Scaled', 'color', 'rgb');
     %}
     
     % establish dv_vector for each node.

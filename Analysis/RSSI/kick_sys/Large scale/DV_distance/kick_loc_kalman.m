@@ -147,12 +147,20 @@ function A = kalman_update_loc(A,B,d)
             addflops(4*2);
         end
         if (~isequal(B.cov,COV_INITIAL)) % if B also has no est, do nothing
+            %{
             A.est_pos = B.est_pos;
     % set cov_d=(DIS_STD_RATIO * d)^2, hence in accordance with std_d = DIS_STD_RATIO * d
             A.cov = B.cov + [d^2 0;0 d^2] + [(DIS_STD_RATIO * d)^2 0;0 (DIS_STD_RATIO * d)^2];
             if FLOP_COUNT_FLAG == 1
                 addflops(2*flops_pow + 4*2);
             end
+            %}
+            kick = kalman_cal_kick(A,B,d);
+            A.est_pos = A.est_pos + kick.pos;
+            if FLOP_COUNT_FLAG == 1
+                addflops(4);
+            end
+            A.cov = kick.cov;
         end
 
     % if A has an est already, it will add a kick factor to its current est.
