@@ -10,7 +10,8 @@ try
 catch
 end
 close all;
-USBport = '/dev/ttyUSB0';%'/dev/ttyUSB0' or 'COM1';
+%USBport = '/dev/ttyUSB0';%'/dev/ttyUSB0' or 'COM1';
+USBport = '/dev/tty.usbserial-A5006u7j';
 port=serial(USBport);
 %Set serial properties according to the Contiki-doc.
 port.BaudRate=115200;

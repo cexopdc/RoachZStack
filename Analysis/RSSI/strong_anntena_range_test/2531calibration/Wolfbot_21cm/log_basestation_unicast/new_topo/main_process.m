@@ -106,4 +106,24 @@ final_mean_error = mean(final_error_array,2);
 final_error_mean_offline = final_mean_error(2,1);
 %
 
+%Graphical result with mean and std
+figure
+hold on;box on;axis([-2 5 -2 5]); %the frame of the plot
+ for i=1:NUM_NODE
+    if i<round(NUM_NODE*BEACON_RATIO)+1
+        h1 = plot(Node(i).x,Node(i).y,'ko','MarkerFace','g','MarkerSize',8);
+    else
+        h2 = plot(Node(i).x,Node(i).y,'ko','MarkerFace','r','MarkerSize',8);
+        plot(Node(i).est_x,Node(i).est_y,'kx');
+        line([Node(i).x,Node(i).est_x],[Node(i).y,Node(i).est_y],'Color','k','LineStyle',':'); 
+        %circle([Node(i).est_x,Node(i).est_y],3*Node(i).std,1000,'k:');
+    end
+    %text(Node(i).pos(1)+2,Node(i).pos(2),strcat('Node',num2str(i)));
+    %text(Node(i).x+0.05,Node(i).y,strcat('Node',num2str(i),' (',num2str(Node(i).x),',',num2str(Node(i).y),')'),'FontWeight','bold');
+    text(Node(i).x+0.05,Node(i).y,num2str(i));
+ end
+ legend([h1,h2],'beacon','unknown');
+ filename = strcat('final_mean_result_topo',num2str(topo),'_method',num2str(mapping_method));
+ exportfig(gcf,strcat('final_mean_std_result/',filename,'.eps'),'height',6,'Width',8,'fontmode','Scaled', 'color', 'rgb');
+
 end
