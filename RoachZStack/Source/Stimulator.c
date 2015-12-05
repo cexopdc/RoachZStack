@@ -92,10 +92,20 @@ static void measureVoltage(void);
 void Stimulator_Init( uint8 task_id )
 {
   Stimulator_TaskID = task_id;
+  NEG_STIM1_DDR |= NEG_STIM1_BV;
+  NEG_STIM2_DDR |= NEG_STIM2_BV;
+  NEG_STIM3_DDR |= NEG_STIM3_BV;
+  NEG_STIM4_DDR |= NEG_STIM4_BV;
+  
+  POS_STIM1_DDR |= POS_STIM1_BV;
+  POS_STIM2_DDR |= POS_STIM2_BV;
+  POS_STIM3_DDR |= POS_STIM3_BV;
+  POS_STIM4_DDR |= POS_STIM4_BV;
+  /*
   LEFT_1_DDR |= LEFT_1_BV;
   RIGHT_1_DDR |= RIGHT_1_BV;
   LEFT_2_DDR |= LEFT_2_BV;
-  RIGHT_2_DDR |= RIGHT_2_BV;
+  RIGHT_2_DDR |= RIGHT_2_BV;*/
 
 // not used for our project  
 #if defined IMPEDANCE && (defined BIPHASIC_STIM || defined VOLT_MONITOR)
@@ -208,32 +218,244 @@ uint16 Stimulator_ProcessEvent( uint8 task_id, uint16 events )
 
 static void stopStimulate(void)
 {
-  LEFT_1_SBIT = 0;
+      NEG_STIM1_SBIT = 0;
+      NEG_STIM2_SBIT = 0;
+      NEG_STIM3_SBIT = 0;
+      NEG_STIM4_SBIT = 0;
+      
+      POS_STIM1_SBIT = 0;
+      POS_STIM2_SBIT = 0;
+      POS_STIM3_SBIT = 0;
+      POS_STIM4_SBIT = 0;      
+  /*LEFT_1_SBIT = 0;
   RIGHT_1_SBIT = 0;
   LEFT_2_SBIT = 0;
   RIGHT_2_SBIT = 0;
-  BICLK_SBIT = 0;
+  BICLK_SBIT = 0; */
 }
 
 static void p_stimulate(uint8 direction)
 {
+      NEG_STIM1_SBIT = 0;
+      NEG_STIM2_SBIT = 0;
+      NEG_STIM3_SBIT = 0;
+      NEG_STIM4_SBIT = 0;
   switch(direction)
   {
-  case 'P':
-    LEFT_1_SBIT = 1;
-    BICLK_SBIT = 0; // used for negative stimulation
+    case 'A':
+      POS_STIM1_SBIT = 0;
+      POS_STIM2_SBIT = 0;
+      POS_STIM3_SBIT = 0;
+      POS_STIM4_SBIT = 0;
+      break;
+    case 'B':
+      POS_STIM1_SBIT = 1;
+      POS_STIM2_SBIT = 0;
+      POS_STIM3_SBIT = 0;
+      POS_STIM4_SBIT = 0;
+      break;
+    case 'C':
+      POS_STIM1_SBIT = 0;
+      POS_STIM2_SBIT = 1;
+      POS_STIM3_SBIT = 0;
+      POS_STIM4_SBIT = 0;
+      break;
+     case 'D':
+      POS_STIM1_SBIT = 1;
+      POS_STIM2_SBIT = 1;
+      POS_STIM3_SBIT = 0;
+      POS_STIM4_SBIT = 0;
+      break;
+     case 'E':
+      POS_STIM1_SBIT = 0;
+      POS_STIM2_SBIT = 0;
+      POS_STIM3_SBIT = 1;
+      POS_STIM4_SBIT = 0;
+      break;
+    case 'F':
+      POS_STIM1_SBIT = 1;
+      POS_STIM2_SBIT = 0;
+      POS_STIM3_SBIT = 1;
+      POS_STIM4_SBIT = 0;
+      break;
+    case 'G':
+      POS_STIM1_SBIT = 0;
+      POS_STIM2_SBIT = 1;
+      POS_STIM3_SBIT = 1;
+      POS_STIM4_SBIT = 0;
+      break;
+     case 'H':
+      POS_STIM1_SBIT = 1;
+      POS_STIM2_SBIT = 1;
+      POS_STIM3_SBIT = 1;
+      POS_STIM4_SBIT = 0;
+      break;
+    case 'I':
+      POS_STIM1_SBIT = 0;
+      POS_STIM2_SBIT = 0;
+      POS_STIM3_SBIT = 0;
+      POS_STIM4_SBIT = 1;
+      break;
+    case 'J':
+      POS_STIM1_SBIT = 1;
+      POS_STIM2_SBIT = 0;
+      POS_STIM3_SBIT = 0;
+      POS_STIM4_SBIT = 1;
+      break;
+    case 'K':
+      POS_STIM1_SBIT = 0;
+      POS_STIM2_SBIT = 1;
+      POS_STIM3_SBIT = 0;
+      POS_STIM4_SBIT = 1;
+      break;
+     case 'L':
+      POS_STIM1_SBIT = 1;
+      POS_STIM2_SBIT = 1;
+      POS_STIM3_SBIT = 0;
+      POS_STIM4_SBIT = 1;
+      break;
+    case 'M':
+      POS_STIM1_SBIT = 0;
+      POS_STIM2_SBIT = 0;
+      POS_STIM3_SBIT = 1;
+      POS_STIM4_SBIT = 1;
+      break;
+    case 'N':
+      POS_STIM1_SBIT = 1;
+      POS_STIM2_SBIT = 0;
+      POS_STIM3_SBIT = 1;
+      POS_STIM4_SBIT = 1;
+      break;
+    case 'O':
+      POS_STIM1_SBIT = 0;
+      POS_STIM2_SBIT = 1;
+      POS_STIM3_SBIT = 1;
+      POS_STIM4_SBIT = 1;
+      break;
+     case 'P':
+      POS_STIM1_SBIT = 1;
+      POS_STIM2_SBIT = 1;
+      POS_STIM3_SBIT = 1;
+      POS_STIM4_SBIT = 1;
+      break;
+    
+  //case 'P':
+    //LEFT_2_SBIT = 1;
+    //RIGHT_2_SBIT = 0; // used for negative stimulation
   }
 }
 
 static void n_stimulate(uint8 direction)
 {
+      POS_STIM1_SBIT = 0;
+      POS_STIM2_SBIT = 0;
+      POS_STIM3_SBIT = 0;
+      POS_STIM4_SBIT = 0;
   switch(direction)
   {
-  case 'P':
-    LEFT_1_SBIT = 0;
-    BICLK_SBIT = 1; // used for negative stimulation
+    case 'A':
+      NEG_STIM1_SBIT = 0;
+      NEG_STIM2_SBIT = 0;
+      NEG_STIM3_SBIT = 0;
+      NEG_STIM4_SBIT = 0;
+      break;
+    case 'B':
+      NEG_STIM1_SBIT = 1;
+      NEG_STIM2_SBIT = 0;
+      NEG_STIM3_SBIT = 0;
+      NEG_STIM4_SBIT = 0;
+      break;
+    case 'C':
+      NEG_STIM1_SBIT = 0;
+      NEG_STIM2_SBIT = 1;
+      NEG_STIM3_SBIT = 0;
+      NEG_STIM4_SBIT = 0;
+      break;
+     case 'D':
+      NEG_STIM1_SBIT = 1;
+      NEG_STIM2_SBIT = 1;
+      NEG_STIM3_SBIT = 0;
+      NEG_STIM4_SBIT = 0;
+      break;
+     case 'E':
+      NEG_STIM1_SBIT = 0;
+      NEG_STIM2_SBIT = 0;
+      NEG_STIM3_SBIT = 1;
+      NEG_STIM4_SBIT = 0;
+      break;
+    case 'F':
+      NEG_STIM1_SBIT = 1;
+      NEG_STIM2_SBIT = 0;
+      NEG_STIM3_SBIT = 1;
+      NEG_STIM4_SBIT = 0;
+      break;
+    case 'G':
+      NEG_STIM1_SBIT = 0;
+      NEG_STIM2_SBIT = 1;
+      NEG_STIM3_SBIT = 1;
+      NEG_STIM4_SBIT = 0;
+      break;
+     case 'H':
+      NEG_STIM1_SBIT = 1;
+      NEG_STIM2_SBIT = 1;
+      NEG_STIM3_SBIT = 1;
+      NEG_STIM4_SBIT = 0;
+      break;
+    case 'I':
+      NEG_STIM1_SBIT = 0;
+      NEG_STIM2_SBIT = 0;
+      NEG_STIM3_SBIT = 0;
+      NEG_STIM4_SBIT = 1;
+      break;
+    case 'J':
+      NEG_STIM1_SBIT = 1;
+      NEG_STIM2_SBIT = 0;
+      NEG_STIM3_SBIT = 0;
+      NEG_STIM4_SBIT = 1;
+      break;
+    case 'K':
+      NEG_STIM1_SBIT = 0;
+      NEG_STIM2_SBIT = 1;
+      NEG_STIM3_SBIT = 0;
+      NEG_STIM4_SBIT = 1;
+      break;
+     case 'L':
+      NEG_STIM1_SBIT = 1;
+      NEG_STIM2_SBIT = 1;
+      NEG_STIM3_SBIT = 0;
+      NEG_STIM4_SBIT = 1;
+      break;
+    case 'M':
+      NEG_STIM1_SBIT = 0;
+      NEG_STIM2_SBIT = 0;
+      NEG_STIM3_SBIT = 1;
+      NEG_STIM4_SBIT = 1;
+      break;
+    case 'N':
+      NEG_STIM1_SBIT = 1;
+      NEG_STIM2_SBIT = 0;
+      NEG_STIM3_SBIT = 1;
+      NEG_STIM4_SBIT = 1;
+      break;
+    case 'O':
+      NEG_STIM1_SBIT = 0;
+      NEG_STIM2_SBIT = 1;
+      NEG_STIM3_SBIT = 1;
+      NEG_STIM4_SBIT = 1;
+      break;
+     case 'P':
+      NEG_STIM1_SBIT = 1;
+      NEG_STIM2_SBIT = 1;
+      NEG_STIM3_SBIT = 1;
+      NEG_STIM4_SBIT = 1;
+      break;
+    
+  //case 'P':
+    //LEFT_2_SBIT = 0;
+    //RIGHT_2_SBIT = 1; // used for negative stimulation
   }
 }
+/*
 static void stimulate(uint8 direction)
 {
   switch (direction)
@@ -335,7 +557,7 @@ static void stimulate(uint8 direction)
       RIGHT_2_SBIT = 1;
       break;
   }
-}
+} */
 
 void Stimulator_SetCommand(stimCommand* data)
 {

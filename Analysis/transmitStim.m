@@ -1,13 +1,13 @@
-port = serial('COM4','BaudRate',115200);
+port = serial('COM3','BaudRate',115200);
 fopen(port);
 
 % STIMULATION TRANSMIT SECTION
 % transmit values in as 4 character (decimal) strings (for parse code to func)
 % pad with 0s at front if shorter value is required
 pinCombo = 'P'; 
-posOnTime = '0100'; % time for positive stimulation
-negOnTime = posOnTime;
-negOffTime = '0050';
+posOnTime = '0010'; % time for positive stimulation
+negOnTime = '0050';%posOnTime;
+negOffTime = '0010';
 posOffTime = negOffTime;
 stimCycleCount = '0003'; % numer of positive/neg stimulations
 silenceTime = '1000';

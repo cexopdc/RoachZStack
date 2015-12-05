@@ -1,7 +1,7 @@
 function transmitADC(adcTime)
 % transmit run time for cc2530 ADC
 % use 4 digit value
-port = serial('COM4','BaudRate',115200);
+port = serial('COM3','BaudRate',115200);
 fopen(port);
 
 type = 'Y'; % for the adc transmit 'Y'

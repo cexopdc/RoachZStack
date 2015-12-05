@@ -15,13 +15,46 @@ extern "C"
 #define ROACHZSTACK_NSTIM_START        0x0010
 #define ROACHZSTACK_NSTIM_STOP         0x0020
  
+#define POS_STIM4_DDR                         P1DIR
+#define POS_STIM4_BV                      BV(3)
+#define POS_STIM4_SBIT                    P1_3
+  
+#define NEG_STIM4_DDR                         P1DIR
+#define NEG_STIM4_BV                      BV(1)
+#define NEG_STIM4_SBIT                    P1_1  
+  
+#define POS_STIM3_DDR                         P1DIR
+#define POS_STIM3_BV                      BV(0)
+#define POS_STIM3_SBIT                    P1_0
+  
+#define NEG_STIM3_DDR                         P1DIR
+#define NEG_STIM3_BV                      BV(2)
+#define NEG_STIM3_SBIT                    P1_2  
+  
+#define POS_STIM2_DDR                         P0DIR
+#define POS_STIM2_BV                      BV(4)
+#define POS_STIM2_SBIT                    P0_4
+  
+#define NEG_STIM2_DDR                         P0DIR
+#define NEG_STIM2_BV                      BV(2)
+#define NEG_STIM2_SBIT                    P0_2  
+  
+#define POS_STIM1_DDR                         P0DIR
+#define POS_STIM1_BV                      BV(0)
+#define POS_STIM1_SBIT                    P0_0
+  
+#define NEG_STIM1_DDR                         P0DIR
+#define NEG_STIM1_BV                      BV(6)
+#define NEG_STIM1_SBIT                    P0_6   
+
+  /*
 #define LEFT_2_DDR                        P1DIR
-#define LEFT_2_BV                         BV(4)
-#define LEFT_2_SBIT                       P1_4 // 18.14
+#define LEFT_2_BV                         BV(3)
+#define LEFT_2_SBIT                       P1_3 
   
 #define RIGHT_2_DDR                       P1DIR
-#define RIGHT_2_BV                        BV(2)
-#define RIGHT_2_SBIT                      P1_2 // 20.18
+#define RIGHT_2_BV                        BV(1)
+#define RIGHT_2_SBIT                      P1_1 // 20.18
 
 #define LEFT_1_DDR                        P1DIR
 #define LEFT_1_BV                         BV(1)
@@ -34,7 +67,8 @@ extern "C"
 #define BICLK_DDR                         P1DIR
 #define BICLK_BV                          BV(0)
 #define BICLK_SBIT                        P1_0//20.04 //P2_1//P2_2//P0_4//P0_2//P0_6//P0_0//P2_0
-
+  
+*/
 // not needed for our project  
 #if defined(IMPEDANCE) && (defined(BIPHASIC_STIM) || defined(VOLT_MONITOR))
 #define BI_IMP_DDR                      P1DIR

@@ -6,7 +6,7 @@ transmitADC('0500')
 settings = {}
 
 % fclose(instrfind)
-port = serial('COM4','BaudRate',115200, 'FlowControl', 'hardware');
+port = serial('COM3','BaudRate',115200, 'FlowControl', 'hardware');
 fopen(port);
 
 inputs = 4;
