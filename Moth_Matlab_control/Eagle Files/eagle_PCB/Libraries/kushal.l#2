@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE eagle SYSTEM "eagle.dtd">
+<eagle version="7.1.0">
+<drawing>
+<settings>
+<setting alwaysvectorfont="no"/>
+<setting verticaltext="up"/>
+</settings>
+<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<layers>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="yes" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="yes" active="yes"/>
+<layer number="32" name="bCream" color="7" fill="5" visible="yes" active="yes"/>
+<layer number="33" name="tFinish" color="6" fill="3" visible="yes" active="yes"/>
+<layer number="34" name="bFinish" color="6" fill="6" visible="yes" active="yes"/>
+<layer number="35" name="tGlue" color="7" fill="4" visible="yes" active="yes"/>
+<layer number="36" name="bGlue" color="7" fill="5" visible="yes" active="yes"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="14" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
+<layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="93" name="Pins" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="94" name="Symbols" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="95" name="Names" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="96" name="Values" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
+</layers>
+<library>
+<packages>
+<package name="QFN-14">
+<wire x1="1.5" y1="1.25" x2="1.5" y2="-1.25" width="0.05" layer="21"/>
+<wire x1="1.5" y1="-1.25" x2="-1.5" y2="-1.25" width="0.05" layer="21"/>
+<wire x1="-1.5" y1="1.25" x2="-1.5" y2="-1.25" width="0.05" layer="21"/>
+<wire x1="-1.5" y1="1.25" x2="1.5" y2="1.25" width="0.05" layer="21"/>
+<smd name="O2" x="0" y="1.3" dx="0.9" dy="0.24" layer="1" rot="R90"/>
+<smd name="A3" x="0.5" y="1.3" dx="0.9" dy="0.24" layer="1" rot="R90"/>
+<smd name="B3" x="1" y="1.3" dx="0.9" dy="0.24" layer="1" rot="R90"/>
+<smd name="B2" x="-0.5" y="1.3" dx="0.9" dy="0.24" layer="1" rot="R90"/>
+<smd name="A2" x="-1" y="1.3" dx="0.9" dy="0.24" layer="1" rot="R90"/>
+<smd name="A1" x="0" y="-1.3" dx="0.9" dy="0.24" layer="1" rot="R90"/>
+<smd name="B1" x="0.5" y="-1.3" dx="0.9" dy="0.24" layer="1" rot="R90"/>
+<smd name="O1" x="1" y="-1.3" dx="0.9" dy="0.24" layer="1" rot="R90"/>
+<smd name="O_0" x="-0.5" y="-1.3" dx="0.9" dy="0.24" layer="1" rot="R90"/>
+<smd name="B0" x="-1" y="-1.3" dx="0.9" dy="0.24" layer="1" rot="R90"/>
+<smd name="P$11" x="-1" y="-1.3" dx="0.9" dy="0.24" layer="1" rot="R90"/>
+<smd name="VCC" x="-1.6" y="0.25" dx="0.9" dy="0.24" layer="1" rot="R180"/>
+<smd name="A0" x="-1.6" y="-0.25" dx="0.9" dy="0.24" layer="1" rot="R180"/>
+<smd name="O3" x="1.6" y="0.25" dx="0.9" dy="0.24" layer="1" rot="R180"/>
+<smd name="GND" x="1.6" y="-0.25" dx="0.9" dy="0.24" layer="1" rot="R180"/>
+<circle x="-0.88" y="-0.54" radius="0.14141875" width="0.05" layer="21"/>
+<text x="2.8" y="1.16" size="0.3048" layer="27" ratio="15">&gt;Value</text>
+<text x="2.8" y="1.79" size="0.3048" layer="27" ratio="15">&gt;Name</text>
+</package>
+<package name="QFN-12-HEATSINK">
+<smd name="BOUT1" x="0.25" y="0.925" dx="0.3" dy="0.7" layer="1"/>
+<smd name="BOUT2" x="0.75" y="0.925" dx="0.3" dy="0.7" layer="1"/>
+<smd name="AOUT2" x="-0.25" y="0.925" dx="0.3" dy="0.7" layer="1"/>
+<smd name="AOUT1" x="-0.75" y="0.925" dx="0.3" dy="0.7" layer="1"/>
+<smd name="GND" x="1.25" y="0.925" dx="0.3" dy="0.7" layer="1"/>
+<smd name="VM" x="-1.25" y="0.925" dx="0.3" dy="0.7" layer="1"/>
+<smd name="AIN2.AENBL" x="0.25" y="-0.925" dx="0.3" dy="0.7" layer="1"/>
+<smd name="BIN1/BPHASE" x="0.75" y="-0.925" dx="0.3" dy="0.7" layer="1"/>
+<smd name="AIN1/APHASE" x="-0.25" y="-0.925" dx="0.3" dy="0.7" layer="1"/>
+<smd name="MODE" x="-0.75" y="-0.925" dx="0.3" dy="0.7" layer="1"/>
+<smd name="BIN2/BENBL" x="1.25" y="-0.925" dx="0.3" dy="0.7" layer="1"/>
+<smd name="VCC" x="-1.25" y="-0.925" dx="0.3" dy="0.7" layer="1"/>
+<smd name="P$13" x="-1.425" y="0.25" dx="0.3" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$14" x="-1.425" y="-0.25" dx="0.3" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$15" x="1.425" y="0.25" dx="0.3" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$16" x="1.425" y="-0.25" dx="0.3" dy="0.7" layer="1" rot="R90"/>
+<wire x1="-1.5" y1="1" x2="1.5" y2="1" width="0.01" layer="21"/>
+<wire x1="-1.5" y1="-1" x2="-1.5" y2="1" width="0.01" layer="21"/>
+<wire x1="1.5" y1="-1" x2="-1.5" y2="-1" width="0.01" layer="21"/>
+<wire x1="1.5" y1="1" x2="1.5" y2="-1" width="0.01" layer="21"/>
+<circle x="-0.9" y="0.44" radius="0.1044" width="0.03" layer="21"/>
+<text x="2.22" y="1.32" size="0.254" layer="27" ratio="16">&gt;Value</text>
+<text x="2.19" y="0.72" size="0.254" layer="25" ratio="16">&gt;Name</text>
+</package>
+<package name="QFN-16">
+<wire x1="-1.4" y1="1.875" x2="1.4" y2="1.875" width="0.05" layer="21"/>
+<wire x1="2" y1="1.275" x2="2" y2="-1.275" width="0.05" layer="21"/>
+<smd name="VS" x="-0.975" y="1.95" dx="0.4" dy="0.7" layer="1"/>
+<smd name="OUT1" x="-0.325" y="1.95" dx="0.4" dy="0.7" layer="1"/>
+<smd name="OUT2" x="0.325" y="1.95" dx="0.4" dy="0.7" layer="1"/>
+<smd name="-VS" x="0.975" y="1.95" dx="0.4" dy="0.7" layer="1"/>
+<smd name="-IN2" x="2.05" y="0.975" dx="0.4" dy="0.7" layer="1" rot="R90"/>
+<smd name="RG2" x="2.05" y="0.325" dx="0.4" dy="0.7" layer="1" rot="R90"/>
+<smd name="RG2_B" x="2.05" y="-0.325" dx="0.4" dy="0.7" layer="1" rot="R90"/>
+<smd name="IN2" x="2.05" y="-0.975" dx="0.4" dy="0.7" layer="1" rot="R90"/>
+<smd name="-VS_B" x="0.975" y="-1.95" dx="0.4" dy="0.7" layer="1" rot="R180"/>
+<smd name="REF2" x="0.325" y="-1.95" dx="0.4" dy="0.7" layer="1" rot="R180"/>
+<smd name="REF1" x="-0.325" y="-1.95" dx="0.4" dy="0.7" layer="1" rot="R180"/>
+<smd name="VS_B" x="-0.975" y="-1.95" dx="0.4" dy="0.7" layer="1" rot="R180"/>
+<smd name="IN1" x="-2.05" y="-0.975" dx="0.4" dy="0.7" layer="1" rot="R270"/>
+<smd name="RG1_B" x="-2.05" y="-0.325" dx="0.4" dy="0.7" layer="1" rot="R270"/>
+<smd name="RG1" x="-2.05" y="0.325" dx="0.4" dy="0.7" layer="1" rot="R270"/>
+<smd name="-IN1" x="-2.05" y="0.975" dx="0.4" dy="0.7" layer="1" rot="R270"/>
+<text x="3.33" y="2.32" size="0.4" layer="27" ratio="15">&gt;Value</text>
+<text x="3.31" y="1.48" size="0.4" layer="25" ratio="15">&gt;Name</text>
+<circle x="-1.39" y="1.25" radius="0.05" width="0.127" layer="21"/>
+<wire x1="-2" y1="1.275" x2="-1.4" y2="1.875" width="0.05" layer="21"/>
+<wire x1="2" y1="1.275" x2="1.4" y2="1.875" width="0.05" layer="21"/>
+<wire x1="1.4" y1="-1.875" x2="-1.4" y2="-1.875" width="0.05" layer="21"/>
+<wire x1="1.4" y1="-1.875" x2="2" y2="-1.275" width="0.05" layer="21"/>
+<wire x1="-2" y1="1.275" x2="-2" y2="-1.275" width="0.05" layer="21"/>
+<wire x1="-1.4" y1="-1.875" x2="-2" y2="-1.275" width="0.05" layer="21"/>
+</package>
+</packages>
+<symbols>
+<symbol name="AND_QUAD">
+<description>QFN-14 quad package AND chip</description>
+<wire x1="-15.24" y1="12.7" x2="15.24" y2="12.7" width="0.254" layer="94"/>
+<wire x1="15.24" y1="12.7" x2="15.24" y2="-12.7" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-12.7" x2="-15.24" y2="-12.7" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="-12.7" x2="-15.24" y2="12.7" width="0.254" layer="94"/>
+<pin name="O2" x="0" y="20.32" visible="pin" direction="out" rot="R270"/>
+<pin name="A3" x="5.08" y="20.32" visible="pin" direction="in" rot="R270"/>
+<pin name="B3" x="10.16" y="20.32" visible="pin" direction="in" rot="R270"/>
+<pin name="B2" x="-5.08" y="20.32" visible="pin" direction="in" rot="R270"/>
+<pin name="A2" x="-10.16" y="20.32" visible="pin" direction="in" rot="R270"/>
+<pin name="O3" x="22.86" y="5.08" visible="pin" direction="out" rot="R180"/>
+<pin name="GND" x="22.86" y="-5.08" visible="pin" direction="pwr" rot="R180"/>
+<pin name="O1" x="10.16" y="-20.32" visible="pin" direction="out" rot="R90"/>
+<pin name="B1" x="5.08" y="-20.32" visible="pin" direction="in" rot="R90"/>
+<pin name="A1" x="0" y="-20.32" visible="pin" direction="in" rot="R90"/>
+<pin name="O_0" x="-5.08" y="-20.32" visible="pin" direction="out" rot="R90"/>
+<pin name="B0" x="-10.16" y="-20.32" visible="pin" direction="in" rot="R90"/>
+<pin name="A0" x="-22.86" y="-5.08" visible="pin" direction="in"/>
+<pin name="VCC" x="-22.86" y="5.08" visible="pin" direction="pwr"/>
+<text x="17.78" y="17.78" size="2.54" layer="96" ratio="16">&gt;Value</text>
+<text x="17.78" y="12.7" size="2.54" layer="95" ratio="16">&gt;Name</text>
+</symbol>
+<symbol name="XOR_QUAD">
+<description>QFN-14 quad package XOR chip</description>
+<wire x1="-20.32" y1="17.78" x2="20.32" y2="17.78" width="0.254" layer="94"/>
+<wire x1="20.32" y1="17.78" x2="20.32" y2="-17.78" width="0.254" layer="94"/>
+<wire x1="20.32" y1="-17.78" x2="-20.32" y2="-17.78" width="0.254" layer="94"/>
+<wire x1="-20.32" y1="-17.78" x2="-20.32" y2="17.78" width="0.254" layer="94"/>
+</symbol>
+<symbol name="DRV8835_HBRIDGE">
+<description>DRV8835 dual package h bridge motor driver</description>
+<wire x1="-27.94" y1="15.24" x2="-27.94" y2="-22.86" width="0.254" layer="94"/>
+<wire x1="-27.94" y1="-22.86" x2="25.4" y2="-22.86" width="0.254" layer="94"/>
+<wire x1="25.4" y1="-22.86" x2="25.4" y2="15.24" width="0.254" layer="94"/>
+<wire x1="25.4" y1="15.24" x2="-27.94" y2="15.24" width="0.254" layer="94"/>
+<pin name="VCC" x="-7.62" y="22.86" visible="pin" rot="R270"/>
+<pin name="VM" x="2.54" y="22.86" visible="pin" rot="R270"/>
+<pin name="AOUT1" x="33.02" y="7.62" visible="pin" rot="R180"/>
+<pin name="AOUT2" x="33.02" y="2.54" visible="pin" rot="R180"/>
+<pin name="BOUT1" x="33.02" y="-5.08" visible="pin" rot="R180"/>
+<pin name="BOUT2" x="33.02" y="-10.16" visible="pin" rot="R180"/>
+<pin name="GND" x="2.54" y="-30.48" visible="pin" rot="R90"/>
+<pin name="MODE" x="-35.56" y="-17.78" visible="pin"/>
+<pin name="BIN2/BENBL" x="-35.56" y="-10.16" visible="pin"/>
+<pin name="BIN1/BPHASE" x="-35.56" y="-5.08" visible="pin"/>
+<pin name="AIN2/AENBL" x="-35.56" y="2.54" visible="pin"/>
+<pin name="AIN1/APHASE" x="-35.56" y="7.62" visible="pin"/>
+<text x="10.16" y="17.78" size="2.54" layer="95" ratio="16">&gt;Name</text>
+<text x="12.7" y="-27.94" size="2.54" layer="96" ratio="16">&gt;Value</text>
+</symbol>
+<symbol name="AD8222_AMP">
+<wire x1="-25.4" y1="25.4" x2="25.4" y2="25.4" width="0.254" layer="94"/>
+<wire x1="25.4" y1="25.4" x2="25.4" y2="-25.4" width="0.254" layer="94"/>
+<wire x1="25.4" y1="-25.4" x2="-25.4" y2="-25.4" width="0.254" layer="94"/>
+<wire x1="-25.4" y1="-25.4" x2="-25.4" y2="25.4" width="0.254" layer="94"/>
+<pin name="-IN1" x="-33.02" y="15.24"/>
+<pin name="RG1" x="-33.02" y="5.08"/>
+<pin name="RG1_B" x="-33.02" y="-5.08"/>
+<pin name="IN1" x="-33.02" y="-15.24"/>
+<pin name="-IN2" x="33.02" y="15.24" rot="R180"/>
+<pin name="RG2" x="33.02" y="5.08" rot="R180"/>
+<pin name="RG2_B" x="33.02" y="-5.08" rot="R180"/>
+<pin name="+IN2" x="33.02" y="-15.24" rot="R180"/>
+<pin name="-VS_B" x="15.24" y="-33.02" rot="R90"/>
+<pin name="VS_B" x="-15.24" y="-33.02" rot="R90"/>
+<pin name="REF1" x="-5.08" y="-33.02" rot="R90"/>
+<pin name="REF2" x="5.08" y="-33.02" rot="R90"/>
+<pin name="+VS" x="-15.24" y="33.02" rot="R270"/>
+<pin name="OUT1" x="-5.08" y="33.02" rot="R270"/>
+<pin name="OUT2" x="5.08" y="33.02" rot="R270"/>
+<pin name="-VS" x="15.24" y="33.02" rot="R270"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="AND_QUAD">
+<description>Quad package SMD AND chip</description>
+<gates>
+<gate name="G$1" symbol="AND_QUAD" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="QFN-14">
+<connects>
+<connect gate="G$1" pin="A0" pad="A0"/>
+<connect gate="G$1" pin="A1" pad="A1"/>
+<connect gate="G$1" pin="A2" pad="A2"/>
+<connect gate="G$1" pin="A3" pad="A3"/>
+<connect gate="G$1" pin="B0" pad="B0"/>
+<connect gate="G$1" pin="B1" pad="B1"/>
+<connect gate="G$1" pin="B2" pad="B2"/>
+<connect gate="G$1" pin="B3" pad="B3"/>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="O1" pad="O1"/>
+<connect gate="G$1" pin="O2" pad="O2"/>
+<connect gate="G$1" pin="O3" pad="O3"/>
+<connect gate="G$1" pin="O_0" pad="O_0"/>
+<connect gate="G$1" pin="VCC" pad="VCC"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="DRV8835">
+<description>DRV8835 dual package motor driver H bridge</description>
+<gates>
+<gate name="G$1" symbol="DRV8835_HBRIDGE" x="2.54" y="5.08"/>
+</gates>
+<devices>
+<device name="" package="QFN-12-HEATSINK">
+<connects>
+<connect gate="G$1" pin="AIN1/APHASE" pad="AIN1/APHASE"/>
+<connect gate="G$1" pin="AIN2/AENBL" pad="AIN2.AENBL"/>
+<connect gate="G$1" pin="AOUT1" pad="AOUT1"/>
+<connect gate="G$1" pin="AOUT2" pad="AOUT2"/>
+<connect gate="G$1" pin="BIN1/BPHASE" pad="BIN1/BPHASE"/>
+<connect gate="G$1" pin="BIN2/BENBL" pad="BIN2/BENBL"/>
+<connect gate="G$1" pin="BOUT1" pad="BOUT1"/>
+<connect gate="G$1" pin="BOUT2" pad="BOUT2"/>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="MODE" pad="MODE"/>
+<connect gate="G$1" pin="VCC" pad="VCC"/>
+<connect gate="G$1" pin="VM" pad="VM"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="AD8222">
+<gates>
+<gate name="G$1" symbol="AD8222_AMP" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="QFN-16">
+<connects>
+<connect gate="G$1" pin="+IN2" pad="IN2"/>
+<connect gate="G$1" pin="+VS" pad="VS"/>
+<connect gate="G$1" pin="-IN1" pad="-IN1"/>
+<connect gate="G$1" pin="-IN2" pad="-IN2"/>
+<connect gate="G$1" pin="-VS" pad="-VS"/>
+<connect gate="G$1" pin="-VS_B" pad="-VS_B"/>
+<connect gate="G$1" pin="IN1" pad="IN1"/>
+<connect gate="G$1" pin="OUT1" pad="OUT1"/>
+<connect gate="G$1" pin="OUT2" pad="OUT2"/>
+<connect gate="G$1" pin="REF1" pad="REF1"/>
+<connect gate="G$1" pin="REF2" pad="REF2"/>
+<connect gate="G$1" pin="RG1" pad="RG1"/>
+<connect gate="G$1" pin="RG1_B" pad="RG1_B"/>
+<connect gate="G$1" pin="RG2" pad="RG2"/>
+<connect gate="G$1" pin="RG2_B" pad="RG2_B"/>
+<connect gate="G$1" pin="VS_B" pad="VS_B"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="XOR_QUAD">
+<gates>
+<gate name="G$1" symbol="AND_QUAD" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="QFN-14">
+<connects>
+<connect gate="G$1" pin="A0" pad="A0"/>
+<connect gate="G$1" pin="A1" pad="A1"/>
+<connect gate="G$1" pin="A2" pad="A2"/>
+<connect gate="G$1" pin="A3" pad="A3"/>
+<connect gate="G$1" pin="B0" pad="B0"/>
+<connect gate="G$1" pin="B1" pad="B1"/>
+<connect gate="G$1" pin="B2" pad="B2"/>
+<connect gate="G$1" pin="B3" pad="B3"/>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="O1" pad="O1"/>
+<connect gate="G$1" pin="O2" pad="O2"/>
+<connect gate="G$1" pin="O3" pad="O3"/>
+<connect gate="G$1" pin="O_0" pad="O_0"/>
+<connect gate="G$1" pin="VCC" pad="VCC"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+</drawing>
+</eagle>

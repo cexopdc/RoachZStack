@@ -1,0 +1,1009 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE eagle SYSTEM "eagle.dtd">
+<eagle version="6.6.0">
+<drawing>
+<settings>
+<setting alwaysvectorfont="no"/>
+<setting verticaltext="up"/>
+</settings>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<layers>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
+<layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
+<layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
+<layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
+<layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
+<layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="93" name="Pins" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="94" name="Symbols" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="95" name="Names" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="96" name="Values" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
+</layers>
+<library>
+<packages>
+<package name="SPDT_THRU">
+<pad name="2" x="0" y="0" drill="0.7874"/>
+<pad name="3" x="2.0066" y="0" drill="0.7874"/>
+<pad name="1" x="-2.0066" y="0" drill="0.7874"/>
+<pad name="A1" x="-4.1021" y="0" drill="1.4986"/>
+<pad name="A2" x="4.1021" y="0" drill="1.4986"/>
+</package>
+<package name="SOT23-5L">
+<description>&lt;b&gt;Small Outline Transistor&lt;/b&gt;&lt;p&gt;
+package type OT</description>
+<wire x1="1.422" y1="0.81" x2="1.422" y2="-0.81" width="0.1524" layer="21"/>
+<wire x1="1.422" y1="-0.81" x2="-1.422" y2="-0.81" width="0.1524" layer="51"/>
+<wire x1="-1.422" y1="-0.81" x2="-1.422" y2="0.81" width="0.1524" layer="21"/>
+<wire x1="-1.422" y1="0.81" x2="1.422" y2="0.81" width="0.1524" layer="51"/>
+<wire x1="-0.522" y1="0.81" x2="0.522" y2="0.81" width="0.1524" layer="21"/>
+<wire x1="-0.428" y1="-0.81" x2="-0.522" y2="-0.81" width="0.1524" layer="21"/>
+<wire x1="0.522" y1="-0.81" x2="0.428" y2="-0.81" width="0.1524" layer="21"/>
+<wire x1="-1.328" y1="-0.81" x2="-1.422" y2="-0.81" width="0.1524" layer="21"/>
+<wire x1="1.422" y1="-0.81" x2="1.328" y2="-0.81" width="0.1524" layer="21"/>
+<wire x1="1.328" y1="0.81" x2="1.422" y2="0.81" width="0.1524" layer="21"/>
+<wire x1="-1.422" y1="0.81" x2="-1.328" y2="0.81" width="0.1524" layer="21"/>
+<smd name="1" x="-0.95" y="-1.3" dx="0.55" dy="1.2" layer="1"/>
+<smd name="2" x="0" y="-1.3" dx="0.55" dy="1.2" layer="1"/>
+<smd name="3" x="0.95" y="-1.3" dx="0.55" dy="1.2" layer="1"/>
+<smd name="4" x="0.95" y="1.3" dx="0.55" dy="1.2" layer="1"/>
+<smd name="5" x="-0.95" y="1.3" dx="0.55" dy="1.2" layer="1"/>
+<text x="-1.905" y="1.905" size="1.27" layer="25">&gt;NAME</text>
+<text x="-1.905" y="-3.429" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-1.2" y1="-1.5" x2="-0.7" y2="-0.85" layer="51"/>
+<rectangle x1="-0.25" y1="-1.5" x2="0.25" y2="-0.85" layer="51"/>
+<rectangle x1="0.7" y1="-1.5" x2="1.2" y2="-0.85" layer="51"/>
+<rectangle x1="0.7" y1="0.85" x2="1.2" y2="1.5" layer="51"/>
+<rectangle x1="-1.2" y1="0.85" x2="-0.7" y2="1.5" layer="51"/>
+</package>
+<package name="DFN6">
+<smd name="1" x="-1.45" y="1" dx="0.85" dy="0.45" layer="1"/>
+<smd name="2" x="-1.45" y="0" dx="0.85" dy="0.45" layer="1"/>
+<smd name="3" x="-1.45" y="-1" dx="0.85" dy="0.45" layer="1"/>
+<smd name="4" x="1.45" y="-1" dx="0.85" dy="0.45" layer="1"/>
+<smd name="5" x="1.45" y="0" dx="0.85" dy="0.45" layer="1"/>
+<smd name="6" x="1.45" y="1" dx="0.85" dy="0.45" layer="1"/>
+<smd name="7" x="0" y="0" dx="1.6" dy="2.5" layer="1"/>
+</package>
+<package name="QFN16">
+<smd name="2" x="-1.75" y="0.325" dx="0.5" dy="0.35" layer="1"/>
+<smd name="3" x="-1.75" y="-0.325" dx="0.5" dy="0.35" layer="1"/>
+<smd name="1" x="-1.75" y="0.975" dx="0.5" dy="0.35" layer="1"/>
+<smd name="4" x="-1.75" y="-0.975" dx="0.5" dy="0.35" layer="1"/>
+<smd name="12" x="1.75" y="0.975" dx="0.5" dy="0.35" layer="1"/>
+<smd name="11" x="1.75" y="0.325" dx="0.5" dy="0.35" layer="1"/>
+<smd name="10" x="1.75" y="-0.325" dx="0.5" dy="0.35" layer="1"/>
+<smd name="9" x="1.75" y="-0.975" dx="0.5" dy="0.35" layer="1"/>
+<smd name="5" x="-0.975" y="-1.75" dx="0.5" dy="0.35" layer="1" rot="R90"/>
+<smd name="6" x="-0.325" y="-1.75" dx="0.5" dy="0.35" layer="1" rot="R90"/>
+<smd name="7" x="0.325" y="-1.75" dx="0.5" dy="0.35" layer="1" rot="R90"/>
+<smd name="8" x="0.975" y="-1.75" dx="0.5" dy="0.35" layer="1" rot="R90"/>
+<smd name="16" x="-0.975" y="1.75" dx="0.5" dy="0.35" layer="1" rot="R90"/>
+<smd name="15" x="-0.325" y="1.75" dx="0.5" dy="0.35" layer="1" rot="R90"/>
+<smd name="14" x="0.325" y="1.75" dx="0.5" dy="0.35" layer="1" rot="R90"/>
+<smd name="13" x="0.975" y="1.75" dx="0.5" dy="0.35" layer="1" rot="R90"/>
+<wire x1="-2" y1="2" x2="2" y2="2" width="0.127" layer="21"/>
+<wire x1="2" y1="2" x2="2" y2="-2" width="0.127" layer="21"/>
+<wire x1="2" y1="-2" x2="-2" y2="-2" width="0.127" layer="21"/>
+<wire x1="-2" y1="-2" x2="-2" y2="2" width="0.127" layer="21"/>
+<circle x="-1.645" y="1.68" radius="0.058521875" width="0.127" layer="21"/>
+<smd name="EP" x="0" y="0" dx="1.95" dy="1.95" layer="1"/>
+</package>
+<package name="QFN40-6X6_SM">
+<wire x1="-3.025" y1="3.025" x2="-2.725" y2="3.025" width="0.1016" layer="21"/>
+<wire x1="-3.025" y1="2.725" x2="-3.025" y2="3.025" width="0.1016" layer="21"/>
+<wire x1="3.025" y1="3.025" x2="3.025" y2="2.725" width="0.1016" layer="21"/>
+<wire x1="-2.725" y1="-3.025" x2="-3.025" y2="-3.025" width="0.1016" layer="21"/>
+<wire x1="3.025" y1="-3.025" x2="2.725" y2="-3.025" width="0.1016" layer="21"/>
+<wire x1="-3.025" y1="-3.025" x2="-3.025" y2="-2.725" width="0.1016" layer="21"/>
+<wire x1="2.725" y1="3.025" x2="3.025" y2="3.025" width="0.1016" layer="21"/>
+<wire x1="3.025" y1="-2.725" x2="3.025" y2="-3.025" width="0.1016" layer="21"/>
+<smd name="1" x="-3.025" y="2.25" dx="0.95" dy="0.28" layer="1" roundness="100" cream="no"/>
+<smd name="2" x="-3.025" y="1.75" dx="0.95" dy="0.28" layer="1" roundness="100" cream="no"/>
+<smd name="3" x="-3.025" y="1.25" dx="0.95" dy="0.28" layer="1" roundness="100" cream="no"/>
+<smd name="4" x="-3.025" y="0.75" dx="0.95" dy="0.28" layer="1" roundness="100" cream="no"/>
+<smd name="5" x="-3.025" y="0.25" dx="0.95" dy="0.28" layer="1" roundness="100" cream="no"/>
+<smd name="6" x="-3.025" y="-0.25" dx="0.95" dy="0.28" layer="1" roundness="100" cream="no"/>
+<smd name="7" x="-3.025" y="-0.75" dx="0.95" dy="0.28" layer="1" roundness="100" cream="no"/>
+<smd name="8" x="-3.025" y="-1.25" dx="0.95" dy="0.28" layer="1" roundness="100" cream="no"/>
+<smd name="9" x="-3.025" y="-1.75" dx="0.95" dy="0.28" layer="1" roundness="100" cream="no"/>
+<smd name="10" x="-3.025" y="-2.25" dx="0.95" dy="0.28" layer="1" roundness="100" cream="no"/>
+<smd name="11" x="-2.25" y="-3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R90" cream="no"/>
+<smd name="12" x="-1.75" y="-3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R90" cream="no"/>
+<smd name="13" x="-1.25" y="-3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R90" cream="no"/>
+<smd name="14" x="-0.75" y="-3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R90" cream="no"/>
+<smd name="15" x="-0.25" y="-3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R90" cream="no"/>
+<smd name="16" x="0.25" y="-3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R90" cream="no"/>
+<smd name="17" x="0.75" y="-3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R90" cream="no"/>
+<smd name="18" x="1.25" y="-3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R90" cream="no"/>
+<smd name="19" x="1.75" y="-3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R90" cream="no"/>
+<smd name="20" x="2.25" y="-3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R90" cream="no"/>
+<smd name="21" x="3.025" y="-2.25" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R180" cream="no"/>
+<smd name="22" x="3.025" y="-1.75" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R180" cream="no"/>
+<smd name="23" x="3.025" y="-1.25" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R180" cream="no"/>
+<smd name="24" x="3.025" y="-0.75" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R180" cream="no"/>
+<smd name="25" x="3.025" y="-0.25" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R180" cream="no"/>
+<smd name="26" x="3.025" y="0.25" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R180" cream="no"/>
+<smd name="27" x="3.025" y="0.75" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R180" cream="no"/>
+<smd name="28" x="3.025" y="1.25" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R180" cream="no"/>
+<smd name="29" x="3.025" y="1.75" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R180" cream="no"/>
+<smd name="30" x="3.025" y="2.25" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R180" cream="no"/>
+<smd name="31" x="2.25" y="3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R270" cream="no"/>
+<smd name="32" x="1.75" y="3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R270" cream="no"/>
+<smd name="33" x="1.25" y="3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R270" cream="no"/>
+<smd name="34" x="0.75" y="3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R270" cream="no"/>
+<smd name="35" x="0.25" y="3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R270" cream="no"/>
+<smd name="36" x="-0.25" y="3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R270" cream="no"/>
+<smd name="37" x="-0.75" y="3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R270" cream="no"/>
+<smd name="38" x="-1.25" y="3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R270" cream="no"/>
+<smd name="39" x="-1.75" y="3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R270" cream="no"/>
+<smd name="40" x="-2.25" y="3.025" dx="0.95" dy="0.28" layer="1" roundness="100" rot="R270" cream="no"/>
+<text x="-2.9" y="3.99" size="1.27" layer="25">&gt;NAME</text>
+<text x="-2.9" y="-5.44" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-3" y1="2.5" x2="-2.5" y2="3" layer="21"/>
+<rectangle x1="-3" y1="2.75" x2="-2.75" y2="3" layer="1"/>
+<pad name="V11" x="0.4" y="-0.4" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V6" x="-0.4" y="0.4" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V7" x="0.4" y="0.4" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V10" x="-0.4" y="-0.4" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V8" x="1.2" y="0.4" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V12" x="1.2" y="-0.4" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V5" x="-1.2" y="0.4" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V9" x="-1.2" y="-0.4" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V15" x="0.4" y="-1.2" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V3" x="0.4" y="1.2" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V14" x="-0.4" y="-1.2" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V2" x="-0.4" y="1.2" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V4" x="1.2" y="1.2" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V1" x="-1.2" y="1.2" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V13" x="-1.2" y="-1.2" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<pad name="V16" x="1.2" y="-1.2" drill="0.381" diameter="0.8" shape="square" stop="no" thermals="no"/>
+<rectangle x1="-1.651" y1="-1.651" x2="1.651" y2="1.651" layer="29"/>
+</package>
+<package name="RIBBON_10POS">
+<smd name="10" x="0" y="1.95" dx="0.72" dy="2.4" layer="1" rot="R180"/>
+<smd name="9" x="0" y="-1.95" dx="0.72" dy="2.4" layer="1" rot="R180"/>
+<smd name="8" x="-1.27" y="1.95" dx="0.72" dy="2.4" layer="1" rot="R180"/>
+<smd name="7" x="-1.27" y="-1.95" dx="0.72" dy="2.4" layer="1" rot="R180"/>
+<smd name="6" x="-2.54" y="1.95" dx="0.72" dy="2.4" layer="1" rot="R180"/>
+<smd name="5" x="-2.54" y="-1.95" dx="0.72" dy="2.4" layer="1" rot="R180"/>
+<smd name="4" x="-3.81" y="1.95" dx="0.72" dy="2.4" layer="1" rot="R180"/>
+<smd name="3" x="-3.81" y="-1.95" dx="0.72" dy="2.4" layer="1" rot="R180"/>
+<smd name="2" x="-5.08" y="1.95" dx="0.72" dy="2.4" layer="1" rot="R180"/>
+<smd name="1" x="-5.08" y="-1.95" dx="0.72" dy="2.4" layer="1" rot="R180"/>
+</package>
+<package name="XTAL_32MHZ_FA128">
+<smd name="P4" x="-0.725" y="0.575" dx="0.85" dy="0.95" layer="1" rot="R90"/>
+<smd name="P1" x="-0.725" y="-0.575" dx="0.85" dy="0.95" layer="1" rot="R90"/>
+<smd name="P2" x="0.725" y="-0.575" dx="0.85" dy="0.95" layer="1" rot="R90"/>
+<smd name="P3" x="0.725" y="0.575" dx="0.85" dy="0.95" layer="1" rot="R90"/>
+<wire x1="-1" y1="0.8" x2="1" y2="0.8" width="0.127" layer="21"/>
+<wire x1="1" y1="0.8" x2="1" y2="-0.8" width="0.127" layer="21"/>
+<wire x1="1" y1="-0.8" x2="-1" y2="-0.8" width="0.127" layer="21"/>
+<wire x1="-1" y1="-0.8" x2="-1" y2="0.8" width="0.127" layer="21"/>
+</package>
+<package name="XTAL_32KHZ">
+<smd name="1" x="0" y="0.762" dx="1.524" dy="0.762" layer="1"/>
+<smd name="2" x="0" y="-0.762" dx="1.524" dy="0.762" layer="1"/>
+</package>
+<package name="ANTENNA_245">
+<smd name="1" x="-3.2" y="0" dx="1.8" dy="1" layer="1" rot="R90"/>
+<smd name="2" x="3.2" y="0" dx="1.8" dy="4" layer="1" rot="R90"/>
+</package>
+<package name="EL7900">
+<smd name="5" x="-0.635" y="0.9525" dx="0.8128" dy="0.4064" layer="1" rot="R90"/>
+<smd name="4" x="0.635" y="0.9525" dx="0.8128" dy="0.4064" layer="1" rot="R90"/>
+<smd name="1" x="-0.635" y="-0.9525" dx="0.8128" dy="0.4064" layer="1" rot="R90"/>
+<smd name="2" x="0" y="-0.9525" dx="0.8128" dy="0.4064" layer="1" rot="R90"/>
+<smd name="3" x="0.635" y="-0.9525" dx="0.8128" dy="0.4064" layer="1" rot="R90"/>
+</package>
+<package name="MICS-2614">
+<wire x1="-3.5" y1="2.5" x2="3.5" y2="2.5" width="0.127" layer="21"/>
+<wire x1="3.5" y1="2.5" x2="3.5" y2="-2.5" width="0.127" layer="21"/>
+<wire x1="3.5" y1="-2.5" x2="-3.5" y2="-2.5" width="0.127" layer="21"/>
+<wire x1="-3.5" y1="-2.5" x2="-3.5" y2="2.5" width="0.127" layer="21"/>
+<smd name="J" x="-3.5" y="1.27" dx="2" dy="0.6" layer="1"/>
+<smd name="K" x="-3.5" y="-1.27" dx="2" dy="0.6" layer="1"/>
+<smd name="E" x="3.5" y="1.27" dx="2" dy="0.6" layer="1"/>
+<smd name="D" x="3.5" y="-1.27" dx="2" dy="0.6" layer="1"/>
+<smd name="H" x="-1.25" y="2.5" dx="0.6" dy="2" layer="1"/>
+<smd name="F" x="1.25" y="2.5" dx="0.6" dy="2" layer="1"/>
+<smd name="G" x="0" y="2.5" dx="0.6" dy="2" layer="1"/>
+<smd name="A" x="-1.25" y="-2.58" dx="0.6" dy="2" layer="1"/>
+<smd name="C" x="1.25" y="-2.58" dx="0.6" dy="2" layer="1"/>
+<smd name="B" x="0" y="-2.58" dx="0.6" dy="2" layer="1"/>
+<text x="-3.81" y="3.81" size="1.27" layer="25">&gt;Name</text>
+<text x="-3.81" y="-5.08" size="1.27" layer="27">&gt;Value</text>
+<circle x="-1.905" y="-1.27" radius="0.635" width="0.127" layer="21"/>
+</package>
+<package name="1.6X0.8MM_SMD_LED">
+<smd name="P$1" x="-0.825" y="0" dx="0.8" dy="0.8" layer="1"/>
+<smd name="P$2" x="0.825" y="0" dx="0.8" dy="0.8" layer="1"/>
+</package>
+<package name="QFN-10">
+<smd name="10" x="0" y="0.9" dx="0.3" dy="0.8" layer="1"/>
+<smd name="5" x="0" y="-0.9" dx="0.3" dy="0.8" layer="1"/>
+<smd name="6" x="0.9" y="-0.8" dx="0.8" dy="0.3" layer="1"/>
+<smd name="7" x="0.9" y="-0.3" dx="0.8" dy="0.3" layer="1"/>
+<smd name="8" x="0.9" y="0.2" dx="0.8" dy="0.3" layer="1"/>
+<smd name="9" x="0.9" y="0.7" dx="0.8" dy="0.3" layer="1"/>
+<smd name="4" x="-0.9" y="-0.8" dx="0.8" dy="0.3" layer="1"/>
+<smd name="3" x="-0.9" y="-0.3" dx="0.8" dy="0.3" layer="1"/>
+<smd name="2" x="-0.9" y="0.2" dx="0.8" dy="0.3" layer="1"/>
+<smd name="1" x="-0.9" y="0.7" dx="0.8" dy="0.3" layer="1"/>
+</package>
+<package name="SMD_COMBO">
+<smd name="P$1" x="-1.05" y="0" dx="1.25" dy="1.1" layer="1"/>
+<smd name="P$2" x="1.05" y="0" dx="1.25" dy="1.1" layer="1"/>
+</package>
+<package name="QFN_20">
+<description>&lt;b&gt;ES Package, 20-Contact QFN with Exposed Thermal Pad&lt;/b&gt;&lt;p&gt;
+&lt;a href="http://www.allegromicro.com/en/Products/Part_Numbers/3906/3906.pdf"&gt; Data sheet &lt;/a&gt;</description>
+<wire x1="-1.8984" y1="-1.8984" x2="1.8984" y2="-1.8984" width="0.2032" layer="51"/>
+<wire x1="1.8984" y1="-1.8984" x2="1.8984" y2="1.8984" width="0.2032" layer="51"/>
+<wire x1="1.8984" y1="1.8984" x2="-1.8984" y2="1.8984" width="0.2032" layer="51"/>
+<wire x1="-1.8984" y1="1.8984" x2="-1.8984" y2="-1.8984" width="0.2032" layer="51"/>
+<wire x1="-1.8984" y1="1.8984" x2="-1.8984" y2="1.3016" width="0.2032" layer="21"/>
+<wire x1="-1.3016" y1="1.8984" x2="-1.8984" y2="1.8984" width="0.2032" layer="21"/>
+<wire x1="-1.8984" y1="-1.8984" x2="-1.3016" y2="-1.8984" width="0.2032" layer="21"/>
+<wire x1="-1.8984" y1="-1.3016" x2="-1.8984" y2="-1.8984" width="0.2032" layer="21"/>
+<wire x1="1.8984" y1="-1.8984" x2="1.8984" y2="-1.3016" width="0.2032" layer="21"/>
+<wire x1="1.3016" y1="-1.8984" x2="1.8984" y2="-1.8984" width="0.2032" layer="21"/>
+<wire x1="1.8984" y1="1.8984" x2="1.3016" y2="1.8984" width="0.2032" layer="21"/>
+<wire x1="1.8984" y1="1.3016" x2="1.8984" y2="1.8984" width="0.2032" layer="21"/>
+<smd name="1" x="-2.05" y="1" dx="0.95" dy="0.26" layer="1" stop="no" cream="no"/>
+<smd name="2" x="-2.05" y="0.5" dx="0.95" dy="0.26" layer="1" stop="no" cream="no"/>
+<smd name="3" x="-2.05" y="0" dx="0.95" dy="0.26" layer="1" stop="no" cream="no"/>
+<smd name="4" x="-2.05" y="-0.5" dx="0.95" dy="0.26" layer="1" stop="no" cream="no"/>
+<smd name="5" x="-2.05" y="-1" dx="0.95" dy="0.26" layer="1" stop="no" cream="no"/>
+<smd name="EXP" x="0" y="0" dx="2.45" dy="2.45" layer="1" stop="no" cream="no"/>
+<smd name="6" x="-1" y="-2.05" dx="0.95" dy="0.26" layer="1" rot="R90" stop="no" cream="no"/>
+<smd name="7" x="-0.5" y="-2.05" dx="0.95" dy="0.26" layer="1" rot="R90" stop="no" cream="no"/>
+<smd name="8" x="0" y="-2.05" dx="0.95" dy="0.26" layer="1" rot="R90" stop="no" cream="no"/>
+<smd name="9" x="0.5" y="-2.05" dx="0.95" dy="0.26" layer="1" rot="R90" stop="no" cream="no"/>
+<smd name="10" x="1" y="-2.05" dx="0.95" dy="0.26" layer="1" rot="R90" stop="no" cream="no"/>
+<smd name="11" x="2.05" y="-1" dx="0.95" dy="0.26" layer="1" rot="R180" stop="no" cream="no"/>
+<smd name="12" x="2.05" y="-0.5" dx="0.95" dy="0.26" layer="1" rot="R180" stop="no" cream="no"/>
+<smd name="13" x="2.05" y="0" dx="0.95" dy="0.26" layer="1" rot="R180" stop="no" cream="no"/>
+<smd name="14" x="2.05" y="0.5" dx="0.95" dy="0.26" layer="1" rot="R180" stop="no" cream="no"/>
+<smd name="15" x="2.05" y="1" dx="0.95" dy="0.26" layer="1" rot="R180" stop="no" cream="no"/>
+<smd name="16" x="1" y="2.05" dx="0.95" dy="0.26" layer="1" rot="R270" stop="no" cream="no"/>
+<smd name="17" x="0.5" y="2.05" dx="0.95" dy="0.26" layer="1" rot="R270" stop="no" cream="no"/>
+<smd name="18" x="0" y="2.05" dx="0.95" dy="0.26" layer="1" rot="R270" stop="no" cream="no"/>
+<smd name="19" x="-0.5" y="2.05" dx="0.95" dy="0.26" layer="1" rot="R270" stop="no" cream="no"/>
+<smd name="20" x="-1" y="2.05" dx="0.95" dy="0.26" layer="1" rot="R270" stop="no" cream="no"/>
+<text x="-2.5" y="3" size="1.27" layer="25">&gt;NAME</text>
+<text x="-2.5" y="-4" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-2.575" y1="0.825" x2="-1.525" y2="1.175" layer="29"/>
+<rectangle x1="-2.5" y1="0.875" x2="-1.6" y2="1.125" layer="31"/>
+<rectangle x1="-2.575" y1="0.325" x2="-1.525" y2="0.675" layer="29"/>
+<rectangle x1="-2.5" y1="0.375" x2="-1.6" y2="0.625" layer="31"/>
+<rectangle x1="-2.575" y1="-0.175" x2="-1.525" y2="0.175" layer="29"/>
+<rectangle x1="-2.5" y1="-0.125" x2="-1.6" y2="0.125" layer="31"/>
+<rectangle x1="-2.575" y1="-0.675" x2="-1.525" y2="-0.325" layer="29"/>
+<rectangle x1="-2.5" y1="-0.625" x2="-1.6" y2="-0.375" layer="31"/>
+<rectangle x1="-2.575" y1="-1.175" x2="-1.525" y2="-0.825" layer="29"/>
+<rectangle x1="-2.5" y1="-1.125" x2="-1.6" y2="-0.875" layer="31"/>
+<rectangle x1="-1.525" y1="-2.225" x2="-0.475" y2="-1.875" layer="29" rot="R90"/>
+<rectangle x1="-1.45" y1="-2.175" x2="-0.55" y2="-1.925" layer="31" rot="R90"/>
+<rectangle x1="-1.025" y1="-2.225" x2="0.025" y2="-1.875" layer="29" rot="R90"/>
+<rectangle x1="-0.95" y1="-2.175" x2="-0.05" y2="-1.925" layer="31" rot="R90"/>
+<rectangle x1="-0.525" y1="-2.225" x2="0.525" y2="-1.875" layer="29" rot="R90"/>
+<rectangle x1="-0.45" y1="-2.175" x2="0.45" y2="-1.925" layer="31" rot="R90"/>
+<rectangle x1="-0.025" y1="-2.225" x2="1.025" y2="-1.875" layer="29" rot="R90"/>
+<rectangle x1="0.05" y1="-2.175" x2="0.95" y2="-1.925" layer="31" rot="R90"/>
+<rectangle x1="0.475" y1="-2.225" x2="1.525" y2="-1.875" layer="29" rot="R90"/>
+<rectangle x1="0.55" y1="-2.175" x2="1.45" y2="-1.925" layer="31" rot="R90"/>
+<rectangle x1="1.525" y1="-1.175" x2="2.575" y2="-0.825" layer="29" rot="R180"/>
+<rectangle x1="1.6" y1="-1.125" x2="2.5" y2="-0.875" layer="31" rot="R180"/>
+<rectangle x1="1.525" y1="-0.675" x2="2.575" y2="-0.325" layer="29" rot="R180"/>
+<rectangle x1="1.6" y1="-0.625" x2="2.5" y2="-0.375" layer="31" rot="R180"/>
+<rectangle x1="1.525" y1="-0.175" x2="2.575" y2="0.175" layer="29" rot="R180"/>
+<rectangle x1="1.6" y1="-0.125" x2="2.5" y2="0.125" layer="31" rot="R180"/>
+<rectangle x1="1.525" y1="0.325" x2="2.575" y2="0.675" layer="29" rot="R180"/>
+<rectangle x1="1.6" y1="0.375" x2="2.5" y2="0.625" layer="31" rot="R180"/>
+<rectangle x1="1.525" y1="0.825" x2="2.575" y2="1.175" layer="29" rot="R180"/>
+<rectangle x1="1.6" y1="0.875" x2="2.5" y2="1.125" layer="31" rot="R180"/>
+<rectangle x1="0.475" y1="1.875" x2="1.525" y2="2.225" layer="29" rot="R270"/>
+<rectangle x1="0.55" y1="1.925" x2="1.45" y2="2.175" layer="31" rot="R270"/>
+<rectangle x1="-0.025" y1="1.875" x2="1.025" y2="2.225" layer="29" rot="R270"/>
+<rectangle x1="0.05" y1="1.925" x2="0.95" y2="2.175" layer="31" rot="R270"/>
+<rectangle x1="-0.525" y1="1.875" x2="0.525" y2="2.225" layer="29" rot="R270"/>
+<rectangle x1="-0.45" y1="1.925" x2="0.45" y2="2.175" layer="31" rot="R270"/>
+<rectangle x1="-1.025" y1="1.875" x2="0.025" y2="2.225" layer="29" rot="R270"/>
+<rectangle x1="-0.95" y1="1.925" x2="-0.05" y2="2.175" layer="31" rot="R270"/>
+<rectangle x1="-1.525" y1="1.875" x2="-0.475" y2="2.225" layer="29" rot="R270"/>
+<rectangle x1="-1.45" y1="1.925" x2="-0.55" y2="2.175" layer="31" rot="R270"/>
+<polygon width="0.15" layer="29">
+<vertex x="-1.2" y="0.95" curve="87.140274"/>
+<vertex x="-0.95" y="1.2"/>
+<vertex x="1.2" y="1.2"/>
+<vertex x="1.2" y="-1.2"/>
+<vertex x="-1.2" y="-1.2"/>
+</polygon>
+<polygon width="0.15" layer="31">
+<vertex x="-1.075" y="0.875" curve="56.144974"/>
+<vertex x="-0.875" y="1.075"/>
+<vertex x="1.075" y="1.075"/>
+<vertex x="1.075" y="-1.075"/>
+<vertex x="-1.075" y="-1.075"/>
+</polygon>
+</package>
+</packages>
+<symbols>
+<symbol name="SPDT_RIGHTANGLE">
+<wire x1="-10.16" y1="-2.54" x2="-10.16" y2="5.08" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="5.08" x2="10.16" y2="5.08" width="0.254" layer="94"/>
+<wire x1="10.16" y1="5.08" x2="10.16" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-5.08" x2="-10.16" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-5.08" x2="-10.16" y2="-2.54" width="0.254" layer="94"/>
+<pin name="1" x="-7.62" y="-10.16" length="middle" rot="R90"/>
+<pin name="2" x="0" y="-10.16" length="middle" rot="R90"/>
+<pin name="3" x="7.62" y="-10.16" length="middle" rot="R90"/>
+</symbol>
+<symbol name="LP3985">
+<wire x1="-12.7" y1="10.16" x2="12.7" y2="10.16" width="0.254" layer="94"/>
+<wire x1="12.7" y1="10.16" x2="12.7" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="12.7" y1="-10.16" x2="-12.7" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="-10.16" x2="-12.7" y2="10.16" width="0.254" layer="94"/>
+<pin name="VOUT" x="17.78" y="5.08" length="middle" rot="R180"/>
+<pin name="BYPASS" x="17.78" y="-5.08" length="middle" rot="R180"/>
+<pin name="VIN" x="-17.78" y="7.62" length="middle"/>
+<pin name="VSS" x="-17.78" y="0" length="middle"/>
+<pin name="EN" x="-17.78" y="-7.62" length="middle"/>
+</symbol>
+<symbol name="SI7020">
+<wire x1="-10.16" y1="10.16" x2="-10.16" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-10.16" x2="10.16" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-10.16" x2="10.16" y2="10.16" width="0.254" layer="94"/>
+<wire x1="10.16" y1="10.16" x2="-10.16" y2="10.16" width="0.254" layer="94"/>
+<pin name="SDA" x="-15.24" y="7.62" length="middle"/>
+<pin name="GND" x="-15.24" y="0" length="middle"/>
+<pin name="DNC" x="-15.24" y="-7.62" length="middle"/>
+<pin name="DNC1" x="15.24" y="-7.62" length="middle" rot="R180"/>
+<pin name="VDD" x="15.24" y="0" length="middle" rot="R180"/>
+<pin name="SCL" x="15.24" y="7.62" length="middle" rot="R180"/>
+<pin name="EP" x="0" y="-15.24" length="middle" rot="R90"/>
+</symbol>
+<symbol name="ADXL335">
+<wire x1="15.24" y1="-15.24" x2="-15.24" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="-15.24" x2="-15.24" y2="15.24" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="15.24" x2="15.24" y2="15.24" width="0.254" layer="94"/>
+<wire x1="15.24" y1="15.24" x2="15.24" y2="-15.24" width="0.254" layer="94"/>
+<pin name="NC" x="-20.32" y="7.62" length="middle"/>
+<pin name="ST" x="-20.32" y="2.54" length="middle"/>
+<pin name="COM" x="-20.32" y="-2.54" length="middle"/>
+<pin name="NC1" x="-20.32" y="-7.62" length="middle"/>
+<pin name="COM1" x="-7.62" y="-20.32" length="middle" rot="R90"/>
+<pin name="COM2" x="-2.54" y="-20.32" length="middle" rot="R90"/>
+<pin name="COM3" x="2.54" y="-20.32" length="middle" rot="R90"/>
+<pin name="ZOUT" x="7.62" y="-20.32" length="middle" rot="R90"/>
+<pin name="NC2" x="20.32" y="-7.62" length="middle" rot="R180"/>
+<pin name="YOUT" x="20.32" y="-2.54" length="middle" rot="R180"/>
+<pin name="NC3" x="20.32" y="2.54" length="middle" rot="R180"/>
+<pin name="XOUT" x="20.32" y="7.62" length="middle" rot="R180"/>
+<pin name="NC4" x="7.62" y="20.32" length="middle" rot="R270"/>
+<pin name="VS" x="2.54" y="20.32" length="middle" rot="R270"/>
+<pin name="VS1" x="-2.54" y="20.32" length="middle" rot="R270"/>
+<pin name="NC5" x="-7.62" y="20.32" length="middle" rot="R270"/>
+<wire x1="-15.24" y1="-15.24" x2="-20.32" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="-20.32" y1="-15.24" x2="-20.32" y2="-22.86" width="0.254" layer="94"/>
+<wire x1="-20.32" y1="-22.86" x2="-15.24" y2="-22.86" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="-22.86" x2="-15.24" y2="-15.24" width="0.254" layer="94"/>
+<pin name="EP" x="-17.78" y="-27.94" length="middle" rot="R90"/>
+</symbol>
+<symbol name="CC2541_SM">
+<wire x1="-27.94" y1="-20.32" x2="30.48" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="30.48" y1="-20.32" x2="30.48" y2="17.78" width="0.254" layer="94"/>
+<wire x1="30.48" y1="17.78" x2="-27.94" y2="17.78" width="0.254" layer="94"/>
+<wire x1="-27.94" y1="17.78" x2="-27.94" y2="-20.32" width="0.254" layer="94"/>
+<text x="-27.94" y="19.05" size="1.778" layer="95">&gt;NAME</text>
+<text x="-27.94" y="-22.86" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="GND" x="-30.48" y="10.16" length="short" direction="pwr"/>
+<pin name="SCL" x="-30.48" y="7.62" length="short"/>
+<pin name="SDA" x="-30.48" y="5.08" length="short"/>
+<pin name="NC" x="-30.48" y="2.54" length="short" direction="nc"/>
+<pin name="P1_5" x="-30.48" y="0" length="short"/>
+<pin name="P1_4" x="-30.48" y="-2.54" length="short"/>
+<pin name="P1_3" x="-30.48" y="-5.08" length="short"/>
+<pin name="P1_2" x="-30.48" y="-7.62" length="short"/>
+<pin name="P1_1" x="-30.48" y="-10.16" length="short"/>
+<pin name="DVDD2" x="-30.48" y="-12.7" length="short" direction="pwr"/>
+<pin name="P1_0" x="-10.16" y="-22.86" length="short" rot="R90"/>
+<pin name="P0_7" x="-7.62" y="-22.86" length="short" rot="R90"/>
+<pin name="P0_6" x="-5.08" y="-22.86" length="short" rot="R90"/>
+<pin name="P0_5" x="-2.54" y="-22.86" length="short" rot="R90"/>
+<pin name="P0_4" x="0" y="-22.86" length="short" rot="R90"/>
+<pin name="P0_3" x="2.54" y="-22.86" length="short" rot="R90"/>
+<pin name="P0_2" x="5.08" y="-22.86" length="short" rot="R90"/>
+<pin name="P0_1" x="7.62" y="-22.86" length="short" rot="R90"/>
+<pin name="P0_0" x="10.16" y="-22.86" length="short" rot="R90"/>
+<pin name="RESET_N" x="12.7" y="-22.86" length="short" direction="in" rot="R90"/>
+<pin name="AVDD5" x="33.02" y="-12.7" length="short" direction="pwr" rot="R180"/>
+<pin name="XOSC_Q1" x="33.02" y="-10.16" length="short" rot="R180"/>
+<pin name="XOSC_Q2" x="33.02" y="-7.62" length="short" rot="R180"/>
+<pin name="AVDD3" x="33.02" y="-5.08" length="short" direction="pwr" rot="R180"/>
+<pin name="RF_P" x="33.02" y="-2.54" length="short" direction="in" rot="R180"/>
+<pin name="RF_N" x="33.02" y="0" length="short" direction="in" rot="R180"/>
+<pin name="AVDD2" x="33.02" y="2.54" length="short" direction="pwr" rot="R180"/>
+<pin name="AVDD1" x="33.02" y="5.08" length="short" direction="pwr" rot="R180"/>
+<pin name="AVDD4" x="33.02" y="7.62" length="short" direction="pwr" rot="R180"/>
+<pin name="RBIAS" x="33.02" y="10.16" length="short" rot="R180"/>
+<pin name="AVDD6" x="12.7" y="20.32" length="short" direction="pwr" rot="R270"/>
+<pin name="P2_4/XOSC32K_Q1" x="10.16" y="20.32" length="short" rot="R270"/>
+<pin name="P2_3/XOSC32K_Q2" x="7.62" y="20.32" length="short" rot="R270"/>
+<pin name="P2_2" x="5.08" y="20.32" length="short" rot="R270"/>
+<pin name="P2_1" x="2.54" y="20.32" length="short" rot="R270"/>
+<pin name="P2_0" x="0" y="20.32" length="short" rot="R270"/>
+<pin name="P1_7" x="-2.54" y="20.32" length="short" rot="R270"/>
+<pin name="P1_6" x="-5.08" y="20.32" length="short" rot="R270"/>
+<pin name="DVDD1" x="-7.62" y="20.32" length="short" direction="pwr" rot="R270"/>
+<pin name="DCOUPL" x="-10.16" y="20.32" length="short" direction="pwr" rot="R270"/>
+<pin name="V2" x="48.26" y="12.7" length="short" direction="pwr" rot="R270"/>
+<pin name="V1" x="45.72" y="12.7" length="short" direction="pwr" rot="R270"/>
+<pin name="V3" x="50.8" y="12.7" length="short" direction="pwr" rot="R270"/>
+<wire x1="43.18" y1="10.16" x2="68.58" y2="10.16" width="0.254" layer="94"/>
+<wire x1="68.58" y1="10.16" x2="68.58" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="68.58" y1="-2.54" x2="43.18" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="43.18" y1="-2.54" x2="43.18" y2="10.16" width="0.254" layer="94"/>
+<pin name="V4" x="53.34" y="12.7" length="short" direction="pwr" rot="R270"/>
+<pin name="V5" x="55.88" y="12.7" length="short" direction="pwr" rot="R270"/>
+<pin name="V6" x="58.42" y="12.7" length="short" direction="pwr" rot="R270"/>
+<pin name="V7" x="60.96" y="12.7" length="short" direction="pwr" rot="R270"/>
+<pin name="V8" x="63.5" y="12.7" length="short" direction="pwr" rot="R270"/>
+<pin name="V9" x="63.5" y="-5.08" length="short" direction="pwr" rot="R90"/>
+<pin name="V10" x="60.96" y="-5.08" length="short" direction="pwr" rot="R90"/>
+<pin name="V11" x="58.42" y="-5.08" length="short" direction="pwr" rot="R90"/>
+<pin name="V12" x="55.88" y="-5.08" length="short" direction="pwr" rot="R90"/>
+<pin name="V13" x="53.34" y="-5.08" length="short" direction="pwr" rot="R90"/>
+<pin name="V14" x="50.8" y="-5.08" length="short" direction="pwr" rot="R90"/>
+<pin name="V15" x="48.26" y="-5.08" length="short" direction="pwr" rot="R90"/>
+<pin name="V16" x="45.72" y="-5.08" length="short" direction="pwr" rot="R90"/>
+</symbol>
+<symbol name="RIBBON_10POS">
+<wire x1="-12.7" y1="5.08" x2="2.54" y2="5.08" width="0.254" layer="94"/>
+<wire x1="2.54" y1="5.08" x2="2.54" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-5.08" x2="-12.7" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="-5.08" x2="-12.7" y2="5.08" width="0.254" layer="94"/>
+<pin name="2A" x="-10.16" y="10.16" length="middle" rot="R270"/>
+<pin name="4A" x="-7.62" y="10.16" length="middle" rot="R270"/>
+<pin name="6A" x="-5.08" y="10.16" length="middle" rot="R270"/>
+<pin name="8A" x="-2.54" y="10.16" length="middle" rot="R270"/>
+<pin name="10A" x="0" y="10.16" length="middle" rot="R270"/>
+<pin name="1A" x="-10.16" y="-10.16" length="middle" rot="R90"/>
+<pin name="3A" x="-7.62" y="-10.16" length="middle" rot="R90"/>
+<pin name="5A" x="-5.08" y="-10.16" length="middle" rot="R90"/>
+<pin name="7A" x="-2.54" y="-10.16" length="middle" rot="R90"/>
+<pin name="9A" x="0" y="-10.16" length="middle" rot="R90"/>
+</symbol>
+<symbol name="XTAL_32MHZ_FA128">
+<wire x1="-10.16" y1="10.16" x2="10.16" y2="10.16" width="0.254" layer="94"/>
+<wire x1="10.16" y1="10.16" x2="10.16" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-10.16" x2="-10.16" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-10.16" x2="-10.16" y2="10.16" width="0.254" layer="94"/>
+<pin name="P1" x="-15.24" y="-5.08" length="middle"/>
+<pin name="P2" x="15.24" y="-5.08" length="middle" rot="R180"/>
+<pin name="P3" x="15.24" y="5.08" length="middle" rot="R180"/>
+<pin name="P4" x="-15.24" y="5.08" length="middle"/>
+</symbol>
+<symbol name="XTAL_32MHZ">
+<wire x1="-10.16" y1="5.08" x2="10.16" y2="5.08" width="0.254" layer="94"/>
+<wire x1="10.16" y1="5.08" x2="10.16" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-5.08" x2="-10.16" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-5.08" x2="-10.16" y2="5.08" width="0.254" layer="94"/>
+<pin name="1" x="-15.24" y="0" length="middle"/>
+<pin name="2" x="15.24" y="0" length="middle" rot="R180"/>
+<text x="-2.54" y="2.54" size="1.27" layer="94">XTAL</text>
+</symbol>
+<symbol name="ANTENNA_245">
+<wire x1="-10.16" y1="2.54" x2="7.62" y2="2.54" width="0.254" layer="94"/>
+<wire x1="7.62" y1="2.54" x2="7.62" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-2.54" x2="-10.16" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-2.54" x2="-10.16" y2="2.54" width="0.254" layer="94"/>
+<pin name="1" x="-15.24" y="0" length="middle"/>
+<pin name="NC" x="12.7" y="0" length="middle" rot="R180"/>
+</symbol>
+<symbol name="ANALOG_SWITCH">
+<wire x1="7.62" y1="7.62" x2="7.62" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-7.62" x2="-7.62" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="-7.62" x2="-7.62" y2="7.62" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="7.62" x2="7.62" y2="7.62" width="0.254" layer="94"/>
+<pin name="COM" x="-12.7" y="5.08" length="middle"/>
+<pin name="NO" x="-12.7" y="0" length="middle"/>
+<pin name="GND" x="-12.7" y="-5.08" length="middle"/>
+<pin name="IN" x="12.7" y="-5.08" length="middle" rot="R180"/>
+<pin name="V+" x="12.7" y="5.08" length="middle" rot="R180"/>
+</symbol>
+<symbol name="MICS-2614">
+<wire x1="-17.78" y1="15.24" x2="20.32" y2="15.24" width="0.254" layer="94"/>
+<wire x1="20.32" y1="15.24" x2="20.32" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="20.32" y1="-15.24" x2="-17.78" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="-17.78" y1="-15.24" x2="-17.78" y2="15.24" width="0.254" layer="94"/>
+<wire x1="0" y1="10.16" x2="0" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="0" y1="-7.62" x2="0" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="0" y1="-10.16" x2="15.24" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-10.16" x2="15.24" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-7.62" x2="15.24" y2="10.16" width="0.254" layer="94"/>
+<wire x1="15.24" y1="10.16" x2="15.24" y2="12.7" width="0.254" layer="94"/>
+<wire x1="15.24" y1="12.7" x2="0" y2="12.7" width="0.254" layer="94"/>
+<wire x1="0" y1="12.7" x2="0" y2="10.16" width="0.254" layer="94"/>
+<wire x1="0" y1="10.16" x2="15.24" y2="10.16" width="0.254" layer="94"/>
+<wire x1="0" y1="-7.62" x2="15.24" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="2.54" y1="2.54" x2="2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-2.54" x2="12.7" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="12.7" y1="-2.54" x2="12.7" y2="2.54" width="0.254" layer="94"/>
+<wire x1="12.7" y1="2.54" x2="7.62" y2="2.54" width="0.254" layer="94"/>
+<wire x1="7.62" y1="2.54" x2="2.54" y2="2.54" width="0.254" layer="94"/>
+<wire x1="7.62" y1="2.54" x2="5.08" y2="5.08" width="0.254" layer="94"/>
+<wire x1="10.16" y1="5.08" x2="7.62" y2="2.54" width="0.254" layer="94"/>
+<wire x1="7.62" y1="2.54" x2="7.62" y2="7.62" width="0.254" layer="94"/>
+<text x="5.08" y="7.62" size="1.27" layer="94">Gas</text>
+<pin name="K" x="-15.24" y="-20.32" length="middle" rot="R90"/>
+<pin name="A" x="-7.62" y="-20.32" length="middle" rot="R90"/>
+<pin name="B" x="0" y="-20.32" length="middle" rot="R90"/>
+<pin name="C" x="7.62" y="-20.32" length="middle" rot="R90"/>
+<pin name="D" x="15.24" y="-20.32" length="middle" rot="R90"/>
+<pin name="E" x="15.24" y="20.32" length="middle" rot="R270"/>
+<pin name="F" x="7.62" y="20.32" length="middle" rot="R270"/>
+<pin name="G" x="0" y="20.32" length="middle" rot="R270"/>
+<pin name="H" x="-7.62" y="20.32" length="middle" rot="R270"/>
+<pin name="J" x="-15.24" y="20.32" length="middle" rot="R270"/>
+</symbol>
+<symbol name="LED">
+<wire x1="-2.54" y1="2.54" x2="-2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-2.54" x2="2.54" y2="0" width="0.254" layer="94"/>
+<wire x1="2.54" y1="0" x2="-2.54" y2="2.54" width="0.254" layer="94"/>
+<pin name="A" x="-7.62" y="0" length="middle"/>
+<pin name="C" x="7.62" y="0" length="middle" rot="R180"/>
+<wire x1="2.54" y1="-2.54" x2="2.54" y2="0" width="0.254" layer="94"/>
+<wire x1="2.54" y1="0" x2="2.54" y2="2.54" width="0.254" layer="94"/>
+</symbol>
+<symbol name="SI1143">
+<wire x1="-10" y1="10" x2="10" y2="10" width="0.254" layer="94"/>
+<wire x1="10" y1="10" x2="10" y2="-7.46" width="0.254" layer="94"/>
+<wire x1="10" y1="-7.46" x2="-10" y2="-7.46" width="0.254" layer="94"/>
+<wire x1="-10" y1="-7.46" x2="-10" y2="10" width="0.254" layer="94"/>
+<pin name="SDA" x="-12.7" y="5.08" length="short"/>
+<pin name="SCL" x="-12.7" y="2.54" length="short"/>
+<pin name="VDD" x="-12.7" y="0" length="short"/>
+<pin name="INT" x="-12.7" y="-2.54" length="short"/>
+<pin name="LED1" x="12.7" y="5.08" length="short" rot="R180"/>
+<pin name="GND" x="12.7" y="2.54" length="short" rot="R180"/>
+<pin name="LED3" x="12.7" y="0" length="short" rot="R180"/>
+<pin name="LED2" x="12.7" y="-2.54" length="short" rot="R180"/>
+<pin name="DNC" x="0" y="12.7" length="short" rot="R270"/>
+<pin name="DNC2" x="0" y="-10.16" length="short" rot="R90"/>
+</symbol>
+<symbol name="AD8232">
+<wire x1="15.24" y1="27.94" x2="-15.24" y2="27.94" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="27.94" x2="-15.24" y2="-25.4" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="-25.4" x2="15.24" y2="-25.4" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-25.4" x2="15.24" y2="27.94" width="0.254" layer="94"/>
+<pin name="HPDRIVE" x="-20.32" y="22.86" length="middle"/>
+<pin name="IAOUT" x="20.32" y="17.78" length="middle" rot="R180"/>
+<pin name="FR" x="20.32" y="-2.54" length="middle" rot="R180"/>
+<pin name="AC/DC" x="20.32" y="-7.62" length="middle" rot="R180"/>
+<pin name="SW" x="-20.32" y="-2.54" length="middle"/>
+<pin name="REFIN" x="20.32" y="12.7" length="middle" rot="R180"/>
+<pin name="+VS" x="20.32" y="7.62" length="middle" rot="R180"/>
+<pin name="GND" x="20.32" y="2.54" length="middle" rot="R180"/>
+<pin name="SDN" x="20.32" y="-12.7" length="middle" rot="R180"/>
+<pin name="OPAMP-" x="-20.32" y="-17.78" length="middle"/>
+<pin name="REFOUT" x="-20.32" y="-12.7" length="middle"/>
+<pin name="OUT" x="-20.32" y="-22.86" length="middle"/>
+<pin name="LOD-" x="20.32" y="-22.86" length="middle" rot="R180"/>
+<pin name="-IN" x="-20.32" y="12.7" length="middle"/>
+<pin name="RLDFB" x="-20.32" y="7.62" length="middle"/>
+<pin name="RLD" x="-20.32" y="2.54" length="middle"/>
+<pin name="LOD+" x="20.32" y="-17.78" length="middle" rot="R180"/>
+<pin name="HPSENSE" x="20.32" y="22.86" length="middle" rot="R180"/>
+<pin name="+IN" x="-20.32" y="17.78" length="middle"/>
+<pin name="OPAMP+" x="-20.32" y="-7.62" length="middle"/>
+<pin name="EP" x="0" y="-30.48" length="middle" rot="R90"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="SPDT_THRU">
+<gates>
+<gate name="G$1" symbol="SPDT_RIGHTANGLE" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SPDT_THRU">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+<connect gate="G$1" pin="3" pad="3"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="LP3985">
+<gates>
+<gate name="G$1" symbol="LP3985" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SOT23-5L">
+<connects>
+<connect gate="G$1" pin="BYPASS" pad="4"/>
+<connect gate="G$1" pin="EN" pad="3"/>
+<connect gate="G$1" pin="VIN" pad="1"/>
+<connect gate="G$1" pin="VOUT" pad="5"/>
+<connect gate="G$1" pin="VSS" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="SI7020">
+<gates>
+<gate name="G$1" symbol="SI7020" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="DFN6">
+<connects>
+<connect gate="G$1" pin="DNC" pad="3"/>
+<connect gate="G$1" pin="DNC1" pad="4"/>
+<connect gate="G$1" pin="EP" pad="7"/>
+<connect gate="G$1" pin="GND" pad="2"/>
+<connect gate="G$1" pin="SCL" pad="6"/>
+<connect gate="G$1" pin="SDA" pad="1"/>
+<connect gate="G$1" pin="VDD" pad="5"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="ADXL335">
+<gates>
+<gate name="G$1" symbol="ADXL335" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="QFN16">
+<connects>
+<connect gate="G$1" pin="COM" pad="3"/>
+<connect gate="G$1" pin="COM1" pad="5"/>
+<connect gate="G$1" pin="COM2" pad="6"/>
+<connect gate="G$1" pin="COM3" pad="7"/>
+<connect gate="G$1" pin="EP" pad="EP"/>
+<connect gate="G$1" pin="NC" pad="1"/>
+<connect gate="G$1" pin="NC1" pad="4"/>
+<connect gate="G$1" pin="NC2" pad="9"/>
+<connect gate="G$1" pin="NC3" pad="11"/>
+<connect gate="G$1" pin="NC4" pad="13"/>
+<connect gate="G$1" pin="NC5" pad="16"/>
+<connect gate="G$1" pin="ST" pad="2"/>
+<connect gate="G$1" pin="VS" pad="14"/>
+<connect gate="G$1" pin="VS1" pad="15"/>
+<connect gate="G$1" pin="XOUT" pad="12"/>
+<connect gate="G$1" pin="YOUT" pad="10"/>
+<connect gate="G$1" pin="ZOUT" pad="8"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="CC2541_SM">
+<gates>
+<gate name="G$1" symbol="CC2541_SM" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="QFN40-6X6_SM">
+<connects>
+<connect gate="G$1" pin="AVDD1" pad="28"/>
+<connect gate="G$1" pin="AVDD2" pad="27"/>
+<connect gate="G$1" pin="AVDD3" pad="24"/>
+<connect gate="G$1" pin="AVDD4" pad="29"/>
+<connect gate="G$1" pin="AVDD5" pad="21"/>
+<connect gate="G$1" pin="AVDD6" pad="31"/>
+<connect gate="G$1" pin="DCOUPL" pad="40"/>
+<connect gate="G$1" pin="DVDD1" pad="39"/>
+<connect gate="G$1" pin="DVDD2" pad="10"/>
+<connect gate="G$1" pin="GND" pad="1"/>
+<connect gate="G$1" pin="NC" pad="4"/>
+<connect gate="G$1" pin="P0_0" pad="19"/>
+<connect gate="G$1" pin="P0_1" pad="18"/>
+<connect gate="G$1" pin="P0_2" pad="17"/>
+<connect gate="G$1" pin="P0_3" pad="16"/>
+<connect gate="G$1" pin="P0_4" pad="15"/>
+<connect gate="G$1" pin="P0_5" pad="14"/>
+<connect gate="G$1" pin="P0_6" pad="13"/>
+<connect gate="G$1" pin="P0_7" pad="12"/>
+<connect gate="G$1" pin="P1_0" pad="11"/>
+<connect gate="G$1" pin="P1_1" pad="9"/>
+<connect gate="G$1" pin="P1_2" pad="8"/>
+<connect gate="G$1" pin="P1_3" pad="7"/>
+<connect gate="G$1" pin="P1_4" pad="6"/>
+<connect gate="G$1" pin="P1_5" pad="5"/>
+<connect gate="G$1" pin="P1_6" pad="38"/>
+<connect gate="G$1" pin="P1_7" pad="37"/>
+<connect gate="G$1" pin="P2_0" pad="36"/>
+<connect gate="G$1" pin="P2_1" pad="35"/>
+<connect gate="G$1" pin="P2_2" pad="34"/>
+<connect gate="G$1" pin="P2_3/XOSC32K_Q2" pad="33"/>
+<connect gate="G$1" pin="P2_4/XOSC32K_Q1" pad="32"/>
+<connect gate="G$1" pin="RBIAS" pad="30"/>
+<connect gate="G$1" pin="RESET_N" pad="20"/>
+<connect gate="G$1" pin="RF_N" pad="26"/>
+<connect gate="G$1" pin="RF_P" pad="25"/>
+<connect gate="G$1" pin="SCL" pad="2"/>
+<connect gate="G$1" pin="SDA" pad="3"/>
+<connect gate="G$1" pin="V1" pad="V1"/>
+<connect gate="G$1" pin="V10" pad="V10"/>
+<connect gate="G$1" pin="V11" pad="V11"/>
+<connect gate="G$1" pin="V12" pad="V12"/>
+<connect gate="G$1" pin="V13" pad="V13"/>
+<connect gate="G$1" pin="V14" pad="V14"/>
+<connect gate="G$1" pin="V15" pad="V15"/>
+<connect gate="G$1" pin="V16" pad="V16"/>
+<connect gate="G$1" pin="V2" pad="V2"/>
+<connect gate="G$1" pin="V3" pad="V3"/>
+<connect gate="G$1" pin="V4" pad="V4"/>
+<connect gate="G$1" pin="V5" pad="V5"/>
+<connect gate="G$1" pin="V6" pad="V6"/>
+<connect gate="G$1" pin="V7" pad="V7"/>
+<connect gate="G$1" pin="V8" pad="V8"/>
+<connect gate="G$1" pin="V9" pad="V9"/>
+<connect gate="G$1" pin="XOSC_Q1" pad="22"/>
+<connect gate="G$1" pin="XOSC_Q2" pad="23"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="RIBBON_10POS">
+<gates>
+<gate name="G$1" symbol="RIBBON_10POS" x="5.08" y="0"/>
+</gates>
+<devices>
+<device name="" package="RIBBON_10POS">
+<connects>
+<connect gate="G$1" pin="10A" pad="10"/>
+<connect gate="G$1" pin="1A" pad="1"/>
+<connect gate="G$1" pin="2A" pad="2"/>
+<connect gate="G$1" pin="3A" pad="3"/>
+<connect gate="G$1" pin="4A" pad="4"/>
+<connect gate="G$1" pin="5A" pad="5"/>
+<connect gate="G$1" pin="6A" pad="6"/>
+<connect gate="G$1" pin="7A" pad="7"/>
+<connect gate="G$1" pin="8A" pad="8"/>
+<connect gate="G$1" pin="9A" pad="9"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="XTAL_32MHZ_FA128">
+<gates>
+<gate name="G$1" symbol="XTAL_32MHZ_FA128" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="XTAL_32MHZ_FA128">
+<connects>
+<connect gate="G$1" pin="P1" pad="P1"/>
+<connect gate="G$1" pin="P2" pad="P2"/>
+<connect gate="G$1" pin="P3" pad="P3"/>
+<connect gate="G$1" pin="P4" pad="P4"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="XTAL_32KHZ">
+<gates>
+<gate name="G$1" symbol="XTAL_32MHZ" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="XTAL_32KHZ">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="ANTENNA_245">
+<gates>
+<gate name="G$1" symbol="ANTENNA_245" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="ANTENNA_245">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="NC" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="ANALOG_SWITCH">
+<gates>
+<gate name="G$1" symbol="ANALOG_SWITCH" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="EL7900">
+<connects>
+<connect gate="G$1" pin="COM" pad="1"/>
+<connect gate="G$1" pin="GND" pad="3"/>
+<connect gate="G$1" pin="IN" pad="4"/>
+<connect gate="G$1" pin="NO" pad="2"/>
+<connect gate="G$1" pin="V+" pad="5"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="MICS-2614">
+<gates>
+<gate name="G$1" symbol="MICS-2614" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="MICS-2614">
+<connects>
+<connect gate="G$1" pin="A" pad="A"/>
+<connect gate="G$1" pin="B" pad="B"/>
+<connect gate="G$1" pin="C" pad="C"/>
+<connect gate="G$1" pin="D" pad="D"/>
+<connect gate="G$1" pin="E" pad="E"/>
+<connect gate="G$1" pin="F" pad="F"/>
+<connect gate="G$1" pin="G" pad="G"/>
+<connect gate="G$1" pin="H" pad="H"/>
+<connect gate="G$1" pin="J" pad="J"/>
+<connect gate="G$1" pin="K" pad="K"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="1.6X0.8MM_SMD_LED">
+<gates>
+<gate name="G$1" symbol="LED" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="1.6X0.8MM_SMD_LED">
+<connects>
+<connect gate="G$1" pin="A" pad="P$1"/>
+<connect gate="G$1" pin="C" pad="P$2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="SI1143">
+<gates>
+<gate name="G$1" symbol="SI1143" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="QFN-10">
+<connects>
+<connect gate="G$1" pin="DNC" pad="10"/>
+<connect gate="G$1" pin="DNC2" pad="5"/>
+<connect gate="G$1" pin="GND" pad="8"/>
+<connect gate="G$1" pin="INT" pad="4"/>
+<connect gate="G$1" pin="LED1" pad="9"/>
+<connect gate="G$1" pin="LED2" pad="6"/>
+<connect gate="G$1" pin="LED3" pad="7"/>
+<connect gate="G$1" pin="SCL" pad="2"/>
+<connect gate="G$1" pin="SDA" pad="1"/>
+<connect gate="G$1" pin="VDD" pad="3"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="SMD_COMBO">
+<gates>
+<gate name="G$1" symbol="LED" x="0.9161625" y="0"/>
+</gates>
+<devices>
+<device name="" package="SMD_COMBO">
+<connects>
+<connect gate="G$1" pin="A" pad="P$1"/>
+<connect gate="G$1" pin="C" pad="P$2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="AD8232">
+<gates>
+<gate name="G$1" symbol="AD8232" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="QFN_20">
+<connects>
+<connect gate="G$1" pin="+IN" pad="2"/>
+<connect gate="G$1" pin="+VS" pad="17"/>
+<connect gate="G$1" pin="-IN" pad="3"/>
+<connect gate="G$1" pin="AC/DC" pad="14"/>
+<connect gate="G$1" pin="EP" pad="EXP"/>
+<connect gate="G$1" pin="FR" pad="15"/>
+<connect gate="G$1" pin="GND" pad="16"/>
+<connect gate="G$1" pin="HPDRIVE" pad="1"/>
+<connect gate="G$1" pin="HPSENSE" pad="20"/>
+<connect gate="G$1" pin="IAOUT" pad="19"/>
+<connect gate="G$1" pin="LOD+" pad="12"/>
+<connect gate="G$1" pin="LOD-" pad="11"/>
+<connect gate="G$1" pin="OPAMP+" pad="7"/>
+<connect gate="G$1" pin="OPAMP-" pad="9"/>
+<connect gate="G$1" pin="OUT" pad="10"/>
+<connect gate="G$1" pin="REFIN" pad="18"/>
+<connect gate="G$1" pin="REFOUT" pad="8"/>
+<connect gate="G$1" pin="RLD" pad="5"/>
+<connect gate="G$1" pin="RLDFB" pad="4"/>
+<connect gate="G$1" pin="SDN" pad="13"/>
+<connect gate="G$1" pin="SW" pad="6"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+</drawing>
+</eagle>
