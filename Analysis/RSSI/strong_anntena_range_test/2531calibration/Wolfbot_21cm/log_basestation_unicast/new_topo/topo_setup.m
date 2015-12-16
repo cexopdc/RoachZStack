@@ -5,6 +5,10 @@ NUM_NODE = 15; % number of total nodes   %%%%%%%%%%%%%
 global BEACON_RATIO;
 BEACON_RATIO = 1/3; %%%%%%%%%%%%%%%%%%%%%
 global Node;
+global Length;
+Length = 3;
+global Width;
+Width = 3;
 
 % calibrated rssi_distance mapping from -42 to -87 dBm. The mapping between
 % rssi value and matrix row index is: index = -RSSI -41. (diff from C array implementation)
