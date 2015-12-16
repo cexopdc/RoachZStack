@@ -1,5 +1,3 @@
-%% this code is used to send values to the LED arena 
-
 delete(instrfindall)
 
 % use the COM port that matches the arduino uno
