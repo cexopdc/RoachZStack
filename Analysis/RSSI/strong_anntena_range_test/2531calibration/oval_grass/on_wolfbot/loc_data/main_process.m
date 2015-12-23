@@ -2,18 +2,18 @@ function final_error_mean_offline = main_process(topo,mapping_method)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % mapping_method: 1. direct mapping
 %                 2. fitting
-%                 3. weighted fitting
-%                 4. cut 3m direct mapping
-%                 5. cut 3m fitting
-%                 6. cut 3m weighted fitting
+%                 3. fitting with proportional std model
+%                 4. weighted fitting with proportional std model
 %
 %clear all;close all;
 global DEMO_MODE;
-DEMO_MODE = 1; % demo mode to show animations of the algorithm process
+DEMO_MODE = 0; % demo mode to show animations of the algorithm process
 global PAUSE_TIME; % used for animation
 PAUSE_TIME=0;%0.0001;
 global DIS_MAP;
 DIS_MAP = zeros(15,15); %DIS for RSSI received at i from j is DIS_MAP(i,j)
+global DIS_STD_MAP;
+DIS_STD_MAP = zeros(15,15); %DIS_STD for RSSI received at i from j is DIS_STD_MAP(i,j)
 topo_setup;
 log_matrix = load(strcat('grass_topo',num2str(topo),'.txt')); % load txt to get log_matrix of n*7  (time, node id, neighbor id, rssi value, est x,est y,est std);
 % initialize error_matrix and time_array for each node
@@ -62,7 +62,7 @@ if DEMO_MODE == 1
 end
 
 % process all the log message by time sequence
-%
+%{
 for i = 1:length(log_matrix)/3 %%%%%%%%%%%%%%
     A = Node(log_matrix(i,2));
     B = Node(round(log_matrix(i,3)));
@@ -112,7 +112,9 @@ for i = 1:length(log_matrix)/3 %%%%%%%%%%%%%%
     
     
     
-    [Node(log_matrix(i,2)),dis_std] = kick_loc_2531(A,B,rssi);
+    %[Node(log_matrix(i,2)),dis_std] = kick_loc_2531(A,B,rssi);
+    %[Node(log_matrix(i,2)),dis_std] = kick_loc_kalman_2531(A,B,rssi);
+    [Node(log_matrix(i,2)),dis_std] = kick_loc_kalman_2nodes_2531(A,B,rssi);
     A = Node(log_matrix(i,2));
     
     % after the calculation, update the demo figure
@@ -161,9 +163,9 @@ for i = 1:length(log_matrix)/3 %%%%%%%%%%%%%%
     Node(log_matrix(i,2)).error_matrix = [Node(log_matrix(i,2)).error_matrix [error_online;error_offline]];
     Node(log_matrix(i,2)).time_array = [Node(log_matrix(i,2)).time_array log_matrix(i,1)];
 end
-%
+%}
 
-%{
+%
 for i = 1:length(log_matrix)
     A = Node(log_matrix(i,2));
     B = Node(round(log_matrix(i,3)));
@@ -190,17 +192,28 @@ for i = 1:length(log_matrix)
     if DIS_MAP(A.id,B.id) == 0 
         DIS_MAP(A.id,B.id) = dis;
     end
+    if DIS_STD_MAP(A.id,B.id) == 0 
+        DIS_STD_MAP(A.id,B.id) = dis_std;
+    end
 end
 
 for i= round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
-    %Node(i) = DV_distance(Node(i));
-    Node(i) = min_max(Node(i));
+    Node(i) = DV_distance(Node(i));
+    %Node(i) = min_max(Node(i));
 end
+
+%{
+for time=1:10
+    for i= round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
+        Node(i) = N_hop_refine(Node(i));
+    end
+end
+%}
 
 %
 for time=1:10
     for i= round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
-        Node(i) = N_hop_refine(Node(i));
+        Node(i) = IWLSE_refine(Node(i));
     end
 end
 %
@@ -213,7 +226,7 @@ end
 final_error_mean_offline = mean(aggr_error);
 %}
 
-%
+%{
 %figure; hold on;
 final_error_array=[];
 for i = round(NUM_NODE*BEACON_RATIO)+1:NUM_NODE
@@ -239,7 +252,7 @@ exportfig(gcf,strcat(filename,'.eps'),'height',6,'Width',8,'fontmode','Scaled', 
 final_mean_error = mean(final_error_array,2);
 %offline error only
 final_error_mean_offline = final_mean_error(2,1);
-%
+%}
 
 %Graphical result with mean and std
 %{

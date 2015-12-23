@@ -24,6 +24,7 @@
 \includegraphics[width=\textwidth]{outdoor_dis_vs_RSSI_5_spot.eps} 
 \end{frame}
 
+
 \begin{frame}
 \frametitle{Three mapping methods}
 \begin{itemize}
@@ -104,11 +105,17 @@ Algorithm & direct  & fitting & weighted fitting \\
 \hline 
 KickLoc & 2.1310 & 2.0146 & 2.0332 \\
 \hline 
+KickLoc Kalman & 1.7901  &  1.6591  &  1.6491 \\
+\hline 
+KK2 & 2.0013 &   1.8996  &  1.9066 \\
+\hline
 DV-distance & 2.7187 & 2.5311 & 2.5992  \\
 \hline
 Min-Max & 2.1845  &  2.0676  &  2.0704  \\
 \hline
 N-hop Lateration & 3.0825  &  2.8399  & 2.8816  \\
+\hline
+IWLSE & 1.8280  &  1.6993  & 1.7238  \\
 \hline
 \end{tabular} 
 \end{frame}
