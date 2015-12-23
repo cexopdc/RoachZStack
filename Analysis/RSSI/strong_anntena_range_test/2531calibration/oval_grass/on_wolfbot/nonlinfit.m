@@ -1,4 +1,4 @@
-%{
+%
 %%% RSSI VS distance %%%
 clear all;
 input = load('dist_mean_std_diff_rssi.txt');
@@ -17,14 +17,14 @@ y2 = 10.^(b(1)-b(2)*x1);
 figure;
 plot(x1,y1,'b*',x1,y2,'-r','LineWidth',2,'MarkerSize',6);
 ylabel('distance (m)');
-xlabel('RSSI');
-legend('original data','Nonlinear Regression');
+xlabel('RSSI (dBm)');
+legend('original mapping','After fitting');
 hold on;
 errorbar(x1,distance_mean_list,distance_std_list,'bo','markersize', 5);
-title('RSSI vs Distance fitting');
+%title('RSSI vs Distance fitting');
 
 set(gca, 'FontSize', 18, 'LineWidth', 2);
-exportfig(gcf,'result_fig/rssi_dis_fit.eps'...
+exportfig(gcf,'result_fig/1111_rssi_dis_fit.eps'...
     ,'height',6,'Width',8,'fontmode','Scaled', 'color', 'rgb');
 
 %store the rssi vs distance fitting
@@ -64,7 +64,7 @@ dlmwrite('rssi_dis_weighted_fitting.txt', rssi_dis_fitting);
 %}
 
 
-%
+%{
 %%%distance vs RSSI%%%
 
 %aggregate rssi from 0.2 to 3.0m.
@@ -100,7 +100,7 @@ errorbar(x1,aggr_mean_rssi,aggr_std_rssi,'bo','markersize', 5);
 set(gca, 'FontSize', 18, 'LineWidth', 2);
 exportfig(gcf,'dis_rssi_fit.eps'...
     ,'height',6,'Width',8,'fontmode','Scaled', 'color', 'rgb');
-%
+%}
 
 
 syms x
@@ -117,5 +117,5 @@ exportfig(gcf,'rssi_dis_reverse_fit.eps'...
 ylim([0 3]);
 exportfig(gcf,'rssi_dis_reverse_fit_cut_3m.eps'...
     ,'height',6,'Width',8,'fontmode','Scaled', 'color', 'rgb');
-
+%}
 

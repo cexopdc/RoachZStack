@@ -1,5 +1,5 @@
 error_matrix = [];
-for i=1:5
+for i=1:3
     error_array = [];
     for j=1:3
         mean_error = main_process(i,j);

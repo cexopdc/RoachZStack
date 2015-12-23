@@ -60,7 +60,7 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{localization errors for kickloc (cut 3m treat discard outlier, distance std fitted)}
+\frametitle{localization errors for kickloc}
 
 \begin{tabular}{|c|c|c|c|}
 \hline 
@@ -82,5 +82,36 @@ average & 2.1310 & 2.0146 & 2.0332  \\
 \hline 
 \end{tabular} 
 \end{frame}
+
+\begin{frame}
+ \frametitle{localization result for topo4 method3}
+\includegraphics[width=0.8\textwidth]{grass_final_mean_std_result_topo4_method3.eps} 
+\end{frame}
+
+\begin{frame}
+ \frametitle{localization result for topo4 method3}
+\includegraphics[width=\textwidth]{grass_final_mean_result_topo4_method3.eps} 
+\end{frame}
+
+
+\begin{frame}
+\frametitle{average localization errors for different algorithms }
+\begin{tabular}{|c|c|c|c|}
+\hline 
+ & \multicolumn{3}{c|}{RSSI to Distance mapping model} \\ 
+\hline 
+Algorithm & direct  & fitting & weighted fitting \\ 
+\hline 
+KickLoc & 2.1310 & 2.0146 & 2.0332 \\
+\hline 
+DV-distance & 2.7187 & 2.5311 & 2.5992  \\
+\hline
+Min-Max & 2.1845  &  2.0676  &  2.0704  \\
+\hline
+N-hop Lateration & 3.0825  &  2.8399  & 2.8816  \\
+\hline
+\end{tabular} 
+\end{frame}
+
 
 \end{document}

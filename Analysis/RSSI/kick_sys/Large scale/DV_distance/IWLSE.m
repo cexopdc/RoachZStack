@@ -4,7 +4,7 @@
 % 3. Each node do a IWLSE lateration with neighbor nodes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  N-hop multilateration algorithm
+%  IWLSE algorithm
 %
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
