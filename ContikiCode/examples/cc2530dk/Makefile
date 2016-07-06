@@ -1,9 +1,11 @@
-CONTIKI_PROJECT = example-unicast example-multihop example-broadcast hello-world blink-hello timer-test sensors-demo example-powertrace example-broadcast-button
 
-#APPS+=powertrace
+PROJECT_SOURCEFILES += spi_master.c
+PROJECT_SOURCEFILES += cc2530_spi.c
+PROJECT_SOURCEFILES += SFE_LSM9DS0.c
+
+CONTIKI_PROJECT = hello-world 
+
 all: $(CONTIKI_PROJECT) 
-DEFINES=NETSTACK_CONF_RDC=nullrdc_driver
-HAVE_BANKING=1
 
-CONTIKI = ../..
+CONTIKI = ../../..
 include $(CONTIKI)/Makefile.include
